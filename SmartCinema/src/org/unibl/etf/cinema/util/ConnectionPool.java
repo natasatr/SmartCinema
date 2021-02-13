@@ -52,7 +52,7 @@ private static final String BUNDLE_NAME = ConnectionPool.class.getName();
 	}
 
 	private void readConfiguration() {
-		ResourceBundle bundle = PropertyResourceBundle.getBundle(BUNDLE_NAME);
+		ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
 		jdbcURL = bundle.getString("jdbcURL");
 		username = bundle.getString("username");
 		password = bundle.getString("password");

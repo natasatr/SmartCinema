@@ -6,18 +6,21 @@ import java.util.Objects;
 public class Nalog implements Serializable {
 	private Integer nalogID;
 	private String korisnickoIme;
-	
+	private Rola rola;
+
 	public Nalog() {
 		
 	}
 	
-	public Nalog(String korisnickoIme) {
+	public Nalog(String korisnickoIme, Rola rola) {
 		this.korisnickoIme = korisnickoIme;
+		this.rola = rola;
 	}
 	
-	public Nalog(Integer nalogID, String korisnickoIme) {
+	public Nalog(Integer nalogID, String korisnickoIme, Rola rola) {
 		this.nalogID = nalogID;
 		this.korisnickoIme = korisnickoIme;
+		this.rola = rola;
 	}
 
 	public Integer getNalogID() {
@@ -34,6 +37,14 @@ public class Nalog implements Serializable {
 	
 	public void setKorisnickoIme(String korisnickoIme) {
 		this.korisnickoIme = korisnickoIme;
+	}
+	
+	public Rola getRola() {
+		return rola;
+	}
+
+	public void setRola(Rola rola) {
+		this.rola = rola;
 	}
 	
     @Override
