@@ -28,7 +28,7 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		
 		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, sj.Uklonjeno, SalaID, s.Broj, "
 				+ " Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID, "
-				+ " a.Naziv, a.Broj, a.Uklonjeno, k.Uklonjeno, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
+				+ " a.Mjesto, a.Ulica, a.Broj, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
 				+ " from sjediste sj "
 				+ " inner join sala s on SALA_SalaID=SalaId "
 				+ " inner join kino k on KINO_KinoID=KinoID "
@@ -48,9 +48,8 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 				retVal.add(new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),
 						new SalaDTO(rs.getInt(6),rs.getInt(7), rs.getInt(8), rs.getInt(9),
 						new KinoDTO(rs.getInt(10),rs.getString(11),rs.getString(12),rs.getString(13),
-								new AdresaDTO(rs.getInt(14),rs.getString(15),rs.getInt(16),rs.getInt(17)),
-								rs.getInt(18))),
-						new VrstaSjedistaDTO(rs.getInt(19),rs.getString(20), rs.getInt(21))));
+								new AdresaDTO(rs.getInt(14),rs.getString(15), rs.getString(16), rs.getInt(17)))),
+						new VrstaSjedistaDTO(rs.getInt(18),rs.getString(19), rs.getInt(20))));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -70,7 +69,7 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 
 		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, sj.Uklonjeno, SalaID, s.Broj, "
 				+ " Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID, "
-				+ " a.Naziv, a.Broj, a.Uklonjeno, k.Uklonjeno, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
+				+ " a.Mjesto, a.Ulica, a.Broj, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
 				+ " from sjediste sj "
 				+ " inner join sala s on SALA_SalaID=SalaId "
 				+ " inner join kino k on KINO_KinoID=KinoID "
@@ -89,9 +88,8 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 				retVal=new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),
 						new SalaDTO(rs.getInt(6),rs.getInt(7), rs.getInt(8), rs.getInt(9),
 						new KinoDTO(rs.getInt(10),rs.getString(11),rs.getString(12),rs.getString(13),
-								new AdresaDTO(rs.getInt(14),rs.getString(15),rs.getInt(16),rs.getInt(17)),
-								rs.getInt(18))),
-						new VrstaSjedistaDTO(rs.getInt(19),rs.getString(20), rs.getInt(21)));
+								new AdresaDTO(rs.getInt(14),rs.getString(15), rs.getString(16), rs.getInt(17)))),
+						new VrstaSjedistaDTO(rs.getInt(18),rs.getString(19), rs.getInt(20)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -192,5 +190,4 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		}
 		return retVal;
 	}
-
 }

@@ -24,7 +24,7 @@ public class MySQLSalaDAO implements SalaDAO {
 		ResultSet rs = null;
 		
 		String query = "select SalaID, s.Broj, Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID,"
-				+ " a.Naziv, a.Broj, a.Uklonjeno, k.Uklonjeno from sala s"
+				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
 				+ " inner join kino k on KINO_KinoID=KinoID "
 				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
 				+ " where k.Naziv= ? "
@@ -39,8 +39,7 @@ public class MySQLSalaDAO implements SalaDAO {
 			while (rs.next())
 				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), rs.getInt(4),
 						new KinoDTO(rs.getInt(5),rs.getString(6),rs.getString(7),rs.getString(8),
-								new AdresaDTO(rs.getInt(9),rs.getString(10),rs.getInt(11),rs.getInt(12)),
-								rs.getInt(13))));
+								new AdresaDTO(rs.getInt(9),rs.getString(10), rs.getString(11), rs.getInt(12)))));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,6 +132,4 @@ public class MySQLSalaDAO implements SalaDAO {
 		}
 		return retVal;
 	}
-	
-
 }

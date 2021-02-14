@@ -4,35 +4,35 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
+import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.util.ConnectionPool;
 import org.unibl.etf.cinema.util.DBUtil;
 
-
-
 public class MySQLAdresaDAO implements AdresaDAO {
-	
-	@Override 
-	public List<AdresaDTO> sveAdrese(){
-		List<AdresaDTO> retVal=new ArrayList<>();
+
+	@Override
+	public List<AdresaDTO> sveAdrese() {
+		List<AdresaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
-		String query = "select AdresaID, Naziv, Broj, Uklonjeno from adresa "
-				+ " order by Naziv asc " ;
-		
+
+		String query = "select AdresaID, Mjesto, Ulica, Broj from adresa "
+				     + "where Uklonjeno = false order by Ulica asc";
+
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new AdresaDTO(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getInt(4)));
+				retVal.add(new AdresaDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -41,25 +41,26 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public AdresaDTO adresa(int AdresaID) {
-		AdresaDTO retVal = new AdresaDTO();
+		AdresaDTO retVal = null;
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String query = "select AdresaID, Naziv, Broj, Uklonjeno from adresa " + 
-				" where AdresaID like ?";
+		String query = "select AdresaID, Mjesto, Ulica, Broj from adresa "
+				     + "where AdresaID = ?";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1,AdresaID);
+			ps.setInt(1, AdresaID);
 			rs = ps.executeQuery();
 
-			
-				retVal=new AdresaDTO(rs.getInt(1),rs.getString(2), rs.getInt(3), rs.getInt(4));
+			if (rs.next()) {
+				retVal = new AdresaDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -68,25 +69,29 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		}
 		return retVal;
 	}
-	
-	@Override /*vrati false on duplicate key, ali dobro je izvrseno
-				jer se nije dodalo nista, vec update-ujemo vrijednost uklonjeno*/
+
+	@Override
 	public boolean dodajAdresu(AdresaDTO adresa) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
+		ResultSet rs = null;
 
-		String query = "INSERT INTO adresa VALUES "
-				+ " (?, ?, ?, ? ) on duplicate key update Uklonjeno=values(Uklonjeno) ";
+		String query = "INSERT INTO adresa(Mjesto, Ulica, Broj) VALUES (?, ?, ?)";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
-			ps = conn.prepareStatement(query);
-			ps.setInt(1,adresa.getAdresaID());
-			ps.setString(2, adresa.getNaziv());
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, adresa.getMjesto());
+			ps.setString(2, adresa.getUlica());
 			ps.setInt(3, adresa.getBroj());
-			ps.setInt(4, 0);
 
 			retVal = ps.executeUpdate() == 1;
+
+			if (retVal) {
+				rs = ps.getGeneratedKeys();
+				if (rs.next())
+					adresa.setAdresaID(rs.getInt(1));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -95,24 +100,21 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		}
 		return retVal;
 	}
-	
-	@Override 
-	public boolean azurirajAdresu(AdresaDTO adresa)
-	{
+
+	@Override
+	public boolean azurirajAdresu(AdresaDTO adresa) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "UPDATE adresa SET "
-				+ " Naziv =?, "
-				+ " Broj= ?  "
-				+ " WHERE AdresaID=? ";
+		String query = "UPDATE adresa SET Mjesto = ?, Ulica = ?, Broj = ? WHERE AdresaID=? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setString(1, adresa.getNaziv());
-			ps.setInt(2, adresa.getBroj());
-			ps.setInt(3, adresa.getAdresaID());
+			ps.setString(1, adresa.getMjesto());
+			ps.setString(2, adresa.getUlica());
+			ps.setInt(3, adresa.getBroj());
+			ps.setInt(4, adresa.getAdresaID());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
@@ -123,15 +125,14 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		}
 		return retVal;
 	}
-	
-	@Override 
+
+	@Override
 	public boolean obrisiAdresu(AdresaDTO adresa) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = " update adresa set Uklonjeno=1"
-				+ " where AdresaID = ? ";
+		String query = "update adresa set Uklonjeno=1" + " where AdresaID = ? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -140,15 +141,12 @@ public class MySQLAdresaDAO implements AdresaDAO {
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(ps);
 		}
 		return retVal;
-		
-	}
-	
-	
 
+	}
 }

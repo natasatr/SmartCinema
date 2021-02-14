@@ -1,84 +1,83 @@
 package org.unibl.etf.cinema.data.dto;
 
-
+import java.util.Objects;
 
 public class AdresaDTO {
 
-	public int AdresaID;
-	public String Naziv;
-	public int Broj;
-	public int Uklonjeno;
-	public AdresaDTO(int adresaID, String naziv, int broj, int uklonjeno) {
-		super();
-		AdresaID = adresaID;
-		Naziv = naziv;
-		Broj = broj;
-		Uklonjeno = uklonjeno;
+	private Integer adresaID;
+	private String mjesto;
+	private String ulica;
+	private Integer broj;
+	
+	public AdresaDTO(String mjesto, String ulica, Integer broj) {
+		this.mjesto = mjesto;
+		this.ulica = ulica;
+		this.broj = broj;
 	}
-	public AdresaDTO() {
-		super();
+	
+
+	public AdresaDTO(Integer adresaID, String mjesto, String ulica, Integer broj) {
+		this.adresaID = adresaID;
+		this.mjesto = mjesto;
+		this.ulica = ulica;
+		this.broj = broj;
 	}
-	public int getAdresaID() {
-		return AdresaID;
+
+	public Integer getAdresaID() {
+		return adresaID;
 	}
-	public void setAdresaID(int adresaID) {
-		AdresaID = adresaID;
+
+	public void setAdresaID(Integer adresaID) {
+		this.adresaID = adresaID;
 	}
-	public String getNaziv() {
-		return Naziv;
+
+	public String getMjesto() {
+		return mjesto;
 	}
-	public void setNaziv(String naziv) {
-		Naziv = naziv;
+
+	public void setMjesto(String mjesto) {
+		this.mjesto = mjesto;
 	}
-	public int getBroj() {
-		return Broj;
+
+	public String getUlica() {
+		return ulica;
 	}
-	public void setBroj(int broj) {
-		Broj = broj;
+
+	public void setUlica(String ulica) {
+		this.ulica = ulica;
 	}
-	public int isUklonjeno() {
-		return Uklonjeno;
+
+	public Integer getBroj() {
+		return broj;
 	}
-	public void setUklonjeno(int uklonjeno) {
-		Uklonjeno = uklonjeno;
+
+	public void setBroj(Integer broj) {
+		this.broj = broj;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + AdresaID;
-		result = prime * result + Broj;
-		result = prime * result + ((Naziv == null) ? 0 : Naziv.hashCode());
-		result = prime * result + Uklonjeno;
+		result = prime * result + ((adresaID == null) ? 0 : adresaID.hashCode());
+		result = prime * result + ((broj == null) ? 0 : broj.hashCode());
+		result = prime * result + ((mjesto == null) ? 0 : mjesto.hashCode());
+		result = prime * result + ((ulica == null) ? 0 : ulica.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!(obj instanceof AdresaDTO))
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AdresaDTO other = (AdresaDTO) obj;
-		if (AdresaID != other.AdresaID)
-			return false;
-		if (Broj != other.Broj)
-			return false;
-		if (Naziv == null) {
-			if (other.Naziv != null)
-				return false;
-		} else if (!Naziv.equals(other.Naziv))
-			return false;
-		if (Uklonjeno != other.Uklonjeno)
-			return false;
-		return true;
+		AdresaDTO adresa = (AdresaDTO) obj;
+		return Objects.equals(adresaID, adresa.adresaID);
 	}
+
 	@Override
 	public String toString() {
-		return "Adresa [AdresaID=" + AdresaID + ", Naziv=" + Naziv + ", Broj=" + Broj + ", Uklonjeno=" + Uklonjeno
-				+ "]";
-	}
-	
-	
+		return "Adresa [AdresaID=" + adresaID + ", Mjesto=" + mjesto + ", Ulica=" + ulica + ", Broj=" + broj + "]";
+	}	
 }
