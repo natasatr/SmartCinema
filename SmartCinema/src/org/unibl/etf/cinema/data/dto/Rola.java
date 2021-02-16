@@ -7,8 +7,11 @@ public class Rola implements Serializable {
 	private Integer rolaID;
 	private String naziv;
 
+	public Rola() {
+		
+	}
+	
 	public Rola(Integer rolaID, String naziv) {
-		super();
 		this.rolaID = rolaID;
 		this.naziv = naziv;
 	}

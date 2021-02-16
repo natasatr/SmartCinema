@@ -17,6 +17,11 @@ public class MySQLDAOFactory extends DAOFactory{
 	}
 	
 	@Override
+	public NalogDAO getNalogDAO() {
+		return new MySQLNalogDAO();
+	}
+	
+	@Override
 	public  PosjetilacDAO getPosjetilacDAO(){
 		return new MySQLPosjetilacDAO();
 	}
@@ -42,6 +47,10 @@ public class MySQLDAOFactory extends DAOFactory{
 		return new MySQLVrstaSjedistaDAO();
 	}
 	
+	@Override
+	public ZaposleniDAO getZaposleniDAO() {
+		return new MySQLZaposleniDAO();
+	}
 	
 
 }
