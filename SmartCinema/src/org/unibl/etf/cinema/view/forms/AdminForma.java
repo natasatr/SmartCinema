@@ -37,10 +37,14 @@ import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
+import org.unibl.etf.cinema.util.EmailValidator;
+import org.unibl.etf.cinema.util.UIUtils;
+import org.unibl.etf.cinema.util.Utils;
 import org.unibl.etf.cinema.view.tables.ZaposleniTableModel;
 
 import java.awt.Rectangle;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
@@ -64,6 +68,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Dimension;
+import javax.swing.border.CompoundBorder;
 
 public class AdminForma extends JFrame {
 
@@ -86,6 +91,7 @@ public class AdminForma extends JFrame {
 
 	private JLabel[] labele = new JLabel[3];
 	private JPanel[] paneli = new JPanel[3];
+	private List<JTextField> kinoPolja = new ArrayList<>();
 
 	private JLabel lblZaglavlje;
 	private JPanel selektovaniPanel;
@@ -99,6 +105,7 @@ public class AdminForma extends JFrame {
 	private JButton btnObrisi;
 	private JButton btnAzuriraj;
 	private JButton btnDodaj;
+	
 
 	/**
 	 * Launch the application.
@@ -288,12 +295,17 @@ public class AdminForma extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		GroupLayout gl_pnlKino = new GroupLayout(pnlKino);
-		gl_pnlKino.setHorizontalGroup(gl_pnlKino.createParallelGroup(Alignment.LEADING).addComponent(panel,
-				GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE));
-		gl_pnlKino.setVerticalGroup(gl_pnlKino.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlKino.createSequentialGroup().addGap(100)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 454, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(36, Short.MAX_VALUE)));
+		gl_pnlKino.setHorizontalGroup(
+			gl_pnlKino.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE)
+		);
+		gl_pnlKino.setVerticalGroup(
+			gl_pnlKino.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlKino.createSequentialGroup()
+					.addGap(100)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 454, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(36, Short.MAX_VALUE))
+		);
 
 		JLabel lblNaslov = new JLabel("Podaci o kinu");
 		lblNaslov.setFont(new Font("Arial", Font.BOLD, 18));
@@ -324,15 +336,21 @@ public class AdminForma extends JFrame {
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (kinoEditable) {
-					sacuvajKino();
-					popuniPodatkeOKinu();
-					btnRight.setText("Uredi");
+					if (provjeriPodatkeOKinu()) {
+						sacuvajKino();
+						popuniPodatkeOKinu();
+						btnRight.setText("Uredi");
+						kinoEditable = !kinoEditable;
+						btnLeft.setVisible(!btnLeft.isVisible());
+					} else {
+						getToolkit().beep();
+					}
 				} else {
 					setEditable(true);
 					btnRight.setText("Saèuvaj");
+					kinoEditable = !kinoEditable;
+					btnLeft.setVisible(!btnLeft.isVisible());
 				}
-				kinoEditable = !kinoEditable;
-				btnLeft.setVisible(!btnLeft.isVisible());
 			}
 		});
 		btnRight.setForeground(Color.WHITE);
@@ -340,26 +358,68 @@ public class AdminForma extends JFrame {
 		btnRight.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		tfNaziv = new JTextField();
+		tfNaziv.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				UIUtils.ograniciDuzinuUnosa(e, tfNaziv);
+			}
+		});
+		tfNaziv.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
 		tfNaziv.setFont(new Font("Arial", Font.PLAIN, 16));
 		tfNaziv.setColumns(10);
+		kinoPolja.add(tfNaziv);
 
 		tfEmail = new JTextField();
+		tfEmail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				UIUtils.ograniciDuzinuUnosa(e, tfEmail);
+			}
+		});
+		tfEmail.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
 		tfEmail.setFont(new Font("Arial", Font.PLAIN, 16));
 		tfEmail.setColumns(10);
+		kinoPolja.add(tfEmail);
 
 		tfBrojTelefona = new JTextField();
+		tfBrojTelefona.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				UIUtils.ograniciDuzinuUnosa(e, tfBrojTelefona);
+			}
+		});
+		tfBrojTelefona.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
 		tfBrojTelefona.setFont(new Font("Arial", Font.PLAIN, 16));
 		tfBrojTelefona.setColumns(10);
+		kinoPolja.add(tfBrojTelefona);
 
 		tfMjesto = new JTextField();
+		tfMjesto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				UIUtils.ograniciDuzinuUnosa(e, tfMjesto);
+			}
+		});
+		tfMjesto.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
 		tfMjesto.setFont(new Font("Arial", Font.PLAIN, 16));
 		tfMjesto.setColumns(10);
+		kinoPolja.add(tfMjesto);
 
 		tfUlica = new JTextField();
+		tfUlica.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				UIUtils.ograniciDuzinuUnosa(e, tfUlica);
+			}
+		});
+		tfUlica.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
 		tfUlica.setFont(new Font("Arial", Font.PLAIN, 16));
 		tfUlica.setColumns(10);
+		kinoPolja.add(tfUlica);
 
 		tfBroj = new JTextField();
+		tfBroj.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
+		tfBroj.setEditable(false);
 		tfBroj.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -371,6 +431,7 @@ public class AdminForma extends JFrame {
 		});
 
 		tfBroj.setFont(new Font("Arial", Font.PLAIN, 16));
+		kinoPolja.add(tfBroj);
 
 		btnLeft = new JButton("Otka\u017Ei");
 		btnLeft.addActionListener(new ActionListener() {
@@ -386,88 +447,89 @@ public class AdminForma extends JFrame {
 		btnLeft.setFont(new Font("Arial", Font.PLAIN, 14));
 		btnLeft.setBackground(new Color(220, 20, 60));
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup().addGap(38)
-				.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(38)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 						.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(
-										ComponentPlacement.RELATED)
-								.addComponent(btnRight, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-								.createSequentialGroup()
+							.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnRight, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(gl_panel.createSequentialGroup()
 								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-										.addGroup(gl_panel.createSequentialGroup().addComponent(lblNaziv).addGap(73))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 77,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(34))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 108,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(3))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 64,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(47))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 38,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(73))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 38,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(73)))
-								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(tfUlica, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
-												Short.MAX_VALUE)
-										.addComponent(tfMjesto, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
-												Short.MAX_VALUE)
-										.addComponent(tfBrojTelefona, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
-												Short.MAX_VALUE)
-										.addComponent(tfEmail, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
-												Short.MAX_VALUE)
-										.addComponent(tfNaziv, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
-												Short.MAX_VALUE)
-										.addComponent(tfBroj, Alignment.LEADING)))
-								.addComponent(lblNaslov)))
-				.addGap(90).addComponent(lblSlika).addGap(0, 0, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup()
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
-						.addGap(25).addComponent(lblNaslov).addGap(29)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblNaziv).addComponent(
-								tfNaziv, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblNaziv)
+										.addGap(73))
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+										.addGap(34))
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+										.addGap(3))
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+										.addGap(47))
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+										.addGap(73))
+									.addGroup(gl_panel.createSequentialGroup()
+										.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+										.addGap(73)))
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(tfUlica, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+										.addComponent(tfMjesto, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+										.addComponent(tfBrojTelefona, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+										.addComponent(tfEmail, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+									.addComponent(tfNaziv, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+									.addComponent(tfBroj)))
+							.addComponent(lblNaslov)))
+					.addGap(90)
+					.addComponent(lblSlika)
+					.addGap(0, 0, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(25)
+							.addComponent(lblNaslov)
+							.addGap(29)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNaziv)
+								.addComponent(tfNaziv, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfEmail, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 19,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfBrojTelefona, GroupLayout.PREFERRED_SIZE, 31,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tfBrojTelefona, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfMjesto, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfUlica, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel.createSequentialGroup().addContainerGap()
-								.addComponent(lblSlika, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)))
-				.addGap(32)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnRight).addComponent(btnLeft,
-						GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(41, Short.MAX_VALUE)));
+								.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblSlika, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnRight)
+						.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(41))
+		);
 		panel.setLayout(gl_panel);
 		pnlKino.setLayout(gl_pnlKino);
 
@@ -576,26 +638,53 @@ public class AdminForma extends JFrame {
 		tfBrojTelefona.setText(kino.getTelefon());
 		tfMjesto.setText(kino.getAdresa().getMjesto());
 		tfUlica.setText(kino.getAdresa().getUlica());
-		tfBroj.setText(kino.getAdresa().getBroj() + "");
+		tfBroj.setText("2");
 
 		setEditable(false);
 	}
 
+	private boolean provjeriPodatkeOKinu() {
+		List<JTextField> nevalidnaPolja = UIUtils.praznaPolja(kinoPolja);
+		
+		EmailValidator validator = new EmailValidator();
+		if (!validator.validate(tfEmail.getText().trim())) {
+			if (!nevalidnaPolja.contains(tfEmail)) {
+				nevalidnaPolja.add(tfEmail);
+			}
+		}
+		
+		if (!Utils.isIntegerNumber(tfBroj.getText().trim())) {
+			if (!nevalidnaPolja.contains(tfBroj)) {
+				nevalidnaPolja.add(tfBroj);
+			}
+		}
+		
+		UIUtils.postaviIvicePolja(nevalidnaPolja, kinoPolja);
+		return nevalidnaPolja.isEmpty();
+	}
+	
 	private void sacuvajKino() {
-		AdresaDTO adresa = new AdresaDTO(kino.getAdresa().getAdresaID(), tfMjesto.getText().trim(),
-				tfUlica.getText().trim(), Integer.parseInt(tfBroj.getText().trim()));
-
-		if (adresaDAO.azurirajAdresu(adresa)) {
+		try {
+			AdresaDTO adresa = new AdresaDTO(kino.getAdresa().getAdresaID(), tfMjesto.getText().trim(),
+					tfUlica.getText().trim(), Integer.parseInt(tfBroj.getText().trim()));
 			KinoDTO novoKino = new KinoDTO(kino.getKinoID(), tfNaziv.getText().trim(), tfEmail.getText().trim(),
 					tfBrojTelefona.getText().trim(), adresa);
-			if (kinoDAO.azurirajKino(novoKino)) {
-				kino = novoKino;
-			} else {
-				// TODO poruka o gresci
+			
+			if (!adresaDAO.azurirajAdresu(adresa)) {
+				throw new Exception();
+			} 
+			if (!kinoDAO.azurirajKino(novoKino)) {
+				throw new Exception();
 			}
-		} else {
-			// TODO poruka o gresci
+
+			kino = novoKino;
+			JOptionPane.showMessageDialog(this, "Podaci o kinu su uspješno saèuvani.", "Uspjeh",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "Podaci o kinu nisu saèuvani.", "Greška",
+					JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 
 	private void setEditable(boolean editable) {
@@ -604,7 +693,6 @@ public class AdminForma extends JFrame {
 		tfBrojTelefona.setEditable(editable);
 		tfMjesto.setEditable(editable);
 		tfUlica.setEditable(editable);
-		tfBroj.setEditable(editable);
 	}
 
 	public void azurirajTabeluKorisnici() {
@@ -674,7 +762,7 @@ public class AdminForma extends JFrame {
 		}
 	}
 
-	void podesiDugmad() {
+	private void podesiDugmad() {
 		boolean enabled = tblKorisnici.getSelectedRow() != -1;
 		btnAzuriraj.setEnabled(enabled);
 		btnObrisi.setEnabled(enabled);

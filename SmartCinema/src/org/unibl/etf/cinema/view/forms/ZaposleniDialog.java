@@ -19,6 +19,7 @@ import org.unibl.etf.cinema.data.dto.Rola;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
 import org.unibl.etf.cinema.util.CryptoUtil;
 import org.unibl.etf.cinema.util.EmailValidator;
+import org.unibl.etf.cinema.util.UIUtils;
 import org.unibl.etf.cinema.util.Utils;
 
 import java.awt.Color;
@@ -78,7 +79,6 @@ public class ZaposleniDialog extends JDialog {
 
 	private List<JTextField> polja = new ArrayList<>();
 
-	private static final int MAX_DUZINA = 45;
 	private static final int MIN_DUZINA_LOZINKE = 8;
 	private static final int MIN_DUZINA_K_IMENA = 6;
 	private JButton btnSacuvaj;
@@ -105,8 +105,8 @@ public class ZaposleniDialog extends JDialog {
 		tfJmb.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfJmb, 13);
-				onemoguciUnosNonDigitKaraktera(e, null, false);
+				UIUtils.ograniciDuzinuUnosa(e, tfJmb, 13);
+				UIUtils.onemoguciUnosNonDigitKaraktera(e, null, false);
 			}
 		});
 		tfJmb.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -118,7 +118,7 @@ public class ZaposleniDialog extends JDialog {
 		tfIme.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfIme, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfIme);
 			}
 		});
 		tfIme.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -133,7 +133,7 @@ public class ZaposleniDialog extends JDialog {
 		tfPrezime.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfPrezime, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfPrezime);
 			}
 		});
 		tfPrezime.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -148,7 +148,7 @@ public class ZaposleniDialog extends JDialog {
 		tfEmail.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfEmail, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfEmail);
 			}
 		});
 		tfEmail.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -163,7 +163,7 @@ public class ZaposleniDialog extends JDialog {
 		tfMjesto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfMjesto, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfMjesto);
 			}
 		});
 		tfMjesto.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -178,7 +178,7 @@ public class ZaposleniDialog extends JDialog {
 		tfKorisnickoIme.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfKorisnickoIme, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfKorisnickoIme);
 			}
 		});
 		tfKorisnickoIme.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -203,7 +203,7 @@ public class ZaposleniDialog extends JDialog {
 		tfUlica.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfUlica, MAX_DUZINA);
+				UIUtils.ograniciDuzinuUnosa(e, tfUlica);
 			}
 		});
 		tfUlica.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -218,7 +218,7 @@ public class ZaposleniDialog extends JDialog {
 		tfBroj.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				onemoguciUnosNonDigitKaraktera(e, tfBroj, true);
+				UIUtils.onemoguciUnosNonDigitKaraktera(e, tfBroj, true);
 			}
 		});
 		tfBroj.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -252,8 +252,8 @@ public class ZaposleniDialog extends JDialog {
 		tfPlata.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				ograniciDuzinuUnosa(e, tfPlata, MAX_DUZINA);
-				onemoguciUnosNonDigitKarakteraOsimTacke(e, tfPlata);
+				UIUtils.ograniciDuzinuUnosa(e, tfPlata);
+				UIUtils.onemoguciUnosNonDigitKarakteraOsimTacke(e, tfPlata);
 			}
 		});
 		tfPlata.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
@@ -382,8 +382,11 @@ public class ZaposleniDialog extends JDialog {
 				btnSacuvaj = new JButton("Sa\u010Duvaj");
 				btnSacuvaj.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						provjeriPolja();
-						sacuvajZaposlenog();
+						if (provjeriPodatkeOZaposlenom()) {
+							sacuvajZaposlenog();
+						} else {
+							getToolkit().beep();
+						}
 					}
 				});
 				btnSacuvaj.setMnemonic(KeyEvent.VK_ENTER);
@@ -447,38 +450,8 @@ public class ZaposleniDialog extends JDialog {
 		pfPotvrdaLozinke.setEnabled(izmjenaOmogucena);
 	}
 
-	private void ograniciDuzinuUnosa(KeyEvent e, JTextField polje, int duzina) {
-		if (polje.getText().length() > duzina - 1) {
-			getToolkit().beep();
-			e.consume();
-		}
-	}
-
-	private void onemoguciUnosNonDigitKaraktera(KeyEvent e, JTextField polje, boolean prvaNulaDozvoljena) {
-		if (!Character.isDigit(e.getKeyChar())
-				|| prvaNulaDozvoljena && e.getKeyChar() == '0' && polje.getText().length() == 0) {
-			getToolkit().beep();
-			e.consume();
-		}
-	}
-
-	private void onemoguciUnosNonDigitKarakteraOsimTacke(KeyEvent e, JTextField polje) {
-		char keyChar = e.getKeyChar();
-		if (!Character.isDigit(keyChar) && keyChar != '.' || keyChar == '.' && polje.getText().contains(".")
-				|| (keyChar == '0' || keyChar == '.') && polje.getText().length() == 0) {
-			getToolkit().beep();
-			e.consume();
-		}
-	}
-
-	private void provjeriPolja() {
-
-		List<JTextField> nevalidnaPolja = new ArrayList<>();
-		for (JTextField polje : polja) {
-			if (polje.getText().isBlank()) {
-				nevalidnaPolja.add(polje);
-			}
-		}
+	private boolean provjeriPodatkeOZaposlenom() {
+		List<JTextField> nevalidnaPolja = UIUtils.praznaPolja(polja);
 
 		String jmb = tfJmb.getText().trim();
 		if (jmb.length() != 13 || !Utils.isIntegerNumber(jmb)) {
@@ -517,39 +490,16 @@ public class ZaposleniDialog extends JDialog {
 			String lozinka2 = new String(pfPotvrdaLozinke.getPassword()).trim();
 
 			if (lozinka1.length() < MIN_DUZINA_LOZINKE || !lozinka1.equals(lozinka2)) {
-				this.dodajCrvenuIvicu(pfLozinka);
-				this.dodajCrvenuIvicu(pfPotvrdaLozinke);
+				UIUtils.dodajCrvenuIvicu(pfLozinka);
+				UIUtils.dodajCrvenuIvicu(pfPotvrdaLozinke);
 			} else {
-				this.dodajPodrazumijevanuIvicu(pfLozinka);
-				this.dodajPodrazumijevanuIvicu(pfPotvrdaLozinke);
+				UIUtils.dodajPodrazumijevanuIvicu(pfLozinka);
+				UIUtils.dodajPodrazumijevanuIvicu(pfPotvrdaLozinke);
 			}
 		}
 
-		for (JTextField npolje : nevalidnaPolja) {
-			this.dodajCrvenuIvicu(npolje);
-		}
-
-		for (JTextField polje : polja) {
-			if (!nevalidnaPolja.contains(polje)) {
-				this.dodajPodrazumijevanuIvicu(polje);
-			}
-		}
-	}
-
-	private void dodajCrvenuIvicu(JTextField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(Color.RED), new EmptyBorder(0, 5, 0, 0)));
-	}
-
-	private void dodajPodrazumijevanuIvicu(JTextField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(0, 5, 0, 0)));
-	}
-
-	private void dodajCrvenuIvicu(JPasswordField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(Color.RED), new EmptyBorder(0, 5, 0, 0)));
-	}
-
-	private void dodajPodrazumijevanuIvicu(JPasswordField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(0, 5, 0, 0)));
+		UIUtils.postaviIvicePolja(nevalidnaPolja, polja);
+		return nevalidnaPolja.isEmpty();
 	}
 
 	private void sacuvajZaposlenog() {
@@ -589,12 +539,12 @@ public class ZaposleniDialog extends JDialog {
 				}
 			}
 
-			JOptionPane.showMessageDialog(this, "Zaposleni je uspješno saèuvan.", "Uspjeh",
+			JOptionPane.showMessageDialog(this, "Podaci o korisniku su uspješno saèuvani.", "Uspjeh",
 					JOptionPane.INFORMATION_MESSAGE);
 			((AdminForma) frame).azurirajTabeluKorisnici();
 			dispose();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this, "Zaposleni nije uspješno saèuvan.", "Greška",
+			JOptionPane.showMessageDialog(this, "Podaci o korisniku nisu saèuvani.", "Greška",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
