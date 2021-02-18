@@ -31,7 +31,7 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 				+ "INNER JOIN rola r ON n.ROLA_RolaID = r.RolaID "
 				+ "INNER JOIN adresa a ON z.ADRESA_AdresaID = a.AdresaID "
 				+ "WHERE z.Uklonjeno = false "
-				+ "ORDER BY ZaposleniID ASC";
+				+ "ORDER BY Ime ASC";
 
 		List<Zaposleni> resultList = new ArrayList<>();
 
@@ -58,6 +58,50 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 		return resultList;
 	}
 
+	@Override
+	public List<Zaposleni> pretraga(String kljucnaRijec) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sqlQuery = "SELECT ZaposleniID, JMB, Ime, Prezime, Plata, Email, NalogID, KorisnickoIme, RolaID, Naziv, AdresaID, Mjesto, Ulica, Broj "
+				+ "FROM zaposleni z " + "INNER JOIN nalog n ON z.NALOG_NalogID = n.NalogID "
+				+ "INNER JOIN rola r ON n.ROLA_RolaID = r.RolaID "
+				+ "INNER JOIN adresa a ON z.ADRESA_AdresaID = a.AdresaID "
+				+ "WHERE z.Uklonjeno = false AND (JMB LIKE ? OR Ime LIKE ? OR Prezime LIKE ? OR Plata LIKE ? OR Email LIKE ? "
+				+ "OR KorisnickoIme LIKE ? OR Naziv LIKE ? OR Mjesto LIKE ? OR Ulica LIKE ? OR Broj LIKE ?) "
+				+ "ORDER BY Ime ASC";
+
+		List<Zaposleni> resultList = new ArrayList<>();
+
+		try {
+			conn = DBUtil.getConnection();
+			
+			List<Object> paramList = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                paramList.add("%" + kljucnaRijec + "%");
+            }
+			ps = DBUtil.prepareStatement(conn, sqlQuery, false, paramList.toArray());
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				resultList.add(new Zaposleni(rs.getInt("ZaposleniID"), rs.getString("JMB"), rs.getString("Ime"),
+						rs.getString("Prezime"), rs.getDouble("Plata"), rs.getString("Email"),
+						new AdresaDTO(rs.getInt("AdresaID"), rs.getString("Mjesto"), rs.getString("Ulica"),
+								rs.getInt("Broj")),
+						new Nalog(rs.getInt("NalogID"), rs.getString("KorisnickoIme"),
+								new Rola(rs.getInt("RolaID"), rs.getString("Naziv")))));
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			DBUtil.close(rs, ps, conn);
+		}
+
+		return resultList;
+	}
+	
 	@Override
 	public boolean dodajZaposlenog(Zaposleni zaposleni) {
 		Connection conn = null;

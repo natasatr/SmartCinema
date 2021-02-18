@@ -21,7 +21,6 @@ import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -69,6 +68,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Dimension;
 import javax.swing.border.CompoundBorder;
+import javax.swing.JTextArea;
 
 public class AdminForma extends JFrame {
 
@@ -105,6 +105,7 @@ public class AdminForma extends JFrame {
 	private JButton btnObrisi;
 	private JButton btnAzuriraj;
 	private JButton btnDodaj;
+	private JTextField tfPretraga;
 	
 
 	/**
@@ -218,19 +219,61 @@ public class AdminForma extends JFrame {
 
 		JPanel pnlOpcije = new JPanel();
 		pnlOpcije.setOpaque(false);
+		
+		JButton btnPretraga = new JButton("");
+		btnPretraga.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				azurirajTabeluKorisnika();
+			}
+		});
+		btnPretraga.setBackground(new Color(220, 20, 60));
+		btnPretraga.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnPretraga.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
+		
+		tfPretraga = new JTextField();
+		tfPretraga.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					azurirajTabeluKorisnika();
+				}
+			}
+		});
+		tfPretraga.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfPretraga.setColumns(10);
 
 		GroupLayout gl_pnlKorisnici = new GroupLayout(pnlKorisnici);
-		gl_pnlKorisnici.setHorizontalGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlKorisnici.createSequentialGroup().addGap(33)
+		gl_pnlKorisnici.setHorizontalGroup(
+			gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlKorisnici.createSequentialGroup()
+					.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_pnlKorisnici.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(tfPretraga, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnPretraga))
 						.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
-								.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE))
-						.addGap(33)));
-		gl_pnlKorisnici.setVerticalGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_pnlKorisnici.createSequentialGroup().addGap(98)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE).addGap(36)
-						.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-						.addGap(77)));
+							.addGroup(gl_pnlKorisnici.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_pnlKorisnici.createSequentialGroup()
+								.addGap(36)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE))))
+					.addGap(40))
+		);
+		gl_pnlKorisnici.setVerticalGroup(
+			gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlKorisnici.createSequentialGroup()
+					.addGap(52)
+					.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnPretraga, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tfPretraga, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(26)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+					.addGap(27)
+					.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+					.addGap(56))
+		);
 
 		btnObrisi = new JButton("");
 		btnObrisi.addActionListener(new ActionListener() {
@@ -695,12 +738,6 @@ public class AdminForma extends JFrame {
 		tfUlica.setEditable(editable);
 	}
 
-	public void azurirajTabeluKorisnici() {
-		ZaposleniTableModel model = (ZaposleniTableModel) tblKorisnici.getModel();
-		model.setZaposleni(zaposleniDAO.sviZaposleni()); // TODO filtrirane podatke ubaciti
-		model.fireTableDataChanged();
-	}
-
 	private void postaviZaglavlje(JLabel label) {
 		lblZaglavlje.setText(label.getText());
 		lblZaglavlje.setIcon(label.getIcon());
@@ -727,8 +764,9 @@ public class AdminForma extends JFrame {
 	}
 
 	public void azurirajTabeluKorisnika() {
+		String kljucnaRijec = tfPretraga.getText().trim();
 		ZaposleniTableModel model = (ZaposleniTableModel) tblKorisnici.getModel();
-		model.setZaposleni(zaposleniDAO.sviZaposleni());
+		model.setZaposleni(zaposleniDAO.pretraga(kljucnaRijec));
 		model.fireTableDataChanged();
 	}
 
@@ -754,7 +792,7 @@ public class AdminForma extends JFrame {
 			if (zaposleniDAO.obrisiZaposlenog(zaposleni)) {
 				JOptionPane.showMessageDialog(this, "Zaposleni je uspješno obrisan.", "Uspjeh",
 						JOptionPane.INFORMATION_MESSAGE);
-				azurirajTabeluKorisnici();
+				azurirajTabeluKorisnika();
 			} else {
 				JOptionPane.showMessageDialog(this, "Zaposleni nije uspješno obrisan.", "Greška",
 						JOptionPane.ERROR_MESSAGE);

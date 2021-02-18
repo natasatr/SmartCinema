@@ -541,7 +541,7 @@ public class ZaposleniDialog extends JDialog {
 
 			JOptionPane.showMessageDialog(this, "Podaci o korisniku su uspješno saèuvani.", "Uspjeh",
 					JOptionPane.INFORMATION_MESSAGE);
-			((AdminForma) frame).azurirajTabeluKorisnici();
+			((AdminForma) frame).azurirajTabeluKorisnika();
 			dispose();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Podaci o korisniku nisu saèuvani.", "Greška",
