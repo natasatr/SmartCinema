@@ -51,6 +51,11 @@ public class MySQLDAOFactory extends DAOFactory{
 	public ZaposleniDAO getZaposleniDAO() {
 		return new MySQLZaposleniDAO();
 	}
-	
+
+
+	@Override
+	public RolaDAO getRolaDAO() {
+		return new MySQLRolaDAO();
+	}
 
 }

@@ -120,7 +120,8 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 	        try {
 	            conn = DBUtil.getConnection();
 	            ps = DBUtil.prepareStatement(conn, sqlQuery, false, zaposleni.getZaposleniID());
-	            retVal = ps.executeUpdate() == 1 && DAOFactory.getDAOFactory().getNalogDAO().obrisiNalog(zaposleni.getNalog());
+	            retVal = ps.executeUpdate() == 1 && DAOFactory.getDAOFactory().getNalogDAO().obrisiNalog(zaposleni.getNalog())
+	            		&& DAOFactory.getDAOFactory().getAdresaDAO().obrisiAdresu(zaposleni.getAdresa());
 	        } catch (SQLException ex) {
 	            Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
 	        } finally {

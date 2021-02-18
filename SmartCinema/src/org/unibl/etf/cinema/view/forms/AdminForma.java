@@ -10,7 +10,9 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -21,6 +23,8 @@ import javax.swing.BoxLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
@@ -32,6 +36,7 @@ import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
 import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
+import org.unibl.etf.cinema.data.dto.Zaposleni;
 import org.unibl.etf.cinema.view.tables.ZaposleniTableModel;
 
 import java.awt.Rectangle;
@@ -45,6 +50,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JFormattedTextField;
 import java.awt.GridLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.KeyEvent;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -56,6 +63,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Dimension;
 
 public class AdminForma extends JFrame {
 
@@ -75,20 +83,22 @@ public class AdminForma extends JFrame {
 	private KinoDTO kino;
 	private boolean kinoEditable = false;
 	private JTable tblKorisnici;
-	
+
 	private JLabel[] labele = new JLabel[3];
 	private JPanel[] paneli = new JPanel[3];
-	
+
 	private JLabel lblZaglavlje;
 	private JPanel selektovaniPanel;
-	
+
 	private int INDEKS_OPCIJE = 0;
-	
 
 	private static final Color DEFAULT_MENU_BG_COLOR = new Color(65, 34, 72);
 	private static final Font DEFAULT_MENU_FONT = new Font("Arial", Font.PLAIN, 16);
-	private static final Color HOVER_MENU_BG_COLOR =  new Color(65, 34, 72); // TODO
+	private static final Color HOVER_MENU_BG_COLOR = new Color(65, 34, 72); // TODO
 	private static final Font HOVER_MENU_FONT = new Font("Arial", Font.BOLD, 16);
+	private JButton btnObrisi;
+	private JButton btnAzuriraj;
+	private JButton btnDodaj;
 
 	/**
 	 * Launch the application.
@@ -181,7 +191,7 @@ public class AdminForma extends JFrame {
 		gbc_pnlSadrzaj.gridy = 1;
 		contentPane.add(pnlSadrzaj, gbc_pnlSadrzaj);
 		pnlSadrzaj.setLayout(new CardLayout(0, 0));
-		
+
 		JPanel pnlPocetnaStrana = new JPanel();
 		paneli[0] = pnlPocetnaStrana;
 		pnlPocetnaStrana.setBackground(new Color(240, 240, 240));
@@ -191,31 +201,77 @@ public class AdminForma extends JFrame {
 		paneli[2] = pnlKino;
 		pnlKino.setBackground(new Color(240, 240, 240));
 		pnlSadrzaj.add(pnlKino, "pnl_kino");
-		
+
 		JPanel pnlKorisnici = new JPanel();
 		paneli[1] = pnlKorisnici;
 		pnlKorisnici.setBackground(new Color(240, 240, 240));
 		pnlSadrzaj.add(pnlKorisnici, "pnl_korisnici");
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 
+		JPanel pnlOpcije = new JPanel();
+		pnlOpcije.setOpaque(false);
+
 		GroupLayout gl_pnlKorisnici = new GroupLayout(pnlKorisnici);
-		gl_pnlKorisnici.setHorizontalGroup(
-			gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlKorisnici.createSequentialGroup()
-					.addGap(33)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
-					.addGap(31))
-		);
-		gl_pnlKorisnici.setVerticalGroup(
-			gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlKorisnici.createSequentialGroup()
-					.addGap(98)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
-					.addGap(161))
-		);
-		
+		gl_pnlKorisnici.setHorizontalGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlKorisnici.createSequentialGroup().addGap(33)
+						.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+								.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE))
+						.addGap(33)));
+		gl_pnlKorisnici.setVerticalGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlKorisnici.createSequentialGroup().addGap(98)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE).addGap(36)
+						.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+						.addGap(77)));
+
+		btnObrisi = new JButton("");
+		btnObrisi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				obrisiKorisnika();
+			}
+		});
+		btnObrisi.setBackground(new Color(220, 20, 60));
+		btnObrisi.setBounds(126, 5, 95, 36);
+		btnObrisi.setIcon(
+				new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_delete.png")));
+
+		btnDodaj = new JButton("");
+		btnDodaj.setBackground(new Color(220, 20, 60));
+		btnDodaj.setBounds(340, 5, 95, 36);
+		btnDodaj.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_add.png")));
+		pnlOpcije.setLayout(null);
+
+		btnAzuriraj = new JButton("");
+		btnAzuriraj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				azurirajKorisnika();
+			}
+		});
+		btnAzuriraj.setBackground(new Color(220, 20, 60));
+		btnAzuriraj.setBounds(233, 5, 95, 36);
+		btnAzuriraj
+				.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_edit.png")));
+		pnlOpcije.add(btnAzuriraj);
+		pnlOpcije.add(btnObrisi);
+		pnlOpcije.add(btnDodaj);
+
+		btnDodaj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dodajKorisnika();
+			}
+		});
+
 		tblKorisnici = new JTable();
+		tblKorisnici.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						podesiDugmad();
+					}
+				});
+			}
+		});
 		scrollPane.setViewportView(tblKorisnici);
 		tblKorisnici.setFont(new Font("Arial", Font.PLAIN, 12));
 		tblKorisnici.setModel(new ZaposleniTableModel(zaposleniDAO.sviZaposleni()));
@@ -307,13 +363,13 @@ public class AdminForma extends JFrame {
 		tfBroj.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				System.out.println(tfBroj.getText().length());
 				if (!Character.isDigit(e.getKeyChar())) {
-					 e.consume();
+					e.consume();
 				}
 			}
 		});
-	
-		
+
 		tfBroj.setFont(new Font("Arial", Font.PLAIN, 16));
 
 		btnLeft = new JButton("Otka\u017Ei");
@@ -330,88 +386,88 @@ public class AdminForma extends JFrame {
 		btnLeft.setFont(new Font("Arial", Font.PLAIN, 14));
 		btnLeft.setBackground(new Color(220, 20, 60));
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(38)
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
+				.createSequentialGroup().addGap(38)
+				.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnRight, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel.createSequentialGroup()
+								.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(
+										ComponentPlacement.RELATED)
+								.addComponent(btnRight, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
+								.createSequentialGroup()
 								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblNaziv)
-										.addGap(73))
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-										.addGap(34))
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-										.addGap(3))
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-										.addGap(47))
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-										.addGap(73))
-									.addGroup(gl_panel.createSequentialGroup()
-										.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-										.addGap(73)))
+										.addGroup(gl_panel.createSequentialGroup().addComponent(lblNaziv).addGap(73))
+										.addGroup(gl_panel.createSequentialGroup()
+												.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 77,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(34))
+										.addGroup(gl_panel.createSequentialGroup()
+												.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 108,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(3))
+										.addGroup(gl_panel.createSequentialGroup()
+												.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(47))
+										.addGroup(gl_panel.createSequentialGroup()
+												.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 38,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(73))
+										.addGroup(gl_panel.createSequentialGroup()
+												.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 38,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(73)))
 								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(tfUlica, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-									.addComponent(tfMjesto, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-									.addComponent(tfBrojTelefona, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-									.addComponent(tfEmail, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-									.addComponent(tfNaziv, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-									.addComponent(tfBroj, Alignment.LEADING)))
-							.addComponent(lblNaslov)))
-					.addGap(90)
-					.addComponent(lblSlika)
-					.addGap(0, 0, Short.MAX_VALUE))
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(25)
-							.addComponent(lblNaslov)
-							.addGap(29)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNaziv)
-								.addComponent(tfNaziv, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+										.addComponent(tfUlica, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
+												Short.MAX_VALUE)
+										.addComponent(tfMjesto, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
+												Short.MAX_VALUE)
+										.addComponent(tfBrojTelefona, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
+												Short.MAX_VALUE)
+										.addComponent(tfEmail, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
+												Short.MAX_VALUE)
+										.addComponent(tfNaziv, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243,
+												Short.MAX_VALUE)
+										.addComponent(tfBroj, Alignment.LEADING)))
+								.addComponent(lblNaslov)))
+				.addGap(90).addComponent(lblSlika).addGap(0, 0, Short.MAX_VALUE)));
+		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
+				.createSequentialGroup()
+				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
+						.addGap(25).addComponent(lblNaslov).addGap(29)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblNaziv).addComponent(
+								tfNaziv, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfEmail, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfBrojTelefona, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addGap(18)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 19,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(tfBrojTelefona, GroupLayout.PREFERRED_SIZE, 31,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfMjesto, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addGap(18)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tfUlica, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addGap(18)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblSlika, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)))
-					.addGap(32)
-					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnRight)
-						.addComponent(btnLeft, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(41, Short.MAX_VALUE))
-		);
+								.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panel.createSequentialGroup().addContainerGap()
+								.addComponent(lblSlika, GroupLayout.PREFERRED_SIZE, 316, GroupLayout.PREFERRED_SIZE)))
+				.addGap(32)
+				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnRight).addComponent(btnLeft,
+						GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+				.addContainerGap(41, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		pnlKino.setLayout(gl_pnlKino);
 
@@ -492,7 +548,7 @@ public class AdminForma extends JFrame {
 					labele[indeks].setBackground(HOVER_MENU_BG_COLOR);
 					labele[indeks].setFont(HOVER_MENU_FONT);
 				}
-				
+
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if (INDEKS_OPCIJE != indeks) {
@@ -500,7 +556,7 @@ public class AdminForma extends JFrame {
 						labele[indeks].setFont(DEFAULT_MENU_FONT);
 					}
 				}
-				
+
 				@Override
 				public void mousePressed(MouseEvent e) {
 					postaviZaglavlje(labele[indeks]);
@@ -511,6 +567,7 @@ public class AdminForma extends JFrame {
 			});
 		}
 		popuniPodatkeOKinu();
+		podesiDugmad();
 	}
 
 	private void popuniPodatkeOKinu() {
@@ -520,14 +577,14 @@ public class AdminForma extends JFrame {
 		tfMjesto.setText(kino.getAdresa().getMjesto());
 		tfUlica.setText(kino.getAdresa().getUlica());
 		tfBroj.setText(kino.getAdresa().getBroj() + "");
-		
+
 		setEditable(false);
 	}
 
 	private void sacuvajKino() {
-		AdresaDTO adresa = new AdresaDTO(kino.getAdresa().getAdresaID(), tfMjesto.getText().trim(), tfUlica.getText().trim(),
-				Integer.parseInt(tfBroj.getText().trim()));
-		
+		AdresaDTO adresa = new AdresaDTO(kino.getAdresa().getAdresaID(), tfMjesto.getText().trim(),
+				tfUlica.getText().trim(), Integer.parseInt(tfBroj.getText().trim()));
+
 		if (adresaDAO.azurirajAdresu(adresa)) {
 			KinoDTO novoKino = new KinoDTO(kino.getKinoID(), tfNaziv.getText().trim(), tfEmail.getText().trim(),
 					tfBrojTelefona.getText().trim(), adresa);
@@ -540,7 +597,7 @@ public class AdminForma extends JFrame {
 			// TODO poruka o gresci
 		}
 	}
-	
+
 	private void setEditable(boolean editable) {
 		tfNaziv.setEditable(editable);
 		tfEmail.setEditable(editable);
@@ -549,35 +606,77 @@ public class AdminForma extends JFrame {
 		tfUlica.setEditable(editable);
 		tfBroj.setEditable(editable);
 	}
-	
-    public void azurirajTabeluKorisnici() {
-        ZaposleniTableModel model = (ZaposleniTableModel) tblKorisnici.getModel();
-     // TODO   model.setZaposleni(searchProducts());
-        model.fireTableDataChanged();
-    }
 
-    private void postaviZaglavlje(JLabel label) {
-        lblZaglavlje.setText(label.getText());
-        lblZaglavlje.setIcon(label.getIcon());
+	public void azurirajTabeluKorisnici() {
+		ZaposleniTableModel model = (ZaposleniTableModel) tblKorisnici.getModel();
+		model.setZaposleni(zaposleniDAO.sviZaposleni()); // TODO filtrirane podatke ubaciti
+		model.fireTableDataChanged();
+	}
 
-    }
+	private void postaviZaglavlje(JLabel label) {
+		lblZaglavlje.setText(label.getText());
+		lblZaglavlje.setIcon(label.getIcon());
 
-    private void postaviSelektovaniPanel() {
-        for (int i = 0; i < paneli.length; i++) {
-            if (i == INDEKS_OPCIJE) {
-                paneli[i].setVisible(true);
-            } else {
-                paneli[i].setVisible(false);
-            }
-        }
-    }
+	}
 
-    private void postaviOstaleLabele() {
-        for (int i = 0; i < labele.length; i++) {
-            if (INDEKS_OPCIJE != i) {
-                labele[i].setBackground(DEFAULT_MENU_BG_COLOR);
-                labele[i].setFont(DEFAULT_MENU_FONT);
-            }
-        }
-    }
+	private void postaviSelektovaniPanel() {
+		for (int i = 0; i < paneli.length; i++) {
+			if (i == INDEKS_OPCIJE) {
+				paneli[i].setVisible(true);
+			} else {
+				paneli[i].setVisible(false);
+			}
+		}
+	}
+
+	private void postaviOstaleLabele() {
+		for (int i = 0; i < labele.length; i++) {
+			if (INDEKS_OPCIJE != i) {
+				labele[i].setBackground(DEFAULT_MENU_BG_COLOR);
+				labele[i].setFont(DEFAULT_MENU_FONT);
+			}
+		}
+	}
+
+	public void azurirajTabeluKorisnika() {
+		ZaposleniTableModel model = (ZaposleniTableModel) tblKorisnici.getModel();
+		model.setZaposleni(zaposleniDAO.sviZaposleni());
+		model.fireTableDataChanged();
+	}
+
+	private void dodajKorisnika() {
+		new ZaposleniDialog(this, null).setVisible(true);
+	}
+
+	private void azurirajKorisnika() {
+		Zaposleni zaposleni = ((ZaposleniTableModel) tblKorisnici.getModel())
+				.getZaposleni(tblKorisnici.getSelectedRow());
+		new ZaposleniDialog(this, zaposleni).setVisible(true);
+	}
+
+	private void obrisiKorisnika() {
+		int row = tblKorisnici.getSelectedRow();
+
+		Object[] opcije = { "Da", "Ne" };
+		String message = "Da li ste sigurni da\nželite ukloniti korisnika?";
+		int value = JOptionPane.showOptionDialog(this, message, "", JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE, null, opcije, opcije[0]);
+		if (value == 0) {
+			Zaposleni zaposleni = ((ZaposleniTableModel) tblKorisnici.getModel()).getZaposleni(row);
+			if (zaposleniDAO.obrisiZaposlenog(zaposleni)) {
+				JOptionPane.showMessageDialog(this, "Zaposleni je uspješno obrisan.", "Uspjeh",
+						JOptionPane.INFORMATION_MESSAGE);
+				azurirajTabeluKorisnici();
+			} else {
+				JOptionPane.showMessageDialog(this, "Zaposleni nije uspješno obrisan.", "Greška",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	void podesiDugmad() {
+		boolean enabled = tblKorisnici.getSelectedRow() != -1;
+		btnAzuriraj.setEnabled(enabled);
+		btnObrisi.setEnabled(enabled);
+	}
 }

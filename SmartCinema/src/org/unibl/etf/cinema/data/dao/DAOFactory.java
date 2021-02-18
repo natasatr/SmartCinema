@@ -12,6 +12,7 @@ public abstract class DAOFactory {
 	public abstract DodatnaPonudaDAO getDodatnaPonudaDAO();
 	public abstract VrstaSjedistaDAO getVrstaSjedistaDAO();
 	public abstract ZaposleniDAO getZaposleniDAO();
+	public abstract RolaDAO getRolaDAO();
 	
 	public static DAOFactory getDAOFactory() {
         return new MySQLDAOFactory();
