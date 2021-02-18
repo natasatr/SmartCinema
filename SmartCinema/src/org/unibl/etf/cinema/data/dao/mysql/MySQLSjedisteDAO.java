@@ -108,17 +108,16 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		PreparedStatement ps = null;
 
 		String query = "INSERT INTO sjediste VALUES "
-				+ " (?, ?, ?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=values(Uklonjeno) ";
+				+ " (null , ?, ?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=values(Uklonjeno) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, sjediste.getSjedisteID());
-			ps.setInt(2, sjediste.getBroj());
-			ps.setInt(3, sjediste.getRed());
+			ps.setInt(1, sjediste.getBroj());
+			ps.setInt(2, sjediste.getRed());
+			ps.setInt(3, 0);
 			ps.setInt(4, 0);
-			ps.setInt(5, 0);
-			ps.setInt(6, sjediste.getSala().getSalaID());
-			ps.setInt(7, sjediste.getVrstaSjedista().getVrstaSjedistaID());
+			ps.setInt(5, sjediste.getSala().getSalaID());
+			ps.setInt(6, sjediste.getVrstaSjedista().getVrstaSjedistaID());
 			
 
 			retVal = ps.executeUpdate() == 1;

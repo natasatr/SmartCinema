@@ -58,15 +58,15 @@ public class MySQLSalaDAO implements SalaDAO {
 		PreparedStatement ps = null;
 
 		String query = "INSERT INTO sala VALUES "
-				+ " (?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=0 ";
+				+ " (null , ?, ?, ?, ? ) on duplicate key update Uklonjeno=0 ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, sala.getSalaID());
-			ps.setInt(2, sala.getBroj());
-			ps.setInt(3, sala.getKapacitet());
-			ps.setInt(4, 0);
-			ps.setInt(5, sala.getKino().getKinoID());
+			
+			ps.setInt(1, sala.getBroj());
+			ps.setInt(2, sala.getKapacitet());
+			ps.setInt(3, 0);
+			ps.setInt(4, sala.getKino().getKinoID());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {

@@ -47,13 +47,13 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 		PreparedStatement ps = null;
 
 		String query = "INSERT INTO vrsta_sjedista VALUES "
-				+ " (?, ?, ? ) on duplicate key update Uklonjeno=0 ";
+				+ " (null , ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, vs.getVrstaSjedistaID());
-			ps.setString(2, vs.getNaziv());
-			ps.setInt(3, 0);
+			
+			ps.setString(1, vs.getNaziv());
+			ps.setInt(2, 0);
 			
 
 			retVal = ps.executeUpdate() == 1;
