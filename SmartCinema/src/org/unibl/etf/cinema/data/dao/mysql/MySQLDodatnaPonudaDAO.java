@@ -44,11 +44,12 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 	}
 	
 	@Override
-	public DodatnaPonudaDTO dodatnaPonuda(String naziv) {
-		DodatnaPonudaDTO retVal = new DodatnaPonudaDTO();
+	public List<DodatnaPonudaDTO> dodatnaPonuda(DodatnaPonudaDTO dp) {
+		List<DodatnaPonudaDTO> retVal =new ArrayList<>(); 
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		String naziv=dp.getNaziv();
 
 		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + 
 				" where Naziv like ?";
@@ -60,7 +61,8 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 			rs = ps.executeQuery();
 
 			
-				retVal=new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3));
+			while (rs.next())
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
