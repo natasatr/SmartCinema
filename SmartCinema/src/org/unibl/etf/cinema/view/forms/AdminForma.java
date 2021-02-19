@@ -19,6 +19,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
+
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import java.awt.CardLayout;
 import javax.swing.border.LineBorder;
@@ -107,6 +109,7 @@ public class AdminForma extends JFrame {
 	private JButton btnDodaj;
 	private JTextField tfPretraga;
 	
+	private Zaposleni prijavljeniKorisnik;	
 
 	/**
 	 * Launch the application.
@@ -126,7 +129,7 @@ public class AdminForma extends JFrame {
 			@Override
 			public void run() {
 				try {
-					AdminForma frame = new AdminForma();
+					AdminForma frame = new AdminForma(1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -138,9 +141,10 @@ public class AdminForma extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AdminForma() {
+	public AdminForma(int nalogID) {
 		// Posto je prijava uspjela, znaci da kino sigurno postoji
 		kino = kinoDAO.svaKina().get(0);
+		prijavljeniKorisnik = zaposleniDAO.zaposleni(nalogID);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1112, 679);
@@ -189,6 +193,30 @@ public class AdminForma extends JFrame {
 		lblZaglavlje.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblZaglavlje.setBorder(new EmptyBorder(0, 15, 0, 0));
 		pnlZaglavlje.add(lblZaglavlje);
+		pnlZaglavlje.add(Box.createHorizontalGlue());
+		
+		final JLabel lblOdjava = new JLabel("Odjava");
+		lblOdjava.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblOdjava.setBackground(HOVER_MENU_BG_COLOR);
+				lblOdjava.setFont(HOVER_MENU_FONT);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblOdjava.setBackground(DEFAULT_MENU_BG_COLOR);
+				lblOdjava.setFont(DEFAULT_MENU_FONT);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				odjava();
+			}
+		});
+		lblOdjava.setBorder(new EmptyBorder(10, 15, 10, 15));
+		lblOdjava.setForeground(Color.WHITE);
+		lblOdjava.setFont(new Font("Arial", Font.PLAIN, 16));
+		pnlZaglavlje.add(lblOdjava);
 
 		JPanel pnlSadrzaj = new JPanel();
 		GridBagConstraints gbc_pnlSadrzaj = new GridBagConstraints();
@@ -204,6 +232,24 @@ public class AdminForma extends JFrame {
 		paneli[0] = pnlPocetnaStrana;
 		pnlPocetnaStrana.setBackground(new Color(240, 240, 240));
 		pnlSadrzaj.add(pnlPocetnaStrana, "pnl_pocetna_strana");
+		
+		JPanel panel_1 = new JPanel();
+		GroupLayout gl_pnlPocetnaStrana = new GroupLayout(pnlPocetnaStrana);
+		gl_pnlPocetnaStrana.setHorizontalGroup(
+			gl_pnlPocetnaStrana.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlPocetnaStrana.createSequentialGroup()
+					.addGap(33)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 503, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(310, Short.MAX_VALUE))
+		);
+		gl_pnlPocetnaStrana.setVerticalGroup(
+			gl_pnlPocetnaStrana.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlPocetnaStrana.createSequentialGroup()
+					.addGap(101)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(145, Short.MAX_VALUE))
+		);
+		pnlPocetnaStrana.setLayout(gl_pnlPocetnaStrana);
 
 		JPanel pnlKino = new JPanel();
 		paneli[2] = pnlKino;
@@ -220,27 +266,9 @@ public class AdminForma extends JFrame {
 		JPanel pnlOpcije = new JPanel();
 		pnlOpcije.setOpaque(false);
 		
-		JButton btnPretraga = new JButton("");
-		btnPretraga.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				azurirajTabeluKorisnika();
-			}
-		});
-		btnPretraga.setBackground(new Color(220, 20, 60));
-		btnPretraga.setFont(new Font("Arial", Font.PLAIN, 12));
-		btnPretraga.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
-		
-		tfPretraga = new JTextField();
-		tfPretraga.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					azurirajTabeluKorisnika();
-				}
-			}
-		});
-		tfPretraga.setFont(new Font("Arial", Font.PLAIN, 14));
-		tfPretraga.setColumns(10);
+		JPanel pnlPretraga = new JPanel();
+		pnlPretraga.setBackground(new Color(220, 20, 60));
+		pnlPretraga.setBorder(null);
 
 		GroupLayout gl_pnlKorisnici = new GroupLayout(pnlKorisnici);
 		gl_pnlKorisnici.setHorizontalGroup(
@@ -249,13 +277,11 @@ public class AdminForma extends JFrame {
 					.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_pnlKorisnici.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(tfPretraga, GroupLayout.PREFERRED_SIZE, 172, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnPretraga))
+							.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
 							.addGroup(gl_pnlKorisnici.createSequentialGroup()
 								.addContainerGap()
-								.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+								.addComponent(pnlPretraga, GroupLayout.PREFERRED_SIZE, 241, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_pnlKorisnici.createSequentialGroup()
 								.addGap(36)
 								.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE))))
@@ -264,16 +290,46 @@ public class AdminForma extends JFrame {
 		gl_pnlKorisnici.setVerticalGroup(
 			gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnlKorisnici.createSequentialGroup()
-					.addGap(52)
-					.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnPretraga, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tfPretraga, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-					.addGap(27)
+					.addGap(36)
+					.addComponent(pnlPretraga, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(31)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+					.addGap(33)
 					.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-					.addGap(56))
+					.addGap(50))
 		);
+		GridBagLayout gbl_pnlPretraga = new GridBagLayout();
+		gbl_pnlPretraga.columnWidths = new int[] {40, 150};
+		gbl_pnlPretraga.rowHeights = new int[]{29};
+		gbl_pnlPretraga.columnWeights = new double[]{0.0, 1.0};
+		gbl_pnlPretraga.rowWeights = new double[]{1.0};
+		pnlPretraga.setLayout(gbl_pnlPretraga);
+		
+		JLabel lblNewLabel = new JLabel("");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 0;
+		pnlPretraga.add(lblNewLabel, gbc_lblNewLabel);
+		lblNewLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
+		
+		tfPretraga = new JTextField();
+		GridBagConstraints gbc_tfPretraga = new GridBagConstraints();
+		gbc_tfPretraga.anchor = GridBagConstraints.BELOW_BASELINE;
+		gbc_tfPretraga.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tfPretraga.gridx = 1;
+		gbc_tfPretraga.gridy = 0;
+		pnlPretraga.add(tfPretraga, gbc_tfPretraga);
+		tfPretraga.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				azurirajTabeluKorisnika();
+			}
+		});
+		tfPretraga.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfPretraga.setColumns(10);
 
 		btnObrisi = new JButton("");
 		btnObrisi.addActionListener(new ActionListener() {
@@ -804,5 +860,20 @@ public class AdminForma extends JFrame {
 		boolean enabled = tblKorisnici.getSelectedRow() != -1;
 		btnAzuriraj.setEnabled(enabled);
 		btnObrisi.setEnabled(enabled);
+	}
+	
+	private void odjava() {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					LoginForma frame = new LoginForma();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		dispose();
 	}
 }

@@ -428,7 +428,7 @@ public class ZaposleniDialog extends JDialog {
 		getContentPane().setLayout(groupLayout);
 
 		this.popuniPodatke();
-		postaviIzmjenuKredencijala(chbKredencijali.isSelected());
+		postaviIzmjenuKredencijala(zaposleni == null);
 	}
 
 	private void popuniPodatke() {

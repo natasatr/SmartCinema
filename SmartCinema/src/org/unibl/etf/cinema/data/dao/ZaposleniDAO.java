@@ -6,6 +6,7 @@ import org.unibl.etf.cinema.data.dto.Zaposleni;
 
 public interface ZaposleniDAO {
 	List<Zaposleni> sviZaposleni();
+	Zaposleni zaposleni(int nalogID);
 	List<Zaposleni> pretraga(String kljucnaRijec);
 	boolean dodajZaposlenog(Zaposleni zaposleni);
 	boolean azurirajZaposlenog(Zaposleni zaposleni);

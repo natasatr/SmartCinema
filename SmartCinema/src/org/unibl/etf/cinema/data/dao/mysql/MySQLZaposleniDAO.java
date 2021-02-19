@@ -29,8 +29,7 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 		String sqlQuery = "SELECT ZaposleniID, JMB, Ime, Prezime, Plata, Email, NalogID, KorisnickoIme, RolaID, Naziv, AdresaID, Mjesto, Ulica, Broj "
 				+ "FROM zaposleni z " + "INNER JOIN nalog n ON z.NALOG_NalogID = n.NalogID "
 				+ "INNER JOIN rola r ON n.ROLA_RolaID = r.RolaID "
-				+ "INNER JOIN adresa a ON z.ADRESA_AdresaID = a.AdresaID "
-				+ "WHERE z.Uklonjeno = false "
+				+ "INNER JOIN adresa a ON z.ADRESA_AdresaID = a.AdresaID " + "WHERE z.Uklonjeno = false "
 				+ "ORDER BY Ime ASC";
 
 		List<Zaposleni> resultList = new ArrayList<>();
@@ -59,6 +58,44 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 	}
 
 	@Override
+	public Zaposleni zaposleni(int nalogID) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sqlQuery = "SELECT ZaposleniID, JMB, Ime, Prezime, Plata, Email, NalogID, KorisnickoIme, RolaID, Naziv, AdresaID, Mjesto, Ulica, Broj "
+				+ "FROM zaposleni z " + "INNER JOIN nalog n ON z.NALOG_NalogID = n.NalogID "
+				+ "INNER JOIN rola r ON n.ROLA_RolaID = r.RolaID "
+				+ "INNER JOIN adresa a ON z.ADRESA_AdresaID = a.AdresaID "
+				+ "WHERE z.Uklonjeno = false AND NalogID = ?";
+
+		Zaposleni zaposleni = null;
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(sqlQuery);
+			ps.setInt(1, nalogID);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				zaposleni = new Zaposleni(rs.getInt("ZaposleniID"), rs.getString("JMB"), rs.getString("Ime"),
+						rs.getString("Prezime"), rs.getDouble("Plata"), rs.getString("Email"),
+						new AdresaDTO(rs.getInt("AdresaID"), rs.getString("Mjesto"), rs.getString("Ulica"),
+								rs.getInt("Broj")),
+						new Nalog(rs.getInt("NalogID"), rs.getString("KorisnickoIme"),
+								new Rola(rs.getInt("RolaID"), rs.getString("Naziv"))));
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLRolaDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			DBUtil.close(rs, ps, conn);
+		}
+
+		return zaposleni;
+	}
+
+	@Override
 	public List<Zaposleni> pretraga(String kljucnaRijec) {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -76,11 +113,11 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 
 		try {
 			conn = DBUtil.getConnection();
-			
+
 			List<Object> paramList = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                paramList.add("%" + kljucnaRijec + "%");
-            }
+			for (int i = 0; i < 10; i++) {
+				paramList.add("%" + kljucnaRijec + "%");
+			}
 			ps = DBUtil.prepareStatement(conn, sqlQuery, false, paramList.toArray());
 			rs = ps.executeQuery();
 
@@ -101,7 +138,7 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 
 		return resultList;
 	}
-	
+
 	@Override
 	public boolean dodajZaposlenog(Zaposleni zaposleni) {
 		Connection conn = null;
@@ -114,7 +151,8 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 		try {
 			conn = DBUtil.getConnection();
 			Object values[] = { zaposleni.getJmb(), zaposleni.getIme(), zaposleni.getPrezime(), zaposleni.getPlata(),
-					zaposleni.getEmail(), false, zaposleni.getNalog().getNalogID(), zaposleni.getAdresa().getAdresaID()};
+					zaposleni.getEmail(), false, zaposleni.getNalog().getNalogID(),
+					zaposleni.getAdresa().getAdresaID() };
 			ps = DBUtil.prepareStatement(conn, sqlQuery, true, values);
 			retVal = ps.executeUpdate();
 			if (retVal != 0) {
@@ -132,25 +170,26 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 
 	@Override
 	public boolean azurirajZaposlenog(Zaposleni zaposleni) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        
-        String sqlQuery = "UPDATE zaposleni SET JMB = ?, Ime = ?, Prezime = ?, Plata = ?, Email = ?, NALOG_NalogID = ?, ADRESA_AdresaID = ? " +
-                          "WHERE ZaposleniID = ?";
-        int retVal = 0;
-        
-        try {
-            conn = DBUtil.getConnection();
-            Object values[] = { zaposleni.getJmb(), zaposleni.getIme(), zaposleni.getPrezime(), zaposleni.getPlata(), zaposleni.getEmail(),
-            		zaposleni.getNalog().getNalogID(), zaposleni.getAdresa().getAdresaID(), zaposleni.getZaposleniID() };
-            ps = DBUtil.prepareStatement(conn, sqlQuery, false, values);
-            retVal = ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            DBUtil.close(ps, conn);
-        }
-        return retVal == 1;
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		String sqlQuery = "UPDATE zaposleni SET JMB = ?, Ime = ?, Prezime = ?, Plata = ?, Email = ?, NALOG_NalogID = ?, ADRESA_AdresaID = ? "
+				+ "WHERE ZaposleniID = ?";
+		int retVal = 0;
+
+		try {
+			conn = DBUtil.getConnection();
+			Object values[] = { zaposleni.getJmb(), zaposleni.getIme(), zaposleni.getPrezime(), zaposleni.getPlata(),
+					zaposleni.getEmail(), zaposleni.getNalog().getNalogID(), zaposleni.getAdresa().getAdresaID(),
+					zaposleni.getZaposleniID() };
+			ps = DBUtil.prepareStatement(conn, sqlQuery, false, values);
+			retVal = ps.executeUpdate();
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			DBUtil.close(ps, conn);
+		}
+		return retVal == 1;
 	}
 
 	@Override
@@ -158,20 +197,21 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-	        String sqlQuery = "UPDATE zaposleni SET Uklonjeno = true WHERE ZaposleniID = ?";
-	        boolean retVal = false;   
-	        
-	        try {
-	            conn = DBUtil.getConnection();
-	            ps = DBUtil.prepareStatement(conn, sqlQuery, false, zaposleni.getZaposleniID());
-	            retVal = ps.executeUpdate() == 1 && DAOFactory.getDAOFactory().getNalogDAO().obrisiNalog(zaposleni.getNalog())
-	            		&& DAOFactory.getDAOFactory().getAdresaDAO().obrisiAdresu(zaposleni.getAdresa());
-	        } catch (SQLException ex) {
-	            Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
-	        } finally {
+		String sqlQuery = "UPDATE zaposleni SET Uklonjeno = true WHERE ZaposleniID = ?";
+		boolean retVal = false;
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = DBUtil.prepareStatement(conn, sqlQuery, false, zaposleni.getZaposleniID());
+			retVal = ps.executeUpdate() == 1
+					&& DAOFactory.getDAOFactory().getNalogDAO().obrisiNalog(zaposleni.getNalog())
+					&& DAOFactory.getDAOFactory().getAdresaDAO().obrisiAdresu(zaposleni.getAdresa());
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLZaposleniDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
 			DBUtil.close(ps, conn);
 		}
-	        return retVal; 
+		return retVal;
 	}
 
 	public static void main(String args[]) {
@@ -182,8 +222,8 @@ public class MySQLZaposleniDAO implements ZaposleniDAO {
 		r.setRolaID(1);
 		Nalog n = new Nalog();
 		n.setNalogID(2);
-		kino.obrisiZaposlenog(new Zaposleni(6, "0505123456898", "Srednji", "Marmat", 10000.0, "srednji@gmail.com", a, n));
-
+		kino.obrisiZaposlenog(
+				new Zaposleni(6, "0505123456898", "Srednji", "Marmat", 10000.0, "srednji@gmail.com", a, n));
 
 		List<Zaposleni> ki = kino.sviZaposleni();
 		for (Zaposleni k : ki)
