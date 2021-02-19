@@ -106,14 +106,13 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO dodatna_ponuda VALUES "
-				+ " (?, ?, ?)  ";
+		String query = "INSERT INTO dodatna_ponuda (Naziv, Cijena)  VALUES "
+				+ " ( ?, ?)  ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, dp.getDodatnaPonudaID());
-			ps.setString(2, dp.getNaziv());
-			ps.setDouble(3, dp.getCijena());
+			ps.setString(1, dp.getNaziv());
+			ps.setDouble(2, dp.getCijena());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {

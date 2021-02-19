@@ -107,8 +107,9 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO sjediste VALUES "
-				+ " (null , ?, ?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=values(Uklonjeno) ";
+		String query = "INSERT INTO sjediste (Broj, Red, Zauzeto, Uklonjeno, SALA_SalaID, VRSTA_SJEDISTA_VrstaSjedistaID)"
+				+ "  VALUES "
+				+ " ( ?, ?, ?, ?, ?, ? )";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);

@@ -57,8 +57,8 @@ public class MySQLSalaDAO implements SalaDAO {
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO sala VALUES "
-				+ " (null , ?, ?, ?, ? ) on duplicate key update Uklonjeno=0 ";
+		String query = "INSERT INTO sala (Broj, Kapacitet, Uklonjeno, KINO_KinoID ) VALUES "
+				+ " ( ?, ?, ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -131,5 +131,14 @@ public class MySQLSalaDAO implements SalaDAO {
 			DBUtil.close( ps, conn);
 		}
 		return retVal;
+	}
+	
+	public static void main(String args[])
+	{
+		MySQLSalaDAO ms=new MySQLSalaDAO();
+		List<SalaDTO> sale=ms.sveSaleUKinu("Kino 1");
+		
+		for(SalaDTO s:sale)
+			System.out.println(s);
 	}
 }

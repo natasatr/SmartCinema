@@ -46,8 +46,8 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO vrsta_sjedista VALUES "
-				+ " (null , ?, ? ) ";
+		String query = "INSERT INTO vrsta_sjedista (Naziv, Uklonjeno) VALUES "
+				+ " ( ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
