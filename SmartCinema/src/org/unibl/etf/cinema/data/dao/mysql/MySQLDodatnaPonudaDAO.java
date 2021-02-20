@@ -44,8 +44,37 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 	}
 	
 	@Override
-	public DodatnaPonudaDTO dodatnaPonuda(String naziv) {
-		DodatnaPonudaDTO retVal = new DodatnaPonudaDTO();
+	public List<DodatnaPonudaDTO> dodatnaPonuda(DodatnaPonudaDTO dp) {
+		List<DodatnaPonudaDTO> retVal =new ArrayList<>(); 
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String naziv=dp.getNaziv();
+
+		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + 
+				" where Naziv like ?";
+
+		try {
+			conn = ConnectionPool.getInstance().checkOut();
+			ps = conn.prepareStatement(query);
+			ps.setString(1,naziv);
+			rs = ps.executeQuery();
+
+			
+			while (rs.next())
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionPool.getInstance().checkIn(conn);
+			DBUtil.close(rs, ps, conn);
+		}
+		return retVal;
+	}
+	
+	@Override 
+	public List<DodatnaPonudaDTO> ucitajDodatnuPonudu(String naziv) {
+		List<DodatnaPonudaDTO> retVal =new  ArrayList<>(); 
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -60,7 +89,8 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 			rs = ps.executeQuery();
 
 			
-				retVal=new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3));
+			while (rs.next())
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -76,14 +106,13 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO dodatna_ponuda VALUES "
-				+ " (?, ?, ?)  ";
+		String query = "INSERT INTO dodatna_ponuda (Naziv, Cijena)  VALUES "
+				+ " ( ?, ?)  ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, dp.getDodatnaPonudaID());
-			ps.setString(2, dp.getNaziv());
-			ps.setDouble(3, dp.getCijena());
+			ps.setString(1, dp.getNaziv());
+			ps.setDouble(2, dp.getCijena());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {

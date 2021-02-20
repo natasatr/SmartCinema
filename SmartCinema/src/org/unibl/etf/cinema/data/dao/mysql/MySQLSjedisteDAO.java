@@ -26,7 +26,7 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, sj.Uklonjeno, SalaID, s.Broj, "
+		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, SalaID, s.Broj, "
 				+ " Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID, "
 				+ " a.Mjesto, a.Ulica, a.Broj, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
 				+ " from sjediste sj "
@@ -45,11 +45,11 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),
-						new SalaDTO(rs.getInt(6),rs.getInt(7), rs.getInt(8), rs.getInt(9),
-						new KinoDTO(rs.getInt(10),rs.getString(11),rs.getString(12),rs.getString(13),
-								new AdresaDTO(rs.getInt(14),rs.getString(15), rs.getString(16), rs.getInt(17)))),
-						new VrstaSjedistaDTO(rs.getInt(18),rs.getString(19), rs.getInt(20))));
+				retVal.add(new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),
+						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), 
+								new KinoDTO(rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11),
+										new AdresaDTO(rs.getInt(12),rs.getString(13), rs.getString(14), rs.getInt(15)))),
+						new VrstaSjedistaDTO(rs.getInt(16),rs.getString(17))));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -67,7 +67,7 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, sj.Uklonjeno, SalaID, s.Broj, "
+		String query = "select SjedisteID, sj.Broj, Red, Zauzeto, SalaID, s.Broj, "
 				+ " Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID, "
 				+ " a.Mjesto, a.Ulica, a.Broj, VrstaSjedistaID, v.Naziv, v.Uklonjeno" 
 				+ " from sjediste sj "
@@ -85,11 +85,11 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 			rs = ps.executeQuery();
 
 			if (rs.next())
-				retVal=new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),
-						new SalaDTO(rs.getInt(6),rs.getInt(7), rs.getInt(8), rs.getInt(9),
-						new KinoDTO(rs.getInt(10),rs.getString(11),rs.getString(12),rs.getString(13),
-								new AdresaDTO(rs.getInt(14),rs.getString(15), rs.getString(16), rs.getInt(17)))),
-						new VrstaSjedistaDTO(rs.getInt(18),rs.getString(19), rs.getInt(20)));
+				retVal=new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),
+						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), 
+								new KinoDTO(rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11),
+										new AdresaDTO(rs.getInt(12),rs.getString(13), rs.getString(14), rs.getInt(15)))),
+						new VrstaSjedistaDTO(rs.getInt(16),rs.getString(17)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -107,18 +107,18 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO sjediste VALUES "
-				+ " (?, ?, ?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=values(Uklonjeno) ";
+		String query = "INSERT INTO sjediste (Broj, Red, Zauzeto, Uklonjeno, SALA_SalaID, VRSTA_SJEDISTA_VrstaSjedistaID)"
+				+ "  VALUES "
+				+ " ( ?, ?, ?, ?, ?, ? )";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, sjediste.getSjedisteID());
-			ps.setInt(2, sjediste.getBroj());
-			ps.setInt(3, sjediste.getRed());
+			ps.setInt(1, sjediste.getBroj());
+			ps.setInt(2, sjediste.getRed());
+			ps.setInt(3, 0);
 			ps.setInt(4, 0);
-			ps.setInt(5, 0);
-			ps.setInt(6, sjediste.getSala().getSalaID());
-			ps.setInt(7, sjediste.getVrstaSjedista().getVrstaSjedistaID());
+			ps.setInt(5, sjediste.getSala().getSalaID());
+			ps.setInt(6, sjediste.getVrstaSjedista().getVrstaSjedistaID());
 			
 
 			retVal = ps.executeUpdate() == 1;
@@ -190,4 +190,5 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 		}
 		return retVal;
 	}
+	
 }

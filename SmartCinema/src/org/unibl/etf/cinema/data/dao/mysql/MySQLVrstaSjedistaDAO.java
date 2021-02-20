@@ -20,7 +20,7 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select VrstaSjedistaID, Naziv, Uklonjeno from vrsta_sjedista "
+		String query = "select VrstaSjedistaID, Naziv from vrsta_sjedista "
 				+ " order by VrstaSjedistaID asc " ;
 		
 		try {
@@ -29,7 +29,7 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new VrstaSjedistaDTO(rs.getInt(1),rs.getString(2), rs.getInt(3)));
+				retVal.add(new VrstaSjedistaDTO(rs.getInt(1),rs.getString(2)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			
@@ -46,14 +46,14 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO vrsta_sjedista VALUES "
-				+ " (?, ?, ? ) on duplicate key update Uklonjeno=0 ";
+		String query = "INSERT INTO vrsta_sjedista (Naziv, Uklonjeno) VALUES "
+				+ " ( ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, vs.getVrstaSjedistaID());
-			ps.setString(2, vs.getNaziv());
-			ps.setInt(3, 0);
+			
+			ps.setString(1, vs.getNaziv());
+			ps.setInt(2, 0);
 			
 
 			retVal = ps.executeUpdate() == 1;
@@ -74,14 +74,13 @@ public class MySQLVrstaSjedistaDAO implements VrstaSjedistaDAO{
 		PreparedStatement ps = null;
 
 		String query = "UPDATE vrsta_sjedista SET "
-				+ " Naziv =? "
-				+ " WHERE Naziv=? ";
+				+ " Naziv = ? "
+				+ " WHERE VrstaSjedistaID=? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, vs.getVrstaSjedistaID());
-			ps.setString(2, vs.getNaziv());
-			ps.setInt(3, vs.isUklonjeno());
+			ps.setString(1, vs.getNaziv());
+			ps.setInt(2, vs.getVrstaSjedistaID());
 			
 
 			retVal = ps.executeUpdate() == 1;

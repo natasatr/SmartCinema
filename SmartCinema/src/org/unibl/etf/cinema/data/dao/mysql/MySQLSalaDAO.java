@@ -23,7 +23,7 @@ public class MySQLSalaDAO implements SalaDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select SalaID, s.Broj, Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID,"
+		String query = "select SalaID, s.Broj, Kapacitet, KinoID, k.Naziv, Email, Telefon, AdresaID,"
 				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
 				+ " inner join kino k on KINO_KinoID=KinoID "
 				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
@@ -37,9 +37,9 @@ public class MySQLSalaDAO implements SalaDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), rs.getInt(4),
-						new KinoDTO(rs.getInt(5),rs.getString(6),rs.getString(7),rs.getString(8),
-								new AdresaDTO(rs.getInt(9),rs.getString(10), rs.getString(11), rs.getInt(12)))));
+				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
+						new KinoDTO(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),
+								new AdresaDTO(rs.getInt(8),rs.getString(9), rs.getString(10), rs.getInt(11)))));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -57,16 +57,16 @@ public class MySQLSalaDAO implements SalaDAO {
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO sala VALUES "
-				+ " (?, ?, ?, ?, ? ) on duplicate key update Uklonjeno=0 ";
+		String query = "INSERT INTO sala (Broj, Kapacitet, Uklonjeno, KINO_KinoID ) VALUES "
+				+ " ( ?, ?, ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, sala.getSalaID());
-			ps.setInt(2, sala.getBroj());
-			ps.setInt(3, sala.getKapacitet());
-			ps.setInt(4, 0);
-			ps.setInt(5, sala.getKino().getKinoID());
+			
+			ps.setInt(1, sala.getBroj());
+			ps.setInt(2, sala.getKapacitet());
+			ps.setInt(3, 0);
+			ps.setInt(4, sala.getKino().getKinoID());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
@@ -131,5 +131,14 @@ public class MySQLSalaDAO implements SalaDAO {
 			DBUtil.close( ps, conn);
 		}
 		return retVal;
+	}
+	
+	public static void main(String args[])
+	{
+		MySQLSalaDAO ms=new MySQLSalaDAO();
+		List<SalaDTO> sale=ms.sveSaleUKinu("Kino 1");
+		
+		for(SalaDTO s:sale)
+			System.out.println(s);
 	}
 }

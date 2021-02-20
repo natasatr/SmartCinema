@@ -6,7 +6,8 @@ import org.unibl.etf.cinema.data.dto.DodatnaPonudaDTO;
 
 public interface DodatnaPonudaDAO {
 	List<DodatnaPonudaDTO> sveDodatnePonude();
-	DodatnaPonudaDTO dodatnaPonuda(String naziv);
+	List<DodatnaPonudaDTO> ucitajDodatnuPonudu(String naziv);
+	List<DodatnaPonudaDTO> dodatnaPonuda(DodatnaPonudaDTO dp);
 	boolean dodajDodatnuPonudu(DodatnaPonudaDTO dp);
 	boolean azurirajDodatnuPonudu(DodatnaPonudaDTO dp);
 	boolean obrisiDodatnuPonudu(String naziv);

@@ -5,14 +5,12 @@ package org.unibl.etf.cinema.data.dto;
 public class SalaDTO {
 	public int SalaID;
 	public int Broj, Kapacitet;
-	public int Uklonjeno;
 	public KinoDTO kino;
-	public SalaDTO(int salaID, int broj, int kapacitet, int uklonjeno, KinoDTO kino) {
+	public SalaDTO(int salaID, int broj, int kapacitet, KinoDTO kino) {
 		super();
 		SalaID = salaID;
 		Broj = broj;
 		Kapacitet = kapacitet;
-		Uklonjeno = uklonjeno;
 		this.kino = kino;
 	}
 	public SalaDTO() {
@@ -36,12 +34,6 @@ public class SalaDTO {
 	public void setKapacitet(int kapacitet) {
 		Kapacitet = kapacitet;
 	}
-	public int isUklonjeno() {
-		return Uklonjeno;
-	}
-	public void setUklonjeno(int uklonjeno) {
-		Uklonjeno = uklonjeno;
-	}
 	public KinoDTO getKino() {
 		return kino;
 	}
@@ -55,7 +47,6 @@ public class SalaDTO {
 		result = prime * result + Broj;
 		result = prime * result + Kapacitet;
 		result = prime * result + SalaID;
-		result = prime * result + Uklonjeno;
 		result = prime * result + ((kino == null) ? 0 : kino.hashCode());
 		return result;
 	}
@@ -74,8 +65,6 @@ public class SalaDTO {
 			return false;
 		if (SalaID != other.SalaID)
 			return false;
-		if (Uklonjeno != other.Uklonjeno)
-			return false;
 		if (kino == null) {
 			if (other.kino != null)
 				return false;
@@ -85,9 +74,9 @@ public class SalaDTO {
 	}
 	@Override
 	public String toString() {
-		return "Sala [SalaID=" + SalaID + ", Broj=" + Broj + ", Kapacitet=" + Kapacitet + ", Uklonjeno=" + Uklonjeno
-				+ ", kino=" + kino + "]";
+		return "Sala " + Broj ;
 	}
+	
 	
 	
 	
