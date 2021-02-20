@@ -38,8 +38,8 @@ public class MySQLSalaDAO implements SalaDAO {
 
 			while (rs.next())
 				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
-						new KinoDTO(rs.getInt(5),rs.getString(6),rs.getString(7),rs.getString(8),
-								new AdresaDTO(rs.getInt(9),rs.getString(10), rs.getString(11), rs.getInt(12)))));
+						new KinoDTO(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),
+								new AdresaDTO(rs.getInt(8),rs.getString(9), rs.getString(10), rs.getInt(11)))));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

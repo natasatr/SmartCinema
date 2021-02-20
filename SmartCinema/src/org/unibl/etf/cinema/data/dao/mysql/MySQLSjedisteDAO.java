@@ -46,10 +46,10 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 
 			while (rs.next())
 				retVal.add(new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),
-						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getInt(8),
-						new KinoDTO(rs.getInt(9),rs.getString(10),rs.getString(11),rs.getString(12),
-								new AdresaDTO(rs.getInt(13),rs.getString(14), rs.getString(15), rs.getInt(16)))),
-						new VrstaSjedistaDTO(rs.getInt(17),rs.getString(18))));
+						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), 
+								new KinoDTO(rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11),
+										new AdresaDTO(rs.getInt(12),rs.getString(13), rs.getString(14), rs.getInt(15)))),
+						new VrstaSjedistaDTO(rs.getInt(16),rs.getString(17))));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -86,10 +86,10 @@ public class MySQLSjedisteDAO implements SjedisteDAO{
 
 			if (rs.next())
 				retVal=new SjedisteDTO(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getInt(4),
-						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), rs.getInt(8),
-						new KinoDTO(rs.getInt(9),rs.getString(10),rs.getString(11),rs.getString(12),
-								new AdresaDTO(rs.getInt(13),rs.getString(14), rs.getString(15), rs.getInt(16)))),
-						new VrstaSjedistaDTO(rs.getInt(17),rs.getString(18)));
+						new SalaDTO(rs.getInt(5),rs.getInt(6), rs.getInt(7), 
+								new KinoDTO(rs.getInt(8),rs.getString(9),rs.getString(10),rs.getString(11),
+										new AdresaDTO(rs.getInt(12),rs.getString(13), rs.getString(14), rs.getInt(15)))),
+						new VrstaSjedistaDTO(rs.getInt(16),rs.getString(17)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
