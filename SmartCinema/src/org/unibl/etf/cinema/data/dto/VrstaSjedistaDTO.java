@@ -4,6 +4,7 @@ public class VrstaSjedistaDTO {
 
 	public int VrstaSjedistaID;
 	public String Naziv;
+	
 	public VrstaSjedistaDTO(int vrstaSjedistaID, String naziv) {
 		super();
 		VrstaSjedistaID = vrstaSjedistaID;
