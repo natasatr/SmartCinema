@@ -23,7 +23,7 @@ public class MySQLSalaDAO implements SalaDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select SalaID, s.Broj, Kapacitet, s.Uklonjeno, KinoID, k.Naziv, Email, Telefon, AdresaID,"
+		String query = "select SalaID, s.Broj, Kapacitet, KinoID, k.Naziv, Email, Telefon, AdresaID,"
 				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
 				+ " inner join kino k on KINO_KinoID=KinoID "
 				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
@@ -37,7 +37,7 @@ public class MySQLSalaDAO implements SalaDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), rs.getInt(4),
+				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
 						new KinoDTO(rs.getInt(5),rs.getString(6),rs.getString(7),rs.getString(8),
 								new AdresaDTO(rs.getInt(9),rs.getString(10), rs.getString(11), rs.getInt(12)))));
 			

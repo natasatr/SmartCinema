@@ -4,12 +4,10 @@ public class VrstaSjedistaDTO {
 
 	public int VrstaSjedistaID;
 	public String Naziv;
-	public int uklonjeno;
-	public VrstaSjedistaDTO(int vrstaSjedistaID, String naziv, int uklonjeno) {
+	public VrstaSjedistaDTO(int vrstaSjedistaID, String naziv) {
 		super();
 		VrstaSjedistaID = vrstaSjedistaID;
 		Naziv = naziv;
-		this.uklonjeno = uklonjeno;
 	}
 	public VrstaSjedistaDTO() {
 		super();
@@ -26,19 +24,12 @@ public class VrstaSjedistaDTO {
 	public void setNaziv(String naziv) {
 		Naziv = naziv;
 	}
-	public int isUklonjeno() {
-		return uklonjeno;
-	}
-	public void setUklonjeno(int uklonjeno) {
-		this.uklonjeno = uklonjeno;
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((Naziv == null) ? 0 : Naziv.hashCode());
 		result = prime * result + VrstaSjedistaID;
-		result = prime * result + uklonjeno;
 		return result;
 	}
 	@Override
@@ -57,15 +48,14 @@ public class VrstaSjedistaDTO {
 			return false;
 		if (VrstaSjedistaID != other.VrstaSjedistaID)
 			return false;
-		if (uklonjeno != other.uklonjeno)
-			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "VrstaSjedista [VrstaSjedistaID=" + VrstaSjedistaID + ", Naziv=" + Naziv + ", uklonjeno=" + uklonjeno
-				+ "]";
+		return "VrstaSjedistaDTO [VrstaSjedistaID=" + VrstaSjedistaID + ", Naziv=" + Naziv + "]";
 	}
+	
+	
 	
 	
 }
