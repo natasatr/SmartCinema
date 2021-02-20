@@ -6,7 +6,6 @@ public abstract class DAOFactory {
 	public abstract AdresaDAO getAdresaDAO();
 	public abstract KinoDAO getKinoDAO();
 	public abstract NalogDAO getNalogDAO();
-	public abstract PosjetilacDAO getPosjetilacDAO();
 	public abstract SalaDAO getSalaDAO();
 	public abstract SjedisteDAO getSjedisteDAO();
 	public abstract DodatnaPonudaDAO getDodatnaPonudaDAO();

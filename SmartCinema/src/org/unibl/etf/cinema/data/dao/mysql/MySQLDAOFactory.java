@@ -10,7 +10,6 @@ public class MySQLDAOFactory extends DAOFactory{
 		return new MySQLAdresaDAO();
 	}
 	
-	
 	@Override
 	public KinoDAO getKinoDAO() {
 		return new MySQLKinoDAO();
@@ -20,12 +19,7 @@ public class MySQLDAOFactory extends DAOFactory{
 	public NalogDAO getNalogDAO() {
 		return new MySQLNalogDAO();
 	}
-	
-	@Override
-	public  PosjetilacDAO getPosjetilacDAO(){
-		return new MySQLPosjetilacDAO();
-	}
-	
+
 	@Override
 	public SalaDAO getSalaDAO() {
 		return new MySQLSalaDAO();
