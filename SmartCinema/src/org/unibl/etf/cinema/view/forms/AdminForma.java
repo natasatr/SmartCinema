@@ -100,9 +100,9 @@ public class AdminForma extends JFrame {
 
 	private int INDEKS_OPCIJE = 0;
 
-	private static final Color DEFAULT_MENU_BG_COLOR = new Color(65, 34, 72);
+	private static final Color DEFAULT_MENU_BG_COLOR = new Color(33, 20, 47);
 	private static final Font DEFAULT_MENU_FONT = new Font("Arial", Font.PLAIN, 16);
-	private static final Color HOVER_MENU_BG_COLOR = new Color(65, 34, 72); // TODO
+	private static final Color HOVER_MENU_BG_COLOR = new Color(28, 15, 42); // TODO
 	private static final Font HOVER_MENU_FONT = new Font("Arial", Font.BOLD, 16);
 	private JButton btnObrisi;
 	private JButton btnAzuriraj;
@@ -196,6 +196,8 @@ public class AdminForma extends JFrame {
 		pnlZaglavlje.add(Box.createHorizontalGlue());
 		
 		final JLabel lblOdjava = new JLabel("Odjava");
+		lblOdjava.setBackground(DEFAULT_MENU_BG_COLOR);
+		lblOdjava.setOpaque(true);
 		lblOdjava.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -649,6 +651,7 @@ public class AdminForma extends JFrame {
 		pnlMeni.setLayout(gbl_pnlMeni);
 
 		JLabel lblPocetnaStrana = new JLabel("Po\u010Detna strana");
+		lblPocetnaStrana.setOpaque(true);
 		labele[0] = lblPocetnaStrana;
 		lblPocetnaStrana.setBackground(HOVER_MENU_BG_COLOR);
 		lblPocetnaStrana.setIconTextGap(10);
@@ -667,8 +670,9 @@ public class AdminForma extends JFrame {
 		pnlMeni.add(lblPocetnaStrana, gbc_lblPocetnaStrana);
 
 		JLabel lblKorisnici = new JLabel("Korisnici");
+		lblKorisnici.setOpaque(true);
 		labele[1] = lblKorisnici;
-		lblKorisnici.setBackground(new Color(99, 62, 109));
+		lblKorisnici.setBackground(DEFAULT_MENU_BG_COLOR);
 		lblKorisnici.setIconTextGap(10);
 		lblKorisnici.setIcon(
 				new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_korisnici.png")));
@@ -685,8 +689,9 @@ public class AdminForma extends JFrame {
 		pnlMeni.add(lblKorisnici, gbc_lblKorisnici);
 
 		JLabel lblKino = new JLabel("Kino");
+		lblKino.setOpaque(true);
 		labele[2] = lblKino;
-		lblKino.setBackground(new Color(127, 83, 135));
+		lblKino.setBackground(DEFAULT_MENU_BG_COLOR);
 		lblKino.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_kino.png")));
 		lblKino.setIconTextGap(10);
 		lblKino.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -802,11 +807,7 @@ public class AdminForma extends JFrame {
 
 	private void postaviSelektovaniPanel() {
 		for (int i = 0; i < paneli.length; i++) {
-			if (i == INDEKS_OPCIJE) {
-				paneli[i].setVisible(true);
-			} else {
-				paneli[i].setVisible(false);
-			}
+			paneli[i].setVisible(INDEKS_OPCIJE == i);
 		}
 	}
 
@@ -867,8 +868,7 @@ public class AdminForma extends JFrame {
 			@Override
 			public void run() {
 				try {
-					LoginForma frame = new LoginForma();
-					frame.setVisible(true);
+					new LoginForma().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
