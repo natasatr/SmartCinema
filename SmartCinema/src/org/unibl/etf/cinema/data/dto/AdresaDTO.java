@@ -8,17 +8,16 @@ public class AdresaDTO {
 	private String mjesto;
 	private String ulica;
 	private Integer broj;
-	
+
 	public AdresaDTO() {
-		
+
 	}
-	
+
 	public AdresaDTO(String mjesto, String ulica, Integer broj) {
 		this.mjesto = mjesto;
 		this.ulica = ulica;
 		this.broj = broj;
 	}
-	
 
 	public AdresaDTO(Integer adresaID, String mjesto, String ulica, Integer broj) {
 		this.adresaID = adresaID;
@@ -82,6 +81,6 @@ public class AdresaDTO {
 
 	@Override
 	public String toString() {
-		return ulica + " " + broj + ", " + mjesto;		
-	}	
+		return ulica + " " + broj + ", " + mjesto;
+	}
 }

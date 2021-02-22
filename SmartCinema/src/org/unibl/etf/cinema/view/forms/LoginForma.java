@@ -50,7 +50,7 @@ public class LoginForma extends JFrame {
 		} catch (Exception e) {
 
 		}
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -150,9 +150,10 @@ public class LoginForma extends JFrame {
 		pnlLogin.add(pfLozinka);
 		pnlLogin.add(lblKorisnickoIme);
 		pnlLogin.add(tfKorisnickoIme);
-		
+
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(LoginForma.class.getResource("/org/unibl/etf/cinema/view/icons/login_logo.png")));
+		lblNewLabel.setIcon(
+				new ImageIcon(LoginForma.class.getResource("/org/unibl/etf/cinema/view/icons/login_logo.png")));
 		lblNewLabel.setBounds(31, 16, 282, 140);
 		pnlLogin.add(lblNewLabel);
 	}
@@ -190,11 +191,11 @@ public class LoginForma extends JFrame {
 				// TODO
 				break;
 			default:
-				// TODO
+				forma = new DodatnaPonudaSearchFrame();
 			}
 
 			final JFrame glavnaForma = forma;
-			forma.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+			forma.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {

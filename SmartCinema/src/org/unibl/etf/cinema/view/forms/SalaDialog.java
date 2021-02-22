@@ -2,38 +2,35 @@ package org.unibl.etf.cinema.view.forms;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.SalaDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JTextField;
 
 public class SalaDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
-	
-	private SalaDAO salaDAO=DAOFactory.getDAOFactory().getSalaDAO();
-	private KinoDAO kinoDAO=DAOFactory.getDAOFactory().getKinoDAO();
-	//private MySQLKinoDAO kinoSQL
+
+	private SalaDAO salaDAO = DAOFactory.getDAOFactory().getSalaDAO();
+	private KinoDAO kinoDAO = DAOFactory.getDAOFactory().getKinoDAO();
+	// private MySQLKinoDAO kinoSQL
 	private DodatnaPonudaSearchFrame frame;
 	private SalaDTO salaDTO;
 	private JTable table;
@@ -42,14 +39,12 @@ public class SalaDialog extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	
-	public SalaDialog(DodatnaPonudaSearchFrame frame,SalaDTO salaDTO )
-	{
+
+	public SalaDialog(DodatnaPonudaSearchFrame frame, SalaDTO salaDTO) {
 		this();
-		this.salaDTO= salaDTO;
-		this.frame=frame;
+		this.salaDTO = salaDTO;
+		this.frame = frame;
 	}
-	
 
 	/**
 	 * Launch the application.
@@ -79,29 +74,21 @@ public class SalaDialog extends JDialog {
 		textField = new JTextField();
 		textField.setColumns(10);
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(26)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addComponent(lblBrojSale)
-							.addGap(55)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblInformacijeOSali))
-					.addContainerGap(216, Short.MAX_VALUE))
-		);
-		gl_contentPanel.setVerticalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(25)
-					.addComponent(lblInformacijeOSali)
-					.addGap(66)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblBrojSale)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(91, Short.MAX_VALUE))
-		);
+		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup().addGap(26)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPanel.createSequentialGroup().addComponent(lblBrojSale).addGap(55)
+										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblInformacijeOSali))
+						.addContainerGap(216, Short.MAX_VALUE)));
+		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup().addGap(25).addComponent(lblInformacijeOSali)
+						.addGap(66)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblBrojSale)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(91, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -113,7 +100,7 @@ public class SalaDialog extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						sacuvajSalu();
-					
+
 					}
 				});
 				buttonPane.add(okButton);
@@ -126,85 +113,84 @@ public class SalaDialog extends JDialog {
 			}
 		}
 	}
-	
+
 	public void sacuvajSalu() {
 		String polje1 = textField.getText();
-		int broj=Integer.parseInt(polje1);
-		KinoDTO kino=kinoDAO.svaKina().get(0);
-		SalaDTO dp=new SalaDTO(broj, kino);
-		
-		if(salaDTO==null) {
-		try
-		{
-			salaDAO.dodajSalu(dp);
-			//setVisible(false);
-			dispose();
-			//frame.refreshDP();
-			
-			JOptionPane.showMessageDialog(frame, "Sala dodana uspijesno.","Sala je dodana", JOptionPane.INFORMATION_MESSAGE);
-		}catch(Exception ee)
-		{
-			JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
-		}	
-		
-	}else {try
-	{
-		salaDAO.azurirajSalu(dp);
-		
-		//setVisible(false);
-		dispose();
-		//frame.refreshDP();
-		
-		JOptionPane.showMessageDialog(frame, "Sala azurirana uspijesno.","Sala je dodana", JOptionPane.INFORMATION_MESSAGE);
-	}catch(Exception ee)
-	{
-		JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+		int broj = Integer.parseInt(polje1);
+		KinoDTO kino = kinoDAO.svaKina().get(0);
+		SalaDTO dp = new SalaDTO(broj, kino);
+
+		if (salaDTO == null) {
+			try {
+				salaDAO.dodajSalu(dp);
+				// setVisible(false);
+				dispose();
+				// frame.refreshDP();
+
+				JOptionPane.showMessageDialog(frame, "Sala dodana uspijesno.", "Sala je dodana",
+						JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ee) {
+				JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		} else {
+			try {
+				salaDAO.azurirajSalu(dp);
+
+				// setVisible(false);
+				dispose();
+				// frame.refreshDP();
+
+				JOptionPane.showMessageDialog(frame, "Sala azurirana uspijesno.", "Sala je dodana",
+						JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ee) {
+				JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+		((DodatnaPonudaSearchFrame) frame).azurirajTabeluSala();
 	}
-		
-	}
-		((DodatnaPonudaSearchFrame )frame).azurirajTabeluSala();
-	}
-	
+
 	public void dodajSalu() {
 		String polje1 = textField.getText();
-		int broj=Integer.parseInt(polje1);
-		KinoDTO kino=kinoDAO.svaKina().get(0);
-		SalaDTO dp=new SalaDTO(broj, kino);
-		
-		if(salaDTO==null) {
-		try
-		{
-			salaDAO.dodajSalu(dp);
-			setVisible(false);
-			dispose();
-			//frame.refreshDP();
-			
-			JOptionPane.showMessageDialog(frame, "Sala dodana uspijesno.","Sala je dodana", JOptionPane.INFORMATION_MESSAGE);
-		}catch(Exception ee)
-		{
-			JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
-		}	
-		
-	}else {try
-	{
-		salaDAO.azurirajSalu(dp);
-		
-		setVisible(false);
-		dispose();
-		//frame.refreshDP();
-		
-		JOptionPane.showMessageDialog(frame, "Sala azurirana uspijesno.","Sala je dodana", JOptionPane.INFORMATION_MESSAGE);
-	}catch(Exception ee)
-	{
-		JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
-	}
-		
-	}
-		((DodatnaPonudaSearchFrame )frame).azurirajTabeluSala();
-		
-	
-		
-	
+		int broj = Integer.parseInt(polje1);
+		KinoDTO kino = kinoDAO.svaKina().get(0);
+		SalaDTO dp = new SalaDTO(broj, kino);
+
+		if (salaDTO == null) {
+			try {
+				salaDAO.dodajSalu(dp);
+				setVisible(false);
+				dispose();
+				// frame.refreshDP();
+
+				JOptionPane.showMessageDialog(frame, "Sala dodana uspijesno.", "Sala je dodana",
+						JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ee) {
+				JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		} else {
+			try {
+				salaDAO.azurirajSalu(dp);
+
+				setVisible(false);
+				dispose();
+				// frame.refreshDP();
+
+				JOptionPane.showMessageDialog(frame, "Sala azurirana uspijesno.", "Sala je dodana",
+						JOptionPane.INFORMATION_MESSAGE);
+			} catch (Exception ee) {
+				JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska",
+						JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+		((DodatnaPonudaSearchFrame) frame).azurirajTabeluSala();
+
 	}
 
 }

@@ -7,14 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
-
-
 public class ConnectionPool {
-	
-	
-private static final String BUNDLE_NAME = ConnectionPool.class.getName();
-	
+
+	private static final String BUNDLE_NAME = ConnectionPool.class.getName();
+
 	private String jdbcURL;
 	private String username;
 	private String password;
@@ -59,12 +55,9 @@ private static final String BUNDLE_NAME = ConnectionPool.class.getName();
 		maxIdleConnections = 10;
 		maxConnections = 10;
 		try {
-			preconnectCount = Integer.parseInt(bundle
-					.getString("preconnectCount"));
-			maxIdleConnections = Integer.parseInt(bundle
-					.getString("maxIdleConnections"));
-			maxConnections = Integer.parseInt(bundle
-					.getString("maxConnections"));
+			preconnectCount = Integer.parseInt(bundle.getString("preconnectCount"));
+			maxIdleConnections = Integer.parseInt(bundle.getString("maxIdleConnections"));
+			maxConnections = Integer.parseInt(bundle.getString("maxConnections"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,7 +103,5 @@ private static final String BUNDLE_NAME = ConnectionPool.class.getName();
 			notify();
 		}
 	}
-	
-	
 
 }

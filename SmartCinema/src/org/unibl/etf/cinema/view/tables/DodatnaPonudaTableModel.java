@@ -5,10 +5,10 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.unibl.etf.cinema.data.dto.DodatnaPonudaDTO;
+import org.unibl.etf.cinema.util.Utils;
 
-public class DodatnaPonudaTableModel extends AbstractTableModel{
-	
-	
+public class DodatnaPonudaTableModel extends AbstractTableModel {
+
 	public List<DodatnaPonudaDTO> getDodatnePonude() {
 		return dodatnePonude;
 	}
@@ -17,14 +17,14 @@ public class DodatnaPonudaTableModel extends AbstractTableModel{
 		this.dodatnePonude = dodatnePonude;
 	}
 
-	private String[] naziviKolona= {"#", "NAZIV", "CIJENA"};
-	
+	private String[] naziviKolona = { "#", "Naziv", "Cijena (KM)" };
+
 	private List<DodatnaPonudaDTO> dodatnePonude;
 
 	public DodatnaPonudaTableModel(List<DodatnaPonudaDTO> dodatnePonude) {
 		this.dodatnePonude = dodatnePonude;
 	}
-	
+
 	public DodatnaPonudaDTO getDodatnaPonudaAtRow(int rowIndex) {
 		return dodatnePonude.get(rowIndex);
 	}
@@ -52,12 +52,10 @@ public class DodatnaPonudaTableModel extends AbstractTableModel{
 		else if (columnIndex == 1)
 			return red.getNaziv();
 		else if (columnIndex == 2)
-			return red.getCijena()+ "   KM";
-		
+			return Utils.formatDecimalNumber(red.getCijena());
+
 		else
 			return null;
 	}
-	
-	
 
 }

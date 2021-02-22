@@ -23,7 +23,7 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		ResultSet rs = null;
 
 		String query = "select AdresaID, Mjesto, Ulica, Broj from adresa "
-				     + "where Uklonjeno = false order by Ulica asc";
+				+ "where Uklonjeno = false order by Ulica asc";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
@@ -48,8 +48,7 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String query = "select AdresaID, Mjesto, Ulica, Broj from adresa "
-				     + "where AdresaID = ?";
+		String query = "select AdresaID, Mjesto, Ulica, Broj from adresa " + "where AdresaID = ?";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
@@ -148,12 +147,11 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		return retVal;
 
 	}
-	
-	public static void main(String args[])
-	{
-		MySQLAdresaDAO m=new MySQLAdresaDAO();
-		AdresaDTO a=m.sveAdrese().get(0);
-		
+
+	public static void main(String args[]) {
+		MySQLAdresaDAO m = new MySQLAdresaDAO();
+		AdresaDTO a = m.sveAdrese().get(0);
+
 		System.out.println(a);
 	}
 }

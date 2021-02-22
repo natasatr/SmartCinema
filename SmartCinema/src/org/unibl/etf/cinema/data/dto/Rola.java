@@ -8,9 +8,9 @@ public class Rola implements Serializable {
 	private String naziv;
 
 	public Rola() {
-		
+
 	}
-	
+
 	public Rola(Integer rolaID, String naziv) {
 		this.rolaID = rolaID;
 		this.naziv = naziv;

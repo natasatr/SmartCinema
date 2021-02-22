@@ -4,27 +4,33 @@ public class VrstaSjedistaDTO {
 
 	public int VrstaSjedistaID;
 	public String Naziv;
-	
+
 	public VrstaSjedistaDTO(int vrstaSjedistaID, String naziv) {
 		super();
 		VrstaSjedistaID = vrstaSjedistaID;
 		Naziv = naziv;
 	}
+
 	public VrstaSjedistaDTO() {
 		super();
 	}
+
 	public int getVrstaSjedistaID() {
 		return VrstaSjedistaID;
 	}
+
 	public void setVrstaSjedistaID(int vrstaSjedistaID) {
 		VrstaSjedistaID = vrstaSjedistaID;
 	}
+
 	public String getNaziv() {
 		return Naziv;
 	}
+
 	public void setNaziv(String naziv) {
 		Naziv = naziv;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -33,6 +39,7 @@ public class VrstaSjedistaDTO {
 		result = prime * result + VrstaSjedistaID;
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -51,12 +58,10 @@ public class VrstaSjedistaDTO {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return Naziv;
 	}
-	
-	
-	
-	
+
 }

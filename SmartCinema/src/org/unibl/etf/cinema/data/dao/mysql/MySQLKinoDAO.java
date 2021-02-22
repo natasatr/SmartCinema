@@ -53,15 +53,15 @@ public class MySQLKinoDAO implements KinoDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String query = "select KinoID, Naziv, Email, Telefon, AdresaID, Mjesto, Ulica, Broj from kino k " + 
-		"inner join adresa a on a.AdresaID=k.ADRESA_AdresaID where Naziv like ? AND k.Uklonjeno = false";
+		String query = "select KinoID, Naziv, Email, Telefon, AdresaID, Mjesto, Ulica, Broj from kino k "
+				+ "inner join adresa a on a.AdresaID=k.ADRESA_AdresaID where Naziv like ? AND k.Uklonjeno = false";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
 			ps.setString(1, naziv);
 			rs = ps.executeQuery();
-			
+
 			if (rs.next()) {
 				retVal = new KinoDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
 						new AdresaDTO(rs.getInt(5), rs.getString(6), rs.getString(7), rs.getInt(8)));
@@ -93,7 +93,7 @@ public class MySQLKinoDAO implements KinoDAO {
 			ps.setInt(4, kino.getAdresa().getAdresaID());
 
 			retVal = ps.executeUpdate() == 1;
-			
+
 			if (retVal) {
 				rs = ps.getGeneratedKeys();
 				if (rs.next())

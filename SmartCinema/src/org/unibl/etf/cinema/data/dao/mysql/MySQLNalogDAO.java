@@ -45,7 +45,7 @@ public class MySQLNalogDAO implements NalogDAO {
 
 	@Override
 	public boolean azurirajNalog(Nalog nalog, String hash) {
-		
+
 		Connection conn = null;
 		PreparedStatement ps = null;
 

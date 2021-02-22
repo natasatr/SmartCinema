@@ -4,41 +4,49 @@ public class DodatnaPonudaDTO {
 	public int DodatnaPonudaID;
 	public String Naziv;
 	public double Cijena;
-	
-	
+
 	public DodatnaPonudaDTO(String naziv, double cijena) {
 		super();
-		DodatnaPonudaID=0;
+		DodatnaPonudaID = 0;
 		Naziv = naziv;
 		Cijena = cijena;
 	}
+
 	public DodatnaPonudaDTO(int dodatnaPonudaID, String naziv, double cijena) {
 		super();
 		DodatnaPonudaID = dodatnaPonudaID;
 		Naziv = naziv;
 		Cijena = cijena;
 	}
+
 	public DodatnaPonudaDTO() {
 		super();
 	}
+
 	public int getDodatnaPonudaID() {
 		return DodatnaPonudaID;
 	}
+
 	public void setDodatnaPonudaID(int dodatnaPonudaID) {
 		DodatnaPonudaID = dodatnaPonudaID;
 	}
+
 	public String getNaziv() {
 		return Naziv;
 	}
+
 	public void setNaziv(String naziv) {
 		Naziv = naziv;
 	}
+
 	public double getCijena() {
 		return Cijena;
 	}
+
 	public void setCijena(double cijena) {
 		Cijena = cijena;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -50,6 +58,7 @@ public class DodatnaPonudaDTO {
 		result = prime * result + ((Naziv == null) ? 0 : Naziv.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -70,11 +79,10 @@ public class DodatnaPonudaDTO {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "DodatnaPonuda [DodatnaPonudaID=" + DodatnaPonudaID + ", Naziv=" + Naziv + ", Cijena=" + Cijena + "]";
 	}
-	
-	
 
 }

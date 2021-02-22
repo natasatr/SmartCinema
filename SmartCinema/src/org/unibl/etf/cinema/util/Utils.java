@@ -13,7 +13,7 @@ public class Utils {
 		}
 		return true;
 	}
-	
+
 	public static boolean isDecimalNumber(String text) {
 		try {
 			Double.parseDouble(text);
@@ -22,9 +22,9 @@ public class Utils {
 		}
 		return true;
 	}
-	
+
 	public static String formatDecimalNumber(double number) {
-		NumberFormat formatter = new DecimalFormat("#0.00");     
+		NumberFormat formatter = new DecimalFormat("#0.00");
 		return formatter.format(number).replace(',', '.');
 	}
 }

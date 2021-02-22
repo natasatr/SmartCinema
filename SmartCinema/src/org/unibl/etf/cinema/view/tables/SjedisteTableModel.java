@@ -7,13 +7,12 @@ import javax.swing.table.AbstractTableModel;
 import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 
 @SuppressWarnings("serial")
-public class SjedisteTableModel extends AbstractTableModel{
-	
-private String[] naziviKolona= {"#", "BROJ", "RED", "VRSTA_SJEDISTA"};
-	
+public class SjedisteTableModel extends AbstractTableModel {
+
+	private String[] naziviKolona = { "#", "BROJ", "RED", "VRSTA_SJEDISTA" };
+
 	private List<SjedisteDTO> sjedista;
 
-	
 	public List<SjedisteDTO> getSjedista() {
 		return sjedista;
 	}
@@ -25,7 +24,7 @@ private String[] naziviKolona= {"#", "BROJ", "RED", "VRSTA_SJEDISTA"};
 	public SjedisteTableModel(List<SjedisteDTO> sjedista) {
 		this.sjedista = sjedista;
 	}
-	
+
 	public SjedisteDTO getSjedisteAtRow(int rowIndex) {
 		return sjedista.get(rowIndex);
 	}
@@ -54,14 +53,13 @@ private String[] naziviKolona= {"#", "BROJ", "RED", "VRSTA_SJEDISTA"};
 			return red.getBroj();
 		else if (columnIndex == 2)
 			return red.getRed();
-		else if(columnIndex==3)
+		else if (columnIndex == 3)
 			return red.getVrstaSjedista().getNaziv();
-		//else if(columnIndex==4)
-			//return red.getVrstaSjedista().getNaziv();
-		
+		// else if(columnIndex==4)
+		// return red.getVrstaSjedista().getNaziv();
+
 		else
 			return null;
 	}
-	
 
 }

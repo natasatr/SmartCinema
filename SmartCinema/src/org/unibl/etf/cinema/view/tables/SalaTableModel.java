@@ -7,14 +7,12 @@ import javax.swing.table.AbstractTableModel;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
 
 @SuppressWarnings("serial")
-public class SalaTableModel extends AbstractTableModel{
-	
-private String[] naziviKolona= {"#", "BROJ_SALE", "KAPACITET"};
-	
+public class SalaTableModel extends AbstractTableModel {
+
+	private String[] naziviKolona = { "#", "Broj sale", "Kapacitet (broj sjedišta)" };
+
 	private List<SalaDTO> sale;
 
-	
-	
 	public List<SalaDTO> getSale() {
 		return sale;
 	}
@@ -26,7 +24,7 @@ private String[] naziviKolona= {"#", "BROJ_SALE", "KAPACITET"};
 	public SalaTableModel(List<SalaDTO> sale) {
 		this.sale = sale;
 	}
-	
+
 	public SalaDTO getSalaAtRow(int rowIndex) {
 		return sale.get(rowIndex);
 	}
@@ -54,8 +52,8 @@ private String[] naziviKolona= {"#", "BROJ_SALE", "KAPACITET"};
 		else if (columnIndex == 1)
 			return red.getBroj();
 		else if (columnIndex == 2)
-			return red.getKapacitet() + "   sjedista";
-		
+			return red.getKapacitet();
+
 		else
 			return null;
 	}

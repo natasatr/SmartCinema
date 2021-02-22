@@ -12,57 +12,52 @@ import org.unibl.etf.cinema.data.dto.DodatnaPonudaDTO;
 import org.unibl.etf.cinema.util.ConnectionPool;
 import org.unibl.etf.cinema.util.DBUtil;
 
+public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO {
 
-
-public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
-	
 	@Override
-	public List<DodatnaPonudaDTO> sveDodatnePonude(){
-		List<DodatnaPonudaDTO> retVal=new ArrayList<>();
+	public List<DodatnaPonudaDTO> sveDodatnePonude() {
+		List<DodatnaPonudaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
-		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda"
-				+ " order by DodatnaPonudaID asc " ;
-		
+
+		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + " order by DodatnaPonudaID asc ";
+
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(rs, ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public List<DodatnaPonudaDTO> dodatnaPonuda(DodatnaPonudaDTO dp) {
-		List<DodatnaPonudaDTO> retVal =new ArrayList<>(); 
+		List<DodatnaPonudaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		String naziv=dp.getNaziv();
+		String naziv = dp.getNaziv();
 
-		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + 
-				" where Naziv like ?";
+		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + " where Naziv like ?";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setString(1,naziv);
+			ps.setString(1, naziv);
 			rs = ps.executeQuery();
 
-			
 			while (rs.next())
-				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -71,26 +66,24 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 		}
 		return retVal;
 	}
-	
-	@Override 
+
+	@Override
 	public List<DodatnaPonudaDTO> ucitajDodatnuPonudu(String naziv) {
-		List<DodatnaPonudaDTO> retVal =new  ArrayList<>(); 
+		List<DodatnaPonudaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + 
-				" where Naziv like ?";
+		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda" + " where Naziv like ?";
 
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setString(1,naziv);
+			ps.setString(1, naziv);
 			rs = ps.executeQuery();
 
-			
 			while (rs.next())
-				retVal.add(new DodatnaPonudaDTO(rs.getInt(1),rs.getString(2), rs.getDouble(3)));
+				retVal.add(new DodatnaPonudaDTO(rs.getInt(1), rs.getString(2), rs.getDouble(3)));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -99,15 +92,14 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean dodajDodatnuPonudu(DodatnaPonudaDTO dp) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO dodatna_ponuda (Naziv, Cijena)  VALUES "
-				+ " ( ?, ?)  ";
+		String query = "INSERT INTO dodatna_ponuda (Naziv, Cijena)  VALUES " + " ( ?, ?)  ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -117,23 +109,21 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
-			DBUtil.close( ps, conn);
+			DBUtil.close(ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean azurirajDodatnuPonudu(DodatnaPonudaDTO dp) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "UPDATE dodatna_ponuda SET "
-				+ " Cijena =? "
-				+ " WHERE Naziv=? ";
+		String query = "UPDATE dodatna_ponuda SET " + " Cijena =? " + " WHERE Naziv=? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -143,22 +133,21 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean obrisiDodatnuPonudu(String naziv) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "DELETE FROM dodatna_ponuda "
-				+ "WHERE Naziv=? ";
+		String query = "DELETE FROM dodatna_ponuda " + "WHERE Naziv=? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -167,13 +156,13 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
-			DBUtil.close( ps, conn);
+			DBUtil.close(ps, conn);
 		}
 		return retVal;
-		
+
 	}
 
 }

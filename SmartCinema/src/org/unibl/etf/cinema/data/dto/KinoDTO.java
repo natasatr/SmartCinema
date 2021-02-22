@@ -13,7 +13,7 @@ public class KinoDTO {
 		this.telefon = telefon;
 		this.adresa = adresa;
 	}
-	
+
 	public KinoDTO(Integer kinoID, String naziv, String email, String telefon, AdresaDTO adresa) {
 		super();
 		this.kinoID = kinoID;
@@ -84,10 +84,10 @@ public class KinoDTO {
 		KinoDTO kino = (KinoDTO) obj;
 		return Objects.equals(kinoID, kino.kinoID);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Kino [KinoID=" + kinoID + ", Naziv=" + naziv + ", Email=" + email + ", Telefon=" + telefon
-				+ ", adresa=" + adresa + "]";
+		return "Kino [KinoID=" + kinoID + ", Naziv=" + naziv + ", Email=" + email + ", Telefon=" + telefon + ", adresa="
+				+ adresa + "]";
 	}
 }

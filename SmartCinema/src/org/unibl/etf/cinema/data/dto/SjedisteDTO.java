@@ -1,7 +1,5 @@
 package org.unibl.etf.cinema.data.dto;
 
-
-
 public class SjedisteDTO {
 	public int SjedisteID;
 	public int broj;
@@ -9,24 +7,21 @@ public class SjedisteDTO {
 	public boolean Zauzeto;
 	public SalaDTO sala;
 	public VrstaSjedistaDTO vrstaSjedista;
-	
-	
-	
-	
 
 	public SjedisteDTO(int broj, int red, SalaDTO sala, VrstaSjedistaDTO vrstaSjedista) {
 		super();
-		this.SjedisteID=0;
-		this.Zauzeto=false;
+		this.SjedisteID = 0;
+		this.Zauzeto = false;
 		this.broj = broj;
 		Red = red;
 		this.sala = sala;
 		this.vrstaSjedista = vrstaSjedista;
 	}
-	
-	public SjedisteDTO(int sjedisteID, int broj, int red, boolean zauzeto, SalaDTO sala, VrstaSjedistaDTO vrstaSjedista) {
+
+	public SjedisteDTO(int sjedisteID, int broj, int red, boolean zauzeto, SalaDTO sala,
+			VrstaSjedistaDTO vrstaSjedista) {
 		super();
-		
+
 		SjedisteID = sjedisteID;
 		this.broj = broj;
 		Red = red;
@@ -34,47 +29,59 @@ public class SjedisteDTO {
 		this.sala = sala;
 		this.vrstaSjedista = vrstaSjedista;
 	}
+
 	public SjedisteDTO() {
 		super();
 	}
+
 	public int getSjedisteID() {
 		return SjedisteID;
 	}
+
 	public void setSjedisteID(int sjedisteID) {
 		SjedisteID = sjedisteID;
 	}
+
 	public int getBroj() {
 		return broj;
 	}
+
 	public void setBroj(int broj) {
 		this.broj = broj;
 	}
+
 	public int getRed() {
 		return Red;
 	}
+
 	public void setRed(int red) {
 		Red = red;
 	}
-	
+
 	public boolean isZauzeto() {
 		return Zauzeto;
 	}
+
 	public void setZauzeto(boolean zauzeto) {
 		Zauzeto = zauzeto;
 	}
+
 	public SalaDTO getSala() {
 		return sala;
 	}
+
 	public void setSala(SalaDTO sala) {
 		this.sala = sala;
 	}
+
 	public VrstaSjedistaDTO getVrstaSjedista() {
 		return vrstaSjedista;
 	}
+
 	public void setVrstaSjedista(VrstaSjedistaDTO vrstaSjedista) {
 		this.vrstaSjedista = vrstaSjedista;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -87,6 +94,7 @@ public class SjedisteDTO {
 		result = prime * result + ((vrstaSjedista == null) ? 0 : vrstaSjedista.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -116,14 +124,11 @@ public class SjedisteDTO {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "SjedisteDTO [SjedisteID=" + SjedisteID + ", broj=" + broj + ", Red=" + Red + ", Zauzeto=" + Zauzeto
 				+ ", sala=" + sala + ", vrstaSjedista=" + vrstaSjedista + "]";
 	}
-	
-	
-	
-	
 
 }

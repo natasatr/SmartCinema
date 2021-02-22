@@ -19,9 +19,7 @@ public class MySQLRolaDAO implements RolaDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		String sqlQuery = "SELECT RolaID, Naziv FROM Rola "
-				+ "WHERE Naziv = ? "
-				+ "ORDER BY Naziv ASC";
+		String sqlQuery = "SELECT RolaID, Naziv FROM Rola " + "WHERE Naziv = ? " + "ORDER BY Naziv ASC";
 
 		Rola rola = null;
 

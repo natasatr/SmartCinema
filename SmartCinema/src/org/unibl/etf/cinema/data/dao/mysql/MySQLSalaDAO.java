@@ -15,57 +15,51 @@ import org.unibl.etf.cinema.util.ConnectionPool;
 import org.unibl.etf.cinema.util.DBUtil;
 
 public class MySQLSalaDAO implements SalaDAO {
-	
+
 	@Override
-	public List<SalaDTO> sveSale(){
-		List<SalaDTO> retVal=new ArrayList<>();
+	public List<SalaDTO> sveSale() {
+		List<SalaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		String query = "select SalaID, s.Broj, Kapacitet, KinoID, k.Naziv, Email, Telefon, AdresaID,"
-				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
-				+ " inner join kino k on KINO_KinoID=KinoID "
-				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
-				+ "  where s.Uklonjeno=0"
-				+ " and KinoID=1 "
-				+ " order by SalaID asc " ;
-		
+				+ " a.Mjesto, a.Ulica, a.Broj from sala s" + " inner join kino k on KINO_KinoID=KinoID "
+				+ " inner join adresa a on ADRESA_AdresaID=AdresaID " + "  where s.Uklonjeno=0" + " and KinoID=1 "
+				+ " order by SalaID asc ";
+
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
-						new KinoDTO(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),
-								new AdresaDTO(rs.getInt(8),rs.getString(9), rs.getString(10), rs.getInt(11)))));
-			
+				retVal.add(new SalaDTO(rs.getInt(1), rs.getInt(2), rs.getInt(3),
+						new KinoDTO(rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+								new AdresaDTO(rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11)))));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(rs, ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
-	public List<SalaDTO> sveSaleUKinu(String nazivKina){
-		List<SalaDTO> retVal=new ArrayList<>();
+	public List<SalaDTO> sveSaleUKinu(String nazivKina) {
+		List<SalaDTO> retVal = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
+
 		String query = "select SalaID, s.Broj, Kapacitet, KinoID, k.Naziv, Email, Telefon, AdresaID,"
-				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
-				+ " inner join kino k on KINO_KinoID=KinoID "
-				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
-				+ " where k.Naziv= ? "
-				+ " and s.Uklonjeno=0"
-				+ " order by SalaID asc " ;
-		
+				+ " a.Mjesto, a.Ulica, a.Broj from sala s" + " inner join kino k on KINO_KinoID=KinoID "
+				+ " inner join adresa a on ADRESA_AdresaID=AdresaID " + " where k.Naziv= ? " + " and s.Uklonjeno=0"
+				+ " order by SalaID asc ";
+
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -73,32 +67,31 @@ public class MySQLSalaDAO implements SalaDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next())
-				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
-						new KinoDTO(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),
-								new AdresaDTO(rs.getInt(8),rs.getString(9), rs.getString(10), rs.getInt(11)))));
-			
+				retVal.add(new SalaDTO(rs.getInt(1), rs.getInt(2), rs.getInt(3),
+						new KinoDTO(rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+								new AdresaDTO(rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11)))));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(rs, ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean dodajSalu(SalaDTO sala) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "INSERT INTO sala (Broj, Kapacitet, Uklonjeno, KINO_KinoID ) VALUES "
-				+ " ( ?, ?, ?, ? ) ";
+		String query = "INSERT INTO sala (Broj, Kapacitet, Uklonjeno, KINO_KinoID ) VALUES " + " ( ?, ?, ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			
+
 			ps.setInt(1, sala.getBroj());
 			ps.setInt(2, sala.getKapacitet());
 			ps.setInt(3, 0);
@@ -107,24 +100,21 @@ public class MySQLSalaDAO implements SalaDAO {
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
-			DBUtil.close( ps, conn);
+			DBUtil.close(ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean azurirajSalu(SalaDTO sala) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "UPDATE sala SET "
-				+ "Broj =?, "
-				+ " Kapacitet= ? "
-				+ " WHERE SalaID=? ";
+		String query = "UPDATE sala SET " + "Broj =?, " + " Kapacitet= ? " + " WHERE SalaID=? ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -135,23 +125,21 @@ public class MySQLSalaDAO implements SalaDAO {
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
 			DBUtil.close(ps, conn);
 		}
 		return retVal;
 	}
-	
+
 	@Override
 	public boolean obrisiSalu(int KinoID, int broj) {
 		boolean retVal = false;
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = " update sala set Uklonjeno=1 "
-				+ " where Broj = ? "
-				+ " and KINO_KinoID= ?  ";
+		String query = " update sala set Uklonjeno=1 " + " where Broj = ? " + " and KINO_KinoID= ?  ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
@@ -161,19 +149,18 @@ public class MySQLSalaDAO implements SalaDAO {
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
-			DBUtil.close( ps, conn);
+			DBUtil.close(ps, conn);
 		}
 		return retVal;
 	}
-	
-	public static void main(String args[])
-	{
-		MySQLSalaDAO ms=new MySQLSalaDAO();
-		List<SalaDTO> sale=ms.sveSale();
-		
+
+	public static void main(String args[]) {
+		MySQLSalaDAO ms = new MySQLSalaDAO();
+		List<SalaDTO> sale = ms.sveSale();
+
 		System.out.println(ms.obrisiSalu(1, 4));
 	}
 }

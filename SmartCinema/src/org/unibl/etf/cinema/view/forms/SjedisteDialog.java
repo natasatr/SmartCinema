@@ -2,35 +2,28 @@ package org.unibl.etf.cinema.view.forms;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import org.unibl.etf.cinema.data.dao.DAOFactory;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import org.unibl.etf.cinema.data.dao.DAOFactory;
-import org.unibl.etf.cinema.data.dao.KinoDAO;
-import org.unibl.etf.cinema.data.dao.SalaDAO;
-import org.unibl.etf.cinema.data.dao.SjedisteDAO;
-import org.unibl.etf.cinema.data.dao.VrstaSjedistaDAO;
-import org.unibl.etf.cinema.data.dto.KinoDTO;
-import org.unibl.etf.cinema.data.dto.SalaDTO;
-import org.unibl.etf.cinema.data.dto.SjedisteDTO;
-import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextField;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import org.unibl.etf.cinema.data.dao.DAOFactory;
+import org.unibl.etf.cinema.data.dao.SalaDAO;
+import org.unibl.etf.cinema.data.dao.SjedisteDAO;
+import org.unibl.etf.cinema.data.dao.VrstaSjedistaDAO;
+import org.unibl.etf.cinema.data.dto.SalaDTO;
+import org.unibl.etf.cinema.data.dto.SjedisteDTO;
+import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
 
 public class SjedisteDialog extends JDialog {
 
@@ -103,52 +96,44 @@ public class SjedisteDialog extends JDialog {
 		;
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(23)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblInformacijeOSjedistu)
-						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblVrstaSjedista)
-								.addComponent(lblSala)
-								.addComponent(lblBroj)
-								.addComponent(lblRed))
-							.addGap(42)
-							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+		gl_contentPanel
+				.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup().addGap(23).addGroup(gl_contentPanel
+								.createParallelGroup(Alignment.LEADING).addComponent(lblInformacijeOSjedistu)
 								.addGroup(gl_contentPanel.createSequentialGroup()
-									.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
-									.addGap(3))
-								.addComponent(comboBox, 0, 281, Short.MAX_VALUE)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(textField_1, Alignment.LEADING)
-									.addComponent(textField, Alignment.LEADING)))))
-					.addContainerGap())
-		);
-		gl_contentPanel.setVerticalGroup(
-			gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(26)
-					.addComponent(lblInformacijeOSjedistu)
-					.addGap(37)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblBroj))
-					.addGap(18)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblRed))
-					.addGap(32)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblSala)
-						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblVrstaSjedista)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+										.addGroup(gl_contentPanel
+												.createParallelGroup(Alignment.LEADING).addComponent(lblVrstaSjedista)
+												.addComponent(lblSala).addComponent(lblBroj).addComponent(lblRed))
+										.addGap(42)
+										.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+												.addGroup(gl_contentPanel.createSequentialGroup()
+														.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 173,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(3))
+												.addComponent(comboBox, 0, 281, Short.MAX_VALUE)
+												.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
+														.addComponent(textField_1, Alignment.LEADING)
+														.addComponent(textField, Alignment.LEADING)))))
+								.addContainerGap()));
+		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup().addGap(26).addComponent(lblInformacijeOSjedistu)
+						.addGap(37)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblBroj))
+						.addGap(18)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblRed))
+						.addGap(32)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblSala)
+								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addComponent(lblVrstaSjedista)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();

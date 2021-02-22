@@ -363,7 +363,7 @@ public class ZaposleniDialog extends JDialog {
 					}
 				});
 				btnOtkazi.setFont(new Font("Arial", Font.PLAIN, 14));
-				btnOtkazi.setBackground(new Color(220, 20, 60));
+				btnOtkazi.setBackground(UIUtils.BUTTON_COLOR);
 				btnOtkazi.setForeground(Color.WHITE);
 				btnOtkazi.setActionCommand("Cancel");
 				buttonPane.add(btnOtkazi);
@@ -380,7 +380,7 @@ public class ZaposleniDialog extends JDialog {
 					}
 				});
 				btnSacuvaj.setMnemonic(KeyEvent.VK_ENTER);
-				btnSacuvaj.setBackground(new Color(220, 20, 60));
+				btnSacuvaj.setBackground(UIUtils.BUTTON_COLOR);
 				btnSacuvaj.setForeground(Color.WHITE);
 				btnSacuvaj.setFont(new Font("Arial", Font.PLAIN, 14));
 				btnSacuvaj.setActionCommand("OK");

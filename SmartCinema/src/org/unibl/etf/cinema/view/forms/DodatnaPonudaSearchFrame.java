@@ -6,11 +6,21 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,57 +28,34 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.DodatnaPonudaDAO;
+import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.SalaDAO;
 import org.unibl.etf.cinema.data.dao.SjedisteDAO;
-import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.mysql.MySQLDodatnaPonudaDAO;
+import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
 import org.unibl.etf.cinema.data.dao.mysql.MySQLSalaDAO;
 import org.unibl.etf.cinema.data.dao.mysql.MySQLSjedisteDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
-import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.DodatnaPonudaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
 import org.unibl.etf.cinema.data.dto.SjedisteDTO;
-import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
-import org.unibl.etf.cinema.data.dto.Zaposleni;
-import org.unibl.etf.cinema.util.EmailValidator;
 import org.unibl.etf.cinema.util.UIUtils;
-import org.unibl.etf.cinema.util.Utils;
 import org.unibl.etf.cinema.view.tables.DodatnaPonudaTableModel;
 import org.unibl.etf.cinema.view.tables.SalaTableModel;
 import org.unibl.etf.cinema.view.tables.SjedisteTableModel;
-import org.unibl.etf.cinema.view.tables.ZaposleniTableModel;
-
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JComboBox;
 
 public class DodatnaPonudaSearchFrame extends JFrame {
 
 	private JPanel contentPane;
-	private static final Color DEFAULT_MENU_BG_COLOR = new Color(65, 34, 72);
-	private static final Font DEFAULT_MENU_FONT = new Font("Arial", Font.PLAIN, 16);
-	private static final Color HOVER_MENU_BG_COLOR = new Color(65, 34, 72); // TODO
-	private static final Font HOVER_MENU_FONT = new Font("Arial", Font.BOLD, 16);
 	private JLabel lblZaglavlje;
 	private int INDEKS_OPCIJE = 0;
 
@@ -132,7 +119,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1112, 679);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 250, 0 };
@@ -190,25 +177,35 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		pnlDodatnaPonuda.setBackground(new Color(240, 240, 240));
 		pnlSadrzaj.add(pnlDodatnaPonuda, "pnl_dodatna_ponuda");
 
-		JScrollPane scrollPane = new JScrollPane();
-
 		JScrollPane scrollPane_1 = new JScrollPane();
 
 		JPanel panel = new JPanel();
+		panel.setOpaque(false);
 		GroupLayout gl_pnlDodatnaPonuda = new GroupLayout(pnlDodatnaPonuda);
-		gl_pnlDodatnaPonuda.setHorizontalGroup(gl_pnlDodatnaPonuda.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_pnlDodatnaPonuda.createSequentialGroup().addContainerGap()
-						.addGroup(gl_pnlDodatnaPonuda.createParallelGroup(Alignment.TRAILING)
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE)
-								.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE))
-						.addContainerGap()));
-		gl_pnlDodatnaPonuda.setVerticalGroup(gl_pnlDodatnaPonuda.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_pnlDodatnaPonuda.createSequentialGroup().addContainerGap(104, Short.MAX_VALUE)
-						.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
-						.addGap(35).addComponent(panel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-						.addGap(122)));
+		gl_pnlDodatnaPonuda.setHorizontalGroup(
+			gl_pnlDodatnaPonuda.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlDodatnaPonuda.createSequentialGroup()
+					.addGroup(gl_pnlDodatnaPonuda.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_pnlDodatnaPonuda.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_pnlDodatnaPonuda.createSequentialGroup()
+							.addGap(40)
+							.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)))
+					.addGap(40))
+		);
+		gl_pnlDodatnaPonuda.setVerticalGroup(
+			gl_pnlDodatnaPonuda.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlDodatnaPonuda.createSequentialGroup()
+					.addGap(100)
+					.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+					.addGap(37)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addGap(25))
+		);
 
 		JButton btnDodaj = new JButton("");
+		btnDodaj.setBackground(UIUtils.BUTTON_COLOR);
 		btnDodaj.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_add.png")));
 		btnDodaj.addActionListener(new ActionListener() {
@@ -220,6 +217,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		});
 
 		btnBrisi = new JButton("");
+		btnBrisi.setBackground(UIUtils.BUTTON_COLOR);
 		btnBrisi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obrisiDO();
@@ -230,14 +228,24 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		btnBrisi.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_delete.png")));
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panel.createSequentialGroup().addContainerGap(214, Short.MAX_VALUE).addComponent(btnBrisi)
-						.addGap(55).addComponent(btnDodaj).addGap(34)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel
-						.createSequentialGroup().addContainerGap().addGroup(gl_panel
-								.createParallelGroup(Alignment.TRAILING).addComponent(btnBrisi).addComponent(btnDodaj))
-						.addContainerGap(31, Short.MAX_VALUE)));
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap(215, Short.MAX_VALUE)
+					.addComponent(btnBrisi, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDodaj, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(19)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnBrisi)
+						.addComponent(btnDodaj, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(20, Short.MAX_VALUE))
+		);
 		panel.setLayout(gl_panel);
 
 		table_1 = new JTable();
@@ -255,9 +263,8 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 
 		table_1.setFont(new Font("Arial", Font.PLAIN, 12));
 		table_1.setModel(new DodatnaPonudaTableModel(dodatnaPonudaDAO.sveDodatnePonude()));
-		table_1.getColumnModel().getColumn(0).setPreferredWidth(250);
+		table_1.getColumnModel().getColumn(0).setMaxWidth(50);
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(250);
-		table_1.getColumnModel().getColumn(2).setPreferredWidth(250);
 
 		pnlDodatnaPonuda.setLayout(gl_pnlDodatnaPonuda);
 
@@ -269,26 +276,30 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		JScrollPane scrollPane_2 = new JScrollPane();
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setOpaque(false);
 
 		GroupLayout gl_pnlSale = new GroupLayout(pnlSale);
-		gl_pnlSale
-				.setHorizontalGroup(gl_pnlSale.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_pnlSale.createSequentialGroup().addContainerGap()
-								.addGroup(gl_pnlSale.createParallelGroup(Alignment.TRAILING)
-										.addGroup(Alignment.LEADING,
-												gl_pnlSale.createSequentialGroup()
-														.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 816,
-																Short.MAX_VALUE)
-														.addContainerGap())
-										.addGroup(gl_pnlSale
-												.createSequentialGroup().addComponent(panel_1,
-														GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
-												.addGap(32)))));
-		gl_pnlSale.setVerticalGroup(gl_pnlSale.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_pnlSale.createSequentialGroup().addGap(82)
-						.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 297, GroupLayout.PREFERRED_SIZE)
-						.addGap(59).addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-						.addGap(72)));
+		gl_pnlSale.setHorizontalGroup(
+			gl_pnlSale.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlSale.createSequentialGroup()
+					.addGroup(gl_pnlSale.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_pnlSale.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_pnlSale.createSequentialGroup()
+							.addGap(40)
+							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)))
+					.addGap(40))
+		);
+		gl_pnlSale.setVerticalGroup(
+			gl_pnlSale.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_pnlSale.createSequentialGroup()
+					.addGap(100)
+					.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+					.addGap(37)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addGap(25))
+		);
 
 		JButton btnDodajSalu = new JButton("");
 		btnDodajSalu.addActionListener(new ActionListener() {
@@ -301,8 +312,10 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 
 		btnDodajSalu.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_add.png")));
+		btnDodajSalu.setBackground(UIUtils.BUTTON_COLOR);
 
 		JButton btnBrisiSalu = new JButton("");
+		btnBrisiSalu.setBackground(UIUtils.BUTTON_COLOR);
 		btnBrisiSalu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obrisiSalu();
@@ -312,14 +325,24 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		btnBrisiSalu.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_delete.png")));
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-				gl_panel_1.createSequentialGroup().addGap(24).addComponent(btnBrisiSalu)
-						.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE).addComponent(btnDodajSalu)
-						.addGap(22)));
-		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap().addGroup(gl_panel_1
-						.createParallelGroup(Alignment.TRAILING).addComponent(btnBrisiSalu).addComponent(btnDodajSalu))
-						.addContainerGap(19, Short.MAX_VALUE)));
+		gl_panel_1.setHorizontalGroup(
+			gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addContainerGap(215, Short.MAX_VALUE)
+					.addComponent(btnBrisiSalu, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDodajSalu, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		gl_panel_1.setVerticalGroup(
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+					.addGap(20)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnBrisiSalu)
+						.addComponent(btnDodajSalu, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(19, Short.MAX_VALUE))
+		);
 		panel_1.setLayout(gl_panel_1);
 
 		table_2 = new JTable();
@@ -335,7 +358,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		scrollPane_2.setViewportView(table_2);
 		table_2.setFont(new Font("Arial", Font.PLAIN, 12));
 		table_2.setModel(new SalaTableModel(salaDAO.sveSale()));
-		table_2.getColumnModel().getColumn(0).setPreferredWidth(250);
+		table_2.getColumnModel().getColumn(0).setMaxWidth(50);
 		table_2.getColumnModel().getColumn(1).setPreferredWidth(250);
 		table_2.getColumnModel().getColumn(2).setPreferredWidth(250);
 
@@ -360,48 +383,46 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		btnNewButton.setIcon(
 				new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
 
-		List<SalaDTO>sale = salaDAO.sveSale();
+		List<SalaDTO> sale = salaDAO.sveSale();
 		comboBox_1 = new JComboBox(sale.toArray(new SalaDTO[] {}));
 		comboBox_1.setSelectedIndex(sale.isEmpty() ? -1 : 0);
 
 		JLabel lblOdaberiteSalu = new JLabel("Odaberite salu");
-		lblOdaberiteSalu.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblOdaberiteSalu.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		JPanel panel_2 = new JPanel();
+		panel_2.setOpaque(false);
 
 		GroupLayout gl_pnlSjedista = new GroupLayout(pnlSjedista);
 		gl_pnlSjedista.setHorizontalGroup(
-			gl_pnlSjedista.createParallelGroup(Alignment.LEADING)
+			gl_pnlSjedista.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnlSjedista.createSequentialGroup()
-					.addContainerGap()
+					.addGap(40)
 					.addGroup(gl_pnlSjedista.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_pnlSjedista.createSequentialGroup()
-							.addComponent(scrollPane_3, GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE)
-							.addContainerGap())
+						.addComponent(scrollPane_3, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_pnlSjedista.createSequentialGroup()
 							.addComponent(lblOdaberiteSalu)
-							.addGap(70)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnNewButton)
-							.addGap(46))
-						.addGroup(gl_pnlSjedista.createSequentialGroup()
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addGap(40))
 		);
 		gl_pnlSjedista.setVerticalGroup(
 			gl_pnlSjedista.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnlSjedista.createSequentialGroup()
 					.addGap(33)
-					.addGroup(gl_pnlSjedista.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(comboBox_1, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-						.addComponent(lblOdaberiteSalu, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
-					.addGap(36)
-					.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 354, GroupLayout.PREFERRED_SIZE)
-					.addGap(35)
-					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-					.addGap(28))
+					.addGroup(gl_pnlSjedista.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(lblOdaberiteSalu, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+						.addComponent(comboBox_1))
+					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+					.addComponent(scrollPane_3, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+					.addGap(58)
+					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addGap(25))
 		);
 
 		JButton btnDodajSjediste = new JButton("\r\n");
@@ -413,8 +434,10 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 
 		btnDodajSjediste.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_add.png")));
+		btnDodajSjediste.setBackground(UIUtils.BUTTON_COLOR);
 
 		JButton btnObrisiSjediste = new JButton("");
+		btnObrisiSjediste.setBackground(UIUtils.BUTTON_COLOR);
 		btnObrisiSjediste.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				obrisiSjediste();
@@ -424,16 +447,23 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		btnObrisiSjediste.setIcon(new ImageIcon(
 				DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/icon_delete.png")));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
-				gl_panel_2.createSequentialGroup().addContainerGap().addComponent(btnObrisiSjediste)
-						.addPreferredGap(ComponentPlacement.RELATED, 29, Short.MAX_VALUE).addComponent(btnDodajSjediste)
-						.addContainerGap()));
-		gl_panel_2
-				.setVerticalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup().addContainerGap()
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-										.addComponent(btnDodajSjediste).addComponent(btnObrisiSjediste))
-								.addContainerGap(23, Short.MAX_VALUE)));
+		gl_panel_2.setHorizontalGroup(
+			gl_panel_2.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_2.createSequentialGroup()
+					.addContainerGap(221, Short.MAX_VALUE)
+					.addComponent(btnObrisiSjediste, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnDodajSjediste, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_panel_2.setVerticalGroup(
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
+					.addContainerGap(20, Short.MAX_VALUE)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnObrisiSjediste)
+						.addComponent(btnDodajSjediste, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addGap(19))
+		);
 		panel_2.setLayout(gl_panel_2);
 
 		table_3 = new JTable();
@@ -531,15 +561,15 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 			labele[i].addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					labele[indeks].setBackground(HOVER_MENU_BG_COLOR);
-					labele[indeks].setFont(HOVER_MENU_FONT);
+					labele[indeks].setBackground(UIUtils.HOVER_MENU_BG_COLOR);
+					labele[indeks].setFont(UIUtils.HOVER_MENU_FONT);
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if (INDEKS_OPCIJE != indeks) {
-						labele[indeks].setBackground(DEFAULT_MENU_BG_COLOR);
-						labele[indeks].setFont(DEFAULT_MENU_FONT);
+						labele[indeks].setBackground(UIUtils.DEFAULT_MENU_BG_COLOR);
+						labele[indeks].setFont(UIUtils.DEFAULT_MENU_FONT);
 					}
 				}
 
@@ -585,8 +615,8 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 	private void postaviOstaleLabele() {
 		for (int i = 0; i < labele.length; i++) {
 			if (INDEKS_OPCIJE != i) {
-				labele[i].setBackground(DEFAULT_MENU_BG_COLOR);
-				labele[i].setFont(DEFAULT_MENU_FONT);
+				labele[i].setBackground(UIUtils.DEFAULT_MENU_BG_COLOR);
+				labele[i].setFont(UIUtils.DEFAULT_MENU_FONT);
 			}
 		}
 	}

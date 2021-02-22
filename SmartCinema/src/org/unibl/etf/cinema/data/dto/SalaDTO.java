@@ -1,30 +1,26 @@
 package org.unibl.etf.cinema.data.dto;
 
-
-
 public class SalaDTO {
 	public int SalaID;
 	public int Broj, Kapacitet;
 	public KinoDTO kino;
-	
-	
-	
-	
-	
+
 	public SalaDTO(int broj, KinoDTO kino) {
 		super();
-		SalaID=0;
+		SalaID = 0;
 		Broj = broj;
-		Kapacitet=0;
+		Kapacitet = 0;
 		this.kino = kino;
 	}
+
 	public SalaDTO(int broj, int kapacitet, KinoDTO kino) {
 		super();
-		SalaID=0;
+		SalaID = 0;
 		Broj = broj;
 		Kapacitet = kapacitet;
 		this.kino = kino;
 	}
+
 	public SalaDTO(int salaID, int broj, int kapacitet, KinoDTO kino) {
 		super();
 		SalaID = salaID;
@@ -32,33 +28,43 @@ public class SalaDTO {
 		Kapacitet = kapacitet;
 		this.kino = kino;
 	}
+
 	public SalaDTO() {
 		super();
 	}
+
 	public int getSalaID() {
 		return SalaID;
 	}
+
 	public void setSalaID(int salaID) {
 		SalaID = salaID;
 	}
+
 	public int getBroj() {
 		return Broj;
 	}
+
 	public void setBroj(int broj) {
 		Broj = broj;
 	}
+
 	public int getKapacitet() {
 		return Kapacitet;
 	}
+
 	public void setKapacitet(int kapacitet) {
 		Kapacitet = kapacitet;
 	}
+
 	public KinoDTO getKino() {
 		return kino;
 	}
+
 	public void setKino(KinoDTO kino) {
 		this.kino = kino;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -69,6 +75,7 @@ public class SalaDTO {
 		result = prime * result + ((kino == null) ? 0 : kino.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -91,13 +98,10 @@ public class SalaDTO {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "Sala " + Broj +"   "+kino.getNaziv() ;
+		return "Sala " + Broj + "   " + kino.getNaziv();
 	}
-	
-	
-	
-	
 
 }

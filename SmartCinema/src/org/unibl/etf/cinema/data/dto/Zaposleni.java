@@ -17,7 +17,8 @@ public class Zaposleni implements Serializable {
 
 	}
 
-	public Zaposleni(String jmb, String ime, String prezime, Double plata, String email, AdresaDTO adresa, Nalog nalog) {
+	public Zaposleni(String jmb, String ime, String prezime, Double plata, String email, AdresaDTO adresa,
+			Nalog nalog) {
 		this.jmb = jmb;
 		this.ime = ime;
 		this.prezime = prezime;
@@ -27,7 +28,8 @@ public class Zaposleni implements Serializable {
 		this.nalog = nalog;
 	}
 
-	public Zaposleni(Integer zaposleniID, String jmb, String ime, String prezime, Double plata, String email, AdresaDTO adresa, Nalog nalog) {
+	public Zaposleni(Integer zaposleniID, String jmb, String ime, String prezime, Double plata, String email,
+			AdresaDTO adresa, Nalog nalog) {
 		this.zaposleniID = zaposleniID;
 		this.jmb = jmb;
 		this.ime = ime;
@@ -37,7 +39,7 @@ public class Zaposleni implements Serializable {
 		this.adresa = adresa;
 		this.nalog = nalog;
 	}
-	
+
 	public Integer getZaposleniID() {
 		return zaposleniID;
 	}
@@ -119,7 +121,7 @@ public class Zaposleni implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ID: " + zaposleniID + "\nJMB: " +jmb + "\n";
+		return "ID: " + zaposleniID + "\nJMB: " + jmb + "\n";
 	}
 
 }
