@@ -188,7 +188,7 @@ public class LoginForma extends JFrame {
 				forma = new AdminForma(nalog.getNalogID());
 				break;
 			case "Administrator2":
-				// TODO
+				forma = new FilmoviGlavnaForma(nalog.getNalogID());
 				break;
 			default:
 				forma = new DodatnaPonudaSearchFrame();

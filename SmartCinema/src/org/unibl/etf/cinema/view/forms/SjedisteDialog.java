@@ -290,7 +290,7 @@ public class SjedisteDialog extends JDialog {
 				dispose();
 				// frame.refreshDP();
 
-				JOptionPane.showMessageDialog(frame, "Sjediste azurirana uspijesno.", "Sala je dodana",
+				JOptionPane.showMessageDialog(frame, "Sjediste azurirana uspjesno.", "Sala je dodana",
 						JOptionPane.INFORMATION_MESSAGE);
 			} catch (Exception ee) {
 				JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska",
