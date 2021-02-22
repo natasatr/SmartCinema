@@ -179,7 +179,7 @@ public class ZaposleniDialog extends JDialog {
 		JLabel lblKorisnikoIme = new JLabel("Korisni\u010Dko ime");
 		lblKorisnikoIme.setFont(new Font("Arial", Font.PLAIN, 14));
 
-		chbKredencijali = new JCheckBox("omoguciti izmjenu lozinke i korisnickog imena");
+		chbKredencijali = new JCheckBox("omogu\u0107iti izmjenu lozinke");
 		chbKredencijali.setActionCommand("omogu\u0107iti izmjenu lozinke");
 		chbKredencijali.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
