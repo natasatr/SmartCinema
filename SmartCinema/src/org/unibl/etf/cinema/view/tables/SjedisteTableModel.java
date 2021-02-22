@@ -9,7 +9,7 @@ import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 @SuppressWarnings("serial")
 public class SjedisteTableModel extends AbstractTableModel {
 
-	private String[] naziviKolona = { "#", "BROJ", "RED", "VRSTA_SJEDISTA" };
+	private String[] naziviKolona = { "#", "Broj", "Red", "Vrsta sjedišta" };
 
 	private List<SjedisteDTO> sjedista;
 

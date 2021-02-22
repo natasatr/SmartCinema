@@ -479,10 +479,9 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		scrollPane_3.setViewportView(table_3);
 		table_3.setFont(new Font("Arial", Font.PLAIN, 12));
 		table_3.setModel(new SjedisteTableModel(sjedisteDAO.svaSjedista()));
-		table_3.getColumnModel().getColumn(0).setPreferredWidth(240);
+		table_3.getColumnModel().getColumn(0).setMaxWidth(50);
 		table_3.getColumnModel().getColumn(1).setPreferredWidth(240);
 		table_3.getColumnModel().getColumn(2).setPreferredWidth(240);
-		table_3.getColumnModel().getColumn(3).setPreferredWidth(250);
 
 		pnlSjedista.setLayout(gl_pnlSjedista);
 
@@ -538,7 +537,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		gbc_lblSale.gridy = 1;
 		pnlMeni.add(lblSale, gbc_lblSale);
 
-		JLabel lblSjedista = new JLabel("Sjedista");
+		JLabel lblSjedista = new JLabel("Sjedi\u0161ta");
 		labele[2] = lblSjedista;
 		lblSjedista.setBackground(new Color(99, 62, 109));
 		lblSjedista.setIconTextGap(10);

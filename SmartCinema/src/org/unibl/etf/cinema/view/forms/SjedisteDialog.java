@@ -24,21 +24,28 @@ import org.unibl.etf.cinema.data.dao.VrstaSjedistaDAO;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
 import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
+import org.unibl.etf.cinema.util.UIUtils;
+
+import java.awt.Color;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class SjedisteDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField tfBroj;
+	private JTextField tfRed;
 	private VrstaSjedistaDAO vsDAO = DAOFactory.getDAOFactory().getVrstaSjedistaDAO();
 	private SjedisteDAO sjedisteDAO = DAOFactory.getDAOFactory().getSjedisteDAO();
 	private SalaDAO salaDAO = DAOFactory.getDAOFactory().getSalaDAO();
 	@SuppressWarnings("rawtypes")
-	private JComboBox comboBox;
+	private JComboBox cbVrstaSjedista;
 	private SjedisteDTO sjedisteDTO;
 	@SuppressWarnings("rawtypes")
-	private JComboBox comboBox_1;
+	private JComboBox cbSala;
 	private DodatnaPonudaSearchFrame frame;
+	private JPanel buttonPane;
 
 	/**
 	 * Launch the application.
@@ -67,85 +74,114 @@ public class SjedisteDialog extends JDialog {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public SjedisteDialog() {
-		setBounds(100, 100, 462, 358);
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setBackground(Color.WHITE);
+		setBounds(100, 100, 462, 408);
+		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		JLabel lblInformacijeOSjedistu = new JLabel("Informacije o sjedistu");
-		lblInformacijeOSjedistu.setFont(new Font("Arial", Font.PLAIN, 18));
+		JLabel lblInformacijeOSjedistu = new JLabel("Informacije o sjedi\u0161tu");
+		lblInformacijeOSjedistu.setFont(new Font("Arial", Font.BOLD, 18));
 		JLabel lblBroj = new JLabel("Broj");
-		lblBroj.setFont(new Font("Arial", Font.PLAIN, 13));
+		lblBroj.setFont(new Font("Arial", Font.PLAIN, 14));
 		JLabel lblRed = new JLabel("Red");
-		lblRed.setFont(new Font("Arial", Font.PLAIN, 13));
-		JLabel lblVrstaSjedista = new JLabel("Vrsta sjedista");
-		lblVrstaSjedista.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+		lblRed.setFont(new Font("Arial", Font.PLAIN, 14));
+		JLabel lblVrstaSjedista = new JLabel("Vrsta sjedi\u0161ta");
+		lblVrstaSjedista.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfBroj = new JTextField();
+		tfBroj.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
+		tfBroj.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfBroj.setColumns(10);
+		tfRed = new JTextField();
+		tfRed.setBorder(new CompoundBorder(new LineBorder(new Color(0, 0, 0)), new EmptyBorder(0, 5, 0, 0)));
+		tfRed.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfRed.setColumns(10);
 
-		comboBox = new JComboBox(vsDAO.sveVrsteSjedista().toArray(new VrstaSjedistaDTO[] {}));
-		comboBox.setSelectedIndex(-1);
+		cbVrstaSjedista = new JComboBox(vsDAO.sveVrsteSjedista().toArray(new VrstaSjedistaDTO[] {}));
+		cbVrstaSjedista.setFont(new Font("Arial", Font.PLAIN, 14));
+		cbVrstaSjedista.setSelectedIndex(-1);
 
 		JLabel lblSala = new JLabel("Sala");
-		lblSala.setFont(new Font("Arial", Font.PLAIN, 13));
+		lblSala.setFont(new Font("Arial", Font.PLAIN, 14));
 
-		comboBox_1 = new JComboBox(salaDAO.sveSale().toArray(new SalaDTO[] {}));
-		System.out.println(comboBox_1);
-		comboBox_1.setSelectedIndex(-1);
+		cbSala = new JComboBox(salaDAO.sveSale().toArray(new SalaDTO[] {}));
+		cbSala.setFont(new Font("Arial", Font.PLAIN, 14));
+		System.out.println(cbSala);
+		cbSala.setSelectedIndex(-1);
 		;
-
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel
-				.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPanel.createSequentialGroup().addGap(23).addGroup(gl_contentPanel
-								.createParallelGroup(Alignment.LEADING).addComponent(lblInformacijeOSjedistu)
-								.addGroup(gl_contentPanel.createSequentialGroup()
-										.addGroup(gl_contentPanel
-												.createParallelGroup(Alignment.LEADING).addComponent(lblVrstaSjedista)
-												.addComponent(lblSala).addComponent(lblBroj).addComponent(lblRed))
-										.addGap(42)
-										.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-												.addGroup(gl_contentPanel.createSequentialGroup()
-														.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 173,
-																GroupLayout.PREFERRED_SIZE)
-														.addGap(3))
-												.addComponent(comboBox, 0, 281, Short.MAX_VALUE)
-												.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
-														.addComponent(textField_1, Alignment.LEADING)
-														.addComponent(textField, Alignment.LEADING)))))
-								.addContainerGap()));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addGap(26).addComponent(lblInformacijeOSjedistu)
-						.addGap(37)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblBroj))
-						.addGap(18)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblRed))
-						.addGap(32)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblSala)
-								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING).addComponent(lblVrstaSjedista)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		gl_contentPanel.setHorizontalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(23)
+					.addComponent(lblInformacijeOSjedistu))
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(43)
+					.addComponent(lblBroj)
+					.addGap(82)
+					.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(43)
+					.addComponent(lblRed)
+					.addGap(81)
+					.addComponent(tfRed, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(43)
+					.addComponent(lblSala)
+					.addGap(79)
+					.addComponent(cbSala, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(43)
+					.addComponent(lblVrstaSjedista)
+					.addGap(22)
+					.addComponent(cbVrstaSjedista, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_contentPanel.setVerticalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(26)
+					.addComponent(lblInformacijeOSjedistu)
+					.addGap(37)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(6)
+							.addComponent(lblBroj))
+						.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(6)
+							.addComponent(lblRed))
+						.addComponent(tfRed, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(7)
+							.addComponent(lblSala))
+						.addComponent(cbSala, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(7)
+							.addComponent(lblVrstaSjedista))
+						.addComponent(cbVrstaSjedista, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)))
+		);
 		contentPanel.setLayout(gl_contentPanel);
 		{
-			JPanel buttonPane = new JPanel();
+			buttonPane = new JPanel();
+			buttonPane.setBackground(Color.WHITE);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Otka\u017Ei");
+				cancelButton.setBackground(UIUtils.BUTTON_COLOR);
+				cancelButton.setFont(new Font("Arial", Font.PLAIN, 14));
+				cancelButton.setForeground(Color.WHITE);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton("Sa\u010Duvaj");
+				okButton.setBackground(UIUtils.BUTTON_COLOR);
+				okButton.setFont(new Font("Arial", Font.PLAIN, 14));
+				okButton.setForeground(Color.WHITE);
 				okButton.setActionCommand("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -158,15 +194,33 @@ public class SjedisteDialog extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 446, GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 419, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 286, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(12))
+		);
+		getContentPane().setLayout(groupLayout);
 	}
 
 	public void sacuvajSjediste() {
-		String polje1 = textField.getText();
+		String polje1 = tfBroj.getText();
 		int broj = Integer.parseInt(polje1);
-		String polje2 = textField_1.getText();
+		String polje2 = tfRed.getText();
 		int broj2 = Integer.parseInt(polje2);
-		SalaDTO sala = (SalaDTO) comboBox_1.getSelectedItem();
-		VrstaSjedistaDTO vs = (VrstaSjedistaDTO) comboBox.getSelectedItem();
+		SalaDTO sala = (SalaDTO) cbSala.getSelectedItem();
+		VrstaSjedistaDTO vs = (VrstaSjedistaDTO) cbVrstaSjedista.getSelectedItem();
 
 		SjedisteDTO s = new SjedisteDTO(broj, broj2, sala, vs);
 
@@ -204,12 +258,12 @@ public class SjedisteDialog extends JDialog {
 	}
 
 	public void dodajSalu() {
-		String polje1 = textField.getText();
+		String polje1 = tfBroj.getText();
 		int broj = Integer.parseInt(polje1);
-		String polje2 = textField_1.getText();
+		String polje2 = tfRed.getText();
 		int broj2 = Integer.parseInt(polje2);
-		SalaDTO sala = (SalaDTO) comboBox_1.getSelectedItem();
-		VrstaSjedistaDTO vs = (VrstaSjedistaDTO) comboBox.getSelectedItem();
+		SalaDTO sala = (SalaDTO) cbSala.getSelectedItem();
+		VrstaSjedistaDTO vs = (VrstaSjedistaDTO) cbVrstaSjedista.getSelectedItem();
 
 		SjedisteDTO s = new SjedisteDTO(broj, broj2, sala, vs);
 
