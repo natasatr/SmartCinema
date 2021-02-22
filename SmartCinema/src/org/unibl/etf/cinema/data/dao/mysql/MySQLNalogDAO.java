@@ -5,16 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.unibl.etf.cinema.data.dao.NalogDAO;
-import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.Nalog;
 import org.unibl.etf.cinema.data.dto.Rola;
-import org.unibl.etf.cinema.data.dto.Zaposleni;
 import org.unibl.etf.cinema.util.CryptoUtil;
 import org.unibl.etf.cinema.util.DBUtil;
 

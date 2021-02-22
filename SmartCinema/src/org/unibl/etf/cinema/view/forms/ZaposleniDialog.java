@@ -1,12 +1,31 @@
 package org.unibl.etf.cinema.view.forms;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dao.DAOFactory;
@@ -21,35 +40,6 @@ import org.unibl.etf.cinema.util.CryptoUtil;
 import org.unibl.etf.cinema.util.EmailValidator;
 import org.unibl.etf.cinema.util.UIUtils;
 import org.unibl.etf.cinema.util.Utils;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JCheckBox;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
-import javax.swing.JPasswordField;
-import javax.swing.border.LineBorder;
-import javax.swing.UIManager;
-import java.awt.Rectangle;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.CompoundBorder;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class ZaposleniDialog extends JDialog {
 

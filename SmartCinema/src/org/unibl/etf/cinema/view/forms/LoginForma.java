@@ -1,33 +1,29 @@
 package org.unibl.etf.cinema.view.forms;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.GridBagLayout;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JPasswordField;
-import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.NalogDAO;
 import org.unibl.etf.cinema.data.dto.Nalog;
-import org.unibl.etf.cinema.util.CryptoUtil;
 import org.unibl.etf.cinema.util.UIUtils;
-
-import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class LoginForma extends JFrame {
 
@@ -38,6 +34,7 @@ public class LoginForma extends JFrame {
 	private JButton btnLogin;
 
 	private NalogDAO nalogDAO = DAOFactory.getDAOFactory().getNalogDAO();
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -71,8 +68,10 @@ public class LoginForma extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginForma() {
+		setTitle("SmartCinema - Prijava");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 321);
+		setBounds(100, 100, 363, 456);
 		contentPane = new JPanel();
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
@@ -83,17 +82,20 @@ public class LoginForma extends JFrame {
 		gbl_contentPane.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 255, 255));
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridheight = 3;
-		gbc_panel.gridwidth = 4;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		contentPane.add(panel, gbc_panel);
+		JPanel pnlLogin = new JPanel();
+		pnlLogin.setBackground(new Color(255, 255, 255));
+		pnlLogin.setLayout(null);
+		GridBagConstraints gbc_pnlLogin = new GridBagConstraints();
+		gbc_pnlLogin.gridheight = 3;
+		gbc_pnlLogin.gridwidth = 4;
+		gbc_pnlLogin.fill = GridBagConstraints.BOTH;
+		gbc_pnlLogin.gridx = 0;
+		gbc_pnlLogin.gridy = 0;
+		contentPane.add(pnlLogin, gbc_pnlLogin);
 
 		tfKorisnickoIme = new JTextField();
+		tfKorisnickoIme.setFont(new Font("Arial", Font.PLAIN, 14));
+		tfKorisnickoIme.setBounds(60, 188, 239, 33);
 		tfKorisnickoIme.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -105,6 +107,8 @@ public class LoginForma extends JFrame {
 		tfKorisnickoIme.setColumns(10);
 
 		pfLozinka = new JPasswordField();
+		pfLozinka.setFont(new Font("Arial", Font.PLAIN, 14));
+		pfLozinka.setBounds(60, 253, 239, 33);
 		pfLozinka.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -115,15 +119,24 @@ public class LoginForma extends JFrame {
 		});
 
 		JLabel lblKorisnickoIme = new JLabel("Korisni\u010Dko ime");
-		lblKorisnickoIme.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblKorisnickoIme.setBounds(62, 168, 104, 19);
+		lblKorisnickoIme.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		JLabel lblLozinka = new JLabel("Lozinka");
-		lblLozinka.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblLozinka.setBounds(61, 233, 104, 19);
+		lblLozinka.setFont(new Font("Arial", Font.PLAIN, 14));
 
-		lblLoginGreska = new JLabel("Greska");
+		lblLoginGreska = new JLabel("Pogre\u0161no korisni\u010Dko ime ili lozinka!");
+		lblLoginGreska.setBounds(70, 353, 230, 19);
+		lblLoginGreska.setForeground(Color.RED);
+		lblLoginGreska.setFont(new Font("Arial", Font.PLAIN, 14));
 		lblLoginGreska.setVisible(false);
 
-		btnLogin = new JButton("Login");
+		btnLogin = new JButton("Prijava");
+		btnLogin.setFont(new Font("Arial", Font.PLAIN, 16));
+		btnLogin.setForeground(Color.WHITE);
+		btnLogin.setBounds(60, 298, 239, 43);
+		btnLogin.setBackground(new Color(220, 20, 60));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (provjeriLoginPolja()) {
@@ -131,34 +144,17 @@ public class LoginForma extends JFrame {
 				}
 			}
 		});
-
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup()
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
-						.addGap(48)
-						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING).addComponent(lblKorisnickoIme)
-								.addComponent(lblLozinka, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
-								gl_panel.createParallelGroup(Alignment.LEADING).addComponent(lblLoginGreska)
-										.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(tfKorisnickoIme, GroupLayout.DEFAULT_SIZE, 189,
-														Short.MAX_VALUE)
-												.addComponent(pfLozinka))))
-						.addGroup(gl_panel.createSequentialGroup().addGap(154).addComponent(btnLogin)))
-				.addContainerGap(81, Short.MAX_VALUE)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.TRAILING).addGroup(gl_panel
-				.createSequentialGroup().addContainerGap(106, Short.MAX_VALUE).addComponent(btnLogin).addGap(50)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblKorisnickoIme).addComponent(
-						tfKorisnickoIme, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLozinka, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addComponent(pfLozinka, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblLoginGreska).addGap(14)));
-		panel.setLayout(gl_panel);
+		pnlLogin.add(btnLogin);
+		pnlLogin.add(lblLoginGreska);
+		pnlLogin.add(lblLozinka);
+		pnlLogin.add(pfLozinka);
+		pnlLogin.add(lblKorisnickoIme);
+		pnlLogin.add(tfKorisnickoIme);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(LoginForma.class.getResource("/org/unibl/etf/cinema/view/icons/login_logo.png")));
+		lblNewLabel.setBounds(31, 16, 282, 140);
+		pnlLogin.add(lblNewLabel);
 	}
 
 	private boolean provjeriLoginPolja() {
@@ -198,6 +194,7 @@ public class LoginForma extends JFrame {
 			}
 
 			final JFrame glavnaForma = forma;
+			forma.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 			EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -212,5 +209,4 @@ public class LoginForma extends JFrame {
 		}
 
 	}
-
 }

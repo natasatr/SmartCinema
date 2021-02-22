@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
-import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.Nalog;
 import org.unibl.etf.cinema.data.dto.Rola;
 import org.unibl.etf.cinema.data.dto.Zaposleni;

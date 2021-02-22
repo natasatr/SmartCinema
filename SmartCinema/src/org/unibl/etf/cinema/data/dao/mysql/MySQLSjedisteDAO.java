@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.unibl.etf.cinema.data.dao.SjedisteDAO;
-import org.unibl.etf.cinema.data.dto.SjedisteDTO;
+import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
-import org.unibl.etf.cinema.data.dto.AdresaDTO;
+import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
 import org.unibl.etf.cinema.util.ConnectionPool;
 import org.unibl.etf.cinema.util.DBUtil;

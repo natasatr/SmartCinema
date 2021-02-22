@@ -1,7 +1,16 @@
 package org.unibl.etf.cinema.data.dao.mysql;
 
 
-import org.unibl.etf.cinema.data.dao.*;
+import org.unibl.etf.cinema.data.dao.AdresaDAO;
+import org.unibl.etf.cinema.data.dao.DAOFactory;
+import org.unibl.etf.cinema.data.dao.DodatnaPonudaDAO;
+import org.unibl.etf.cinema.data.dao.KinoDAO;
+import org.unibl.etf.cinema.data.dao.NalogDAO;
+import org.unibl.etf.cinema.data.dao.RolaDAO;
+import org.unibl.etf.cinema.data.dao.SalaDAO;
+import org.unibl.etf.cinema.data.dao.SjedisteDAO;
+import org.unibl.etf.cinema.data.dao.VrstaSjedistaDAO;
+import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
 
 public class MySQLDAOFactory extends DAOFactory{
 	

@@ -1,40 +1,50 @@
 package org.unibl.etf.cinema.view.forms;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
-import java.awt.Font;
-import javax.swing.ImageIcon;
-import java.awt.BorderLayout;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import java.awt.CardLayout;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicSpinnerUI;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
@@ -42,35 +52,6 @@ import org.unibl.etf.cinema.util.EmailValidator;
 import org.unibl.etf.cinema.util.UIUtils;
 import org.unibl.etf.cinema.util.Utils;
 import org.unibl.etf.cinema.view.tables.ZaposleniTableModel;
-
-import java.awt.Rectangle;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JFormattedTextField;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-
-import java.awt.event.KeyEvent;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Dimension;
-import javax.swing.border.CompoundBorder;
-import javax.swing.JTextArea;
 
 public class AdminForma extends JFrame {
 
@@ -91,8 +72,8 @@ public class AdminForma extends JFrame {
 	private boolean kinoEditable = false;
 	private JTable tblKorisnici;
 
-	private JLabel[] labele = new JLabel[3];
-	private JPanel[] paneli = new JPanel[3];
+	private JLabel[] labele = new JLabel[2];
+	private JPanel[] paneli = new JPanel[2];
 	private List<JTextField> kinoPolja = new ArrayList<>();
 
 	private JLabel lblZaglavlje;
@@ -142,12 +123,13 @@ public class AdminForma extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminForma(int nalogID) {
+		setTitle("SmartCinema");
 		// Posto je prijava uspjela, znaci da kino sigurno postoji
 		kino = kinoDAO.svaKina().get(0);
 		prijavljeniKorisnik = zaposleniDAO.zaposleni(nalogID);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1112, 679);
+		//setBounds(100, 100, 1112, 679);
 		contentPane = new JPanel();
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
@@ -230,38 +212,16 @@ public class AdminForma extends JFrame {
 		contentPane.add(pnlSadrzaj, gbc_pnlSadrzaj);
 		pnlSadrzaj.setLayout(new CardLayout(0, 0));
 
-		JPanel pnlPocetnaStrana = new JPanel();
-		paneli[0] = pnlPocetnaStrana;
-		pnlPocetnaStrana.setBackground(new Color(240, 240, 240));
-		pnlSadrzaj.add(pnlPocetnaStrana, "pnl_pocetna_strana");
+		JPanel pnlKorisnici = new JPanel();
+		paneli[0] = pnlKorisnici;
+		pnlKorisnici.setBackground(new Color(240, 240, 240));
+		pnlSadrzaj.add(pnlKorisnici, "pnl_korisnici");
 		
-		JPanel panel_1 = new JPanel();
-		GroupLayout gl_pnlPocetnaStrana = new GroupLayout(pnlPocetnaStrana);
-		gl_pnlPocetnaStrana.setHorizontalGroup(
-			gl_pnlPocetnaStrana.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlPocetnaStrana.createSequentialGroup()
-					.addGap(33)
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 503, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(310, Short.MAX_VALUE))
-		);
-		gl_pnlPocetnaStrana.setVerticalGroup(
-			gl_pnlPocetnaStrana.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnlPocetnaStrana.createSequentialGroup()
-					.addGap(101)
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(145, Short.MAX_VALUE))
-		);
-		pnlPocetnaStrana.setLayout(gl_pnlPocetnaStrana);
-
 		JPanel pnlKino = new JPanel();
-		paneli[2] = pnlKino;
+		paneli[1] = pnlKino;
 		pnlKino.setBackground(new Color(240, 240, 240));
 		pnlSadrzaj.add(pnlKino, "pnl_kino");
 
-		JPanel pnlKorisnici = new JPanel();
-		paneli[1] = pnlKorisnici;
-		pnlKorisnici.setBackground(new Color(240, 240, 240));
-		pnlSadrzaj.add(pnlKorisnici, "pnl_korisnici");
 
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -650,28 +610,9 @@ public class AdminForma extends JFrame {
 		gbl_pnlMeni.rowWeights = new double[] { 0, 0, 0, 1 };
 		pnlMeni.setLayout(gbl_pnlMeni);
 
-		JLabel lblPocetnaStrana = new JLabel("Po\u010Detna strana");
-		lblPocetnaStrana.setOpaque(true);
-		labele[0] = lblPocetnaStrana;
-		lblPocetnaStrana.setBackground(HOVER_MENU_BG_COLOR);
-		lblPocetnaStrana.setIconTextGap(10);
-		lblPocetnaStrana.setBorder(new EmptyBorder(0, 15, 0, 0));
-		lblPocetnaStrana.setIcon(new ImageIcon(
-				AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_pocetna_strana.png")));
-		lblPocetnaStrana.setForeground(new Color(255, 255, 255));
-		lblPocetnaStrana.setFont(HOVER_MENU_FONT);
-		lblPocetnaStrana.setHorizontalTextPosition(SwingConstants.RIGHT);
-		lblPocetnaStrana.setHorizontalAlignment(SwingConstants.LEFT);
-		GridBagConstraints gbc_lblPocetnaStrana = new GridBagConstraints();
-		gbc_lblPocetnaStrana.insets = new Insets(0, 0, 0, 0);
-		gbc_lblPocetnaStrana.fill = GridBagConstraints.BOTH;
-		gbc_lblPocetnaStrana.gridx = 0;
-		gbc_lblPocetnaStrana.gridy = 0;
-		pnlMeni.add(lblPocetnaStrana, gbc_lblPocetnaStrana);
-
 		JLabel lblKorisnici = new JLabel("Korisnici");
 		lblKorisnici.setOpaque(true);
-		labele[1] = lblKorisnici;
+		labele[0] = lblKorisnici;
 		lblKorisnici.setBackground(DEFAULT_MENU_BG_COLOR);
 		lblKorisnici.setIconTextGap(10);
 		lblKorisnici.setIcon(
@@ -685,12 +626,12 @@ public class AdminForma extends JFrame {
 		gbc_lblKorisnici.fill = GridBagConstraints.BOTH;
 		gbc_lblKorisnici.insets = new Insets(0, 0, 0, 0);
 		gbc_lblKorisnici.gridx = 0;
-		gbc_lblKorisnici.gridy = 1;
+		gbc_lblKorisnici.gridy = 0;
 		pnlMeni.add(lblKorisnici, gbc_lblKorisnici);
 
 		JLabel lblKino = new JLabel("Kino");
 		lblKino.setOpaque(true);
-		labele[2] = lblKino;
+		labele[1] = lblKino;
 		lblKino.setBackground(DEFAULT_MENU_BG_COLOR);
 		lblKino.setIcon(new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_kino.png")));
 		lblKino.setIconTextGap(10);
@@ -703,7 +644,7 @@ public class AdminForma extends JFrame {
 		gbc_lblKino.fill = GridBagConstraints.BOTH;
 		gbc_lblKorisnici.fill = GridBagConstraints.BOTH;
 		gbc_lblKino.gridx = 0;
-		gbc_lblKino.gridy = 2;
+		gbc_lblKino.gridy = 1;
 		pnlMeni.add(lblKino, gbc_lblKino);
 
 		for (int i = 0; i < labele.length; i++) {
@@ -732,6 +673,10 @@ public class AdminForma extends JFrame {
 				}
 			});
 		}
+		labele[0].setBackground(HOVER_MENU_BG_COLOR);
+		labele[0].setFont(HOVER_MENU_FONT);
+		postaviSelektovaniPanel();
+		postaviZaglavlje(labele[0]);
 		popuniPodatkeOKinu();
 		podesiDugmad();
 	}

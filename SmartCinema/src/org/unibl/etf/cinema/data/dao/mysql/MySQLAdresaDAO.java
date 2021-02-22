@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dto.AdresaDTO;
-import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.util.ConnectionPool;
 import org.unibl.etf.cinema.util.DBUtil;
 
