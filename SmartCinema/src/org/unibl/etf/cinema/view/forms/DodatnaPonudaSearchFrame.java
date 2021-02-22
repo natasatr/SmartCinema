@@ -277,6 +277,8 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setOpaque(false);
+		
+		JPanel panel_3 = new JPanel();
 
 		GroupLayout gl_pnlSale = new GroupLayout(pnlSale);
 		gl_pnlSale.setHorizontalGroup(
@@ -285,21 +287,57 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 					.addGroup(gl_pnlSale.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_pnlSale.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_pnlSale.createSequentialGroup()
-							.addGap(40)
-							.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)))
+							.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_pnlSale.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_pnlSale.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 417, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_pnlSale.createSequentialGroup()
+								.addGap(40)
+								.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE))))
 					.addGap(40))
 		);
 		gl_pnlSale.setVerticalGroup(
 			gl_pnlSale.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnlSale.createSequentialGroup()
-					.addGap(100)
-					.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+					.addGap(25)
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
 					.addGap(37)
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
 					.addGap(25))
 		);
+		
+		JButton btnOsvezi = new JButton("");
+		btnOsvezi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+				
+					azurirajTabeluSala();
+					azurirajTabeluSjedista();
+
+				} catch (Exception e1) {
+					
+				}
+			}
+		});
+		btnOsvezi.setBackground(UIUtils.BUTTON_COLOR);
+		btnOsvezi.setIcon(new ImageIcon(DodatnaPonudaSearchFrame.class.getResource("/org/unibl/etf/cinema/view/icons/round_refresh_white_18dp.png")));
+		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+		gl_panel_3.setHorizontalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_3.createSequentialGroup()
+					.addContainerGap(49, Short.MAX_VALUE)
+					.addComponent(btnOsvezi, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_panel_3.setVerticalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addComponent(btnOsvezi, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(24, Short.MAX_VALUE))
+		);
+		panel_3.setLayout(gl_panel_3);
 
 		JButton btnDodajSalu = new JButton("");
 		btnDodajSalu.addActionListener(new ActionListener() {
@@ -328,7 +366,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
-					.addContainerGap(215, Short.MAX_VALUE)
+					.addContainerGap(211, Short.MAX_VALUE)
 					.addComponent(btnBrisiSalu, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnDodajSalu, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
@@ -340,7 +378,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 					.addGap(20)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
 						.addComponent(btnBrisiSalu)
-						.addComponent(btnDodajSalu, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnDodajSalu, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(19, Short.MAX_VALUE))
 		);
 		panel_1.setLayout(gl_panel_1);
@@ -383,6 +421,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		btnNewButton.setIcon(
 				new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
 
+		
 		List<SalaDTO> sale = salaDAO.sveSale();
 		comboBox_1 = new JComboBox(sale.toArray(new SalaDTO[] {}));
 		comboBox_1.setSelectedIndex(sale.isEmpty() ? -1 : 0);
@@ -637,6 +676,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 	}
 
 	public void azurirajTabeluSjedista() {
+		azurirajTabeluSala();
 		SalaDTO dp = (SalaDTO) comboBox_1.getSelectedItem();
 		int salaID = dp.getSalaID();
 		SjedisteTableModel model = (SjedisteTableModel) table_3.getModel();
