@@ -148,4 +148,12 @@ public class MySQLAdresaDAO implements AdresaDAO {
 		return retVal;
 
 	}
+	
+	public static void main(String args[])
+	{
+		MySQLAdresaDAO m=new MySQLAdresaDAO();
+		AdresaDTO a=m.sveAdrese().get(0);
+		
+		System.out.println(a);
+	}
 }

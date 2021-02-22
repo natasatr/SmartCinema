@@ -53,7 +53,7 @@ public class VrstaSjedistaDTO {
 	}
 	@Override
 	public String toString() {
-		return "VrstaSjedistaDTO [VrstaSjedistaID=" + VrstaSjedistaID + ", Naziv=" + Naziv + "]";
+		return Naziv;
 	}
 	
 	

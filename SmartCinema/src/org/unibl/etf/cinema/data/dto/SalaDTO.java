@@ -6,6 +6,25 @@ public class SalaDTO {
 	public int SalaID;
 	public int Broj, Kapacitet;
 	public KinoDTO kino;
+	
+	
+	
+	
+	
+	public SalaDTO(int broj, KinoDTO kino) {
+		super();
+		SalaID=0;
+		Broj = broj;
+		Kapacitet=0;
+		this.kino = kino;
+	}
+	public SalaDTO(int broj, int kapacitet, KinoDTO kino) {
+		super();
+		SalaID=0;
+		Broj = broj;
+		Kapacitet = kapacitet;
+		this.kino = kino;
+	}
 	public SalaDTO(int salaID, int broj, int kapacitet, KinoDTO kino) {
 		super();
 		SalaID = salaID;
@@ -74,7 +93,7 @@ public class SalaDTO {
 	}
 	@Override
 	public String toString() {
-		return "Sala " + Broj ;
+		return "Sala " + Broj +"   "+kino.getNaziv() ;
 	}
 	
 	

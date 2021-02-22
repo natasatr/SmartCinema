@@ -23,7 +23,7 @@ public class MySQLDodatnaPonudaDAO implements DodatnaPonudaDAO{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda "
+		String query = "select DodatnaPonudaID, Naziv, Cijena from dodatna_ponuda"
 				+ " order by DodatnaPonudaID asc " ;
 		
 		try {

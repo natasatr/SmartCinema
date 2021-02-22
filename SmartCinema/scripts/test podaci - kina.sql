@@ -1,18 +1,18 @@
-insert into adresa (Mjesto, Ulica, Broj, Uklonjeno)  values ('Banja Luka','Milana Tepica', 1, 0);
-insert into adresa (Mjesto, Ulica, Broj, Uklonjeno)  values ('Banja Luka','Lovcenska', 27, 0);
-insert into adresa  (Mjesto, Ulica, Broj, Uklonjeno) values ('Banja Luka','Dunavska', 132, 0);
-insert into adresa (Mjesto, Ulica, Broj, Uklonjeno)  values ('Prijedor','Djure Jaksica', 12, 0);
-insert into adresa (Mjesto, Ulica, Broj, Uklonjeno)  values ('Prijedor','Gavrila Principa', 86, 0);
+insert into adresa values( 1,'Banja Luka',	'Milana Tepica',	1,	0);
+insert into adresa values (2,'Banja Luka','	Lovcenska',	27	,0);
+insert into  adresa values(3,	'Banja Luka',	'Dunavska',	132,	0);
+insert into adresa values(4, 'Prijedor'	,'Djure Jaksica',	12,	0);
+insert into adresa values(5,'Prijedor'	,'Gavrila Principa',	86,	0);
 
-insert into kino values (1,'Kino Banja Luka', 'kino1@gmail.com','051899558', 1,0);
 
-insert into vrsta_sjedista values (1, 'Regularna sjedista');
-insert into vrsta_sjedista values (2, 'Ljubavna sjedista');
-insert into vrsta_sjedista values (3, 'VIP sjedista');
-insert into vrsta_sjedista values (4, 'Love box sjedista');
-insert into vrsta_sjedista values (5, 'VIP relax sjedista');
-insert into vrsta_sjedista values (6, 'Premium lounge fotelje');
+insert into kino values (1,'Kino 1', 'kino1@gmail.com','051899558', 1,0);
 
+insert into vrsta_sjedista values (1, 'Regularna sjedista', 0);
+insert into vrsta_sjedista values (2, 'Ljubavna sjedista', 0);
+insert into vrsta_sjedista values (3, 'VIP sjedista', 0);
+insert into vrsta_sjedista values (4, 'Love box sjedista', 0);
+insert into vrsta_sjedista values (5, 'VIP relax sjedista', 0);
+insert into vrsta_sjedista values (6, 'Premium lounge fotelje', 0);
 
 insert into dodatna_ponuda values (1, 'Kokice male' , 2.00);
 insert into dodatna_ponuda values (2, 'Kokice srednje' , 3.00);
@@ -25,11 +25,14 @@ insert into dodatna_ponuda values (8, 'Cips srednji' , 2.00);
 insert into dodatna_ponuda values (9, 'Cips veliki' , 3.00);
 
 
-insert into sala values (1, 1, 30, 0, 1);
-insert into sala values (2, 2, 25, 0, 1);
-insert into sala values (3, 3, 30, 0, 1);
-insert into sala values (4, 4 , 50, 0, 1);
+insert into sala (SalaID,Broj,Kapacitet, Uklonjeno, KINO_KinoID) values (1,1, 0,0, 1);
+insert into sala (SalaID, Broj,Kapacitet, Uklonjeno, KINO_KinoID) values (2,2, 0,0, 1);
+insert into sala (SalaID,Broj,Kapacitet, Uklonjeno, KINO_KinoID) values (3,3, 0, 0,1);
+insert into sala (SalaID,Broj,Kapacitet, Uklonjeno, KINO_KinoID) values (4,4, 0,0, 1);
 
+-- insert into sala values (2, 2, 25, 0, 1);
+-- insert into sala values (3, 3, 30, 0, 1);
+-- insert into sala values (4, 4 , 50, 0, 1);
 
 -- sala 1 kino 1
 insert into sjediste values (1, 1, 1, 0, 0, 1, 1);

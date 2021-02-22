@@ -9,9 +9,18 @@ import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 @SuppressWarnings("serial")
 public class SjedisteTableModel extends AbstractTableModel{
 	
-private String[] naziviKolona= {"#", "BROJ", "RED", "ZAUZETO", "VRSTA_SJEDISTA"};
+private String[] naziviKolona= {"#", "BROJ", "RED", "VRSTA_SJEDISTA"};
 	
 	private List<SjedisteDTO> sjedista;
+
+	
+	public List<SjedisteDTO> getSjedista() {
+		return sjedista;
+	}
+
+	public void setSjedista(List<SjedisteDTO> sjedista) {
+		this.sjedista = sjedista;
+	}
 
 	public SjedisteTableModel(List<SjedisteDTO> sjedista) {
 		this.sjedista = sjedista;
@@ -46,9 +55,9 @@ private String[] naziviKolona= {"#", "BROJ", "RED", "ZAUZETO", "VRSTA_SJEDISTA"}
 		else if (columnIndex == 2)
 			return red.getRed();
 		else if(columnIndex==3)
-			return red.isZauzeto();
-		else if(columnIndex==4)
 			return red.getVrstaSjedista().getNaziv();
+		//else if(columnIndex==4)
+			//return red.getVrstaSjedista().getNaziv();
 		
 		else
 			return null;

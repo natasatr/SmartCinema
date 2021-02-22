@@ -4,6 +4,14 @@ public class DodatnaPonudaDTO {
 	public int DodatnaPonudaID;
 	public String Naziv;
 	public double Cijena;
+	
+	
+	public DodatnaPonudaDTO(String naziv, double cijena) {
+		super();
+		DodatnaPonudaID=0;
+		Naziv = naziv;
+		Cijena = cijena;
+	}
 	public DodatnaPonudaDTO(int dodatnaPonudaID, String naziv, double cijena) {
 		super();
 		DodatnaPonudaID = dodatnaPonudaID;

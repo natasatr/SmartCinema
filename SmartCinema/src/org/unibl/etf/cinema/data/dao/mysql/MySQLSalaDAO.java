@@ -17,6 +17,41 @@ import org.unibl.etf.cinema.util.DBUtil;
 public class MySQLSalaDAO implements SalaDAO {
 	
 	@Override
+	public List<SalaDTO> sveSale(){
+		List<SalaDTO> retVal=new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String query = "select SalaID, s.Broj, Kapacitet, KinoID, k.Naziv, Email, Telefon, AdresaID,"
+				+ " a.Mjesto, a.Ulica, a.Broj from sala s"
+				+ " inner join kino k on KINO_KinoID=KinoID "
+				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
+				+ "  where s.Uklonjeno=0"
+				+ " and KinoID=1 "
+				+ " order by SalaID asc " ;
+		
+		try {
+			conn = ConnectionPool.getInstance().checkOut();
+			ps = conn.prepareStatement(query);
+			rs = ps.executeQuery();
+
+			while (rs.next())
+				retVal.add(new SalaDTO(rs.getInt(1),rs.getInt(2), rs.getInt(3), 
+						new KinoDTO(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),
+								new AdresaDTO(rs.getInt(8),rs.getString(9), rs.getString(10), rs.getInt(11)))));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		} finally {
+			ConnectionPool.getInstance().checkIn(conn);
+			DBUtil.close(rs, ps, conn);
+		}
+		return retVal;
+	}
+	
+	@Override
 	public List<SalaDTO> sveSaleUKinu(String nazivKina){
 		List<SalaDTO> retVal=new ArrayList<>();
 		Connection conn = null;
@@ -28,6 +63,7 @@ public class MySQLSalaDAO implements SalaDAO {
 				+ " inner join kino k on KINO_KinoID=KinoID "
 				+ " inner join adresa a on ADRESA_AdresaID=AdresaID "
 				+ " where k.Naziv= ? "
+				+ " and s.Uklonjeno=0"
 				+ " order by SalaID asc " ;
 		
 		try {
@@ -136,9 +172,8 @@ public class MySQLSalaDAO implements SalaDAO {
 	public static void main(String args[])
 	{
 		MySQLSalaDAO ms=new MySQLSalaDAO();
-		List<SalaDTO> sale=ms.sveSaleUKinu("Kino 1");
+		List<SalaDTO> sale=ms.sveSale();
 		
-		for(SalaDTO s:sale)
-			System.out.println(s);
+		System.out.println(ms.obrisiSalu(1, 4));
 	}
 }

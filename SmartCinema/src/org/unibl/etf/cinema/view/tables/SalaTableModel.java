@@ -13,6 +13,16 @@ private String[] naziviKolona= {"#", "BROJ_SALE", "KAPACITET"};
 	
 	private List<SalaDTO> sale;
 
+	
+	
+	public List<SalaDTO> getSale() {
+		return sale;
+	}
+
+	public void setSale(List<SalaDTO> sale) {
+		this.sale = sale;
+	}
+
 	public SalaTableModel(List<SalaDTO> sale) {
 		this.sale = sale;
 	}
@@ -44,7 +54,7 @@ private String[] naziviKolona= {"#", "BROJ_SALE", "KAPACITET"};
 		else if (columnIndex == 1)
 			return red.getBroj();
 		else if (columnIndex == 2)
-			return red.getKapacitet() + " sjedista";
+			return red.getKapacitet() + "   sjedista";
 		
 		else
 			return null;

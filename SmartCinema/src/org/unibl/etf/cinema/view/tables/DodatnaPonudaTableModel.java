@@ -6,9 +6,17 @@ import javax.swing.table.AbstractTableModel;
 
 import org.unibl.etf.cinema.data.dto.DodatnaPonudaDTO;
 
-@SuppressWarnings("serial")
 public class DodatnaPonudaTableModel extends AbstractTableModel{
 	
+	
+	public List<DodatnaPonudaDTO> getDodatnePonude() {
+		return dodatnePonude;
+	}
+
+	public void setDodatnePonude(List<DodatnaPonudaDTO> dodatnePonude) {
+		this.dodatnePonude = dodatnePonude;
+	}
+
 	private String[] naziviKolona= {"#", "NAZIV", "CIJENA"};
 	
 	private List<DodatnaPonudaDTO> dodatnePonude;
@@ -44,7 +52,7 @@ public class DodatnaPonudaTableModel extends AbstractTableModel{
 		else if (columnIndex == 1)
 			return red.getNaziv();
 		else if (columnIndex == 2)
-			return red.getCijena();
+			return red.getCijena()+ "   KM";
 		
 		else
 			return null;
