@@ -3,8 +3,11 @@ package org.unibl.etf.cinema.data.dao.mysql;
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.DodatnaPonudaDAO;
+import org.unibl.etf.cinema.data.dao.FilmDAO;
+import org.unibl.etf.cinema.data.dao.KartaDAO;
 import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.NalogDAO;
+import org.unibl.etf.cinema.data.dao.RezervacijaDAO;
 import org.unibl.etf.cinema.data.dao.RolaDAO;
 import org.unibl.etf.cinema.data.dao.SalaDAO;
 import org.unibl.etf.cinema.data.dao.SjedisteDAO;
@@ -23,6 +26,11 @@ public class MySQLDAOFactory extends DAOFactory {
 		return new MySQLKinoDAO();
 	}
 
+	@Override
+	public KartaDAO getKartaDAO() {
+		return new MySQLKartaDAO();
+	}
+	
 	@Override
 	public NalogDAO getNalogDAO() {
 		return new MySQLNalogDAO();
@@ -56,6 +64,16 @@ public class MySQLDAOFactory extends DAOFactory {
 	@Override
 	public RolaDAO getRolaDAO() {
 		return new MySQLRolaDAO();
+	}
+	
+	@Override
+	public FilmDAO getFilmDAO(){
+		return new MySQLFilmDAO();
+	}
+	
+	@Override
+	public RezervacijaDAO getRezervacijaDAO(){
+		return new MySQLRezervacijaDAO();
 	}
 
 }

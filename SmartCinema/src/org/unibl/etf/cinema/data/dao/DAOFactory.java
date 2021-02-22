@@ -6,6 +6,8 @@ public abstract class DAOFactory {
 	public abstract AdresaDAO getAdresaDAO();
 
 	public abstract KinoDAO getKinoDAO();
+	
+	public abstract KartaDAO getKartaDAO();
 
 	public abstract NalogDAO getNalogDAO();
 
@@ -20,6 +22,10 @@ public abstract class DAOFactory {
 	public abstract ZaposleniDAO getZaposleniDAO();
 
 	public abstract RolaDAO getRolaDAO();
+
+	public abstract FilmDAO getFilmDAO();
+
+	public abstract RezervacijaDAO getRezervacijaDAO();
 
 	public static DAOFactory getDAOFactory() {
 		return new MySQLDAOFactory();
