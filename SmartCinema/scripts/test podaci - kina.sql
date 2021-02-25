@@ -196,6 +196,7 @@ insert into sjediste values (135, 10 ,5, 0 , 0 , 4, 5);
 insert into rola values (1,'Administrator1');
 insert into rola values (2,'Administrator2');
 insert into rola values (3,'Sluzbenik');
+insert into rola values (4,'Radnik');
 
 insert into nalog values (1,'korisnik1','$2a$12$EkazOUR.cmIlUrC7UYRqL.gITTendUcW2Y.sJ.ZvjWZdl5QWck7OW',0,1);
 insert into nalog values (2,'korisnik2','$2a$12$Ph1IO2P5XclpMbw7v2sPy.bKCfxzJFGi1gdT1YlqKo7Ajb2oCpFnO',0,2);
