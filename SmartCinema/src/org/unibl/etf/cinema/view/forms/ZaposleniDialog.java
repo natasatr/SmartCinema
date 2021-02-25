@@ -496,7 +496,7 @@ public class ZaposleniDialog extends JDialog {
 		try {
 			AdresaDTO adresa = new AdresaDTO(tfMjesto.getText().trim(), tfUlica.getText().trim(),
 					Integer.parseInt(tfBroj.getText().trim()));
-			Rola rola = rolaDAO.rola("Sluzbenik");
+			Rola rola = rolaDAO.rola("Radnik");
 			Nalog nalog = new Nalog(tfKorisnickoIme.getText(), rola);
 			Zaposleni noviZaposleni = new Zaposleni(tfJmb.getText().trim(), tfIme.getText().trim(),
 					tfPrezime.getText().trim(), Double.parseDouble(tfPlata.getText().trim()), tfEmail.getText().trim(),

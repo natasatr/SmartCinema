@@ -7,6 +7,7 @@ import org.unibl.etf.cinema.data.dao.FilmDAO;
 import org.unibl.etf.cinema.data.dao.KartaDAO;
 import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.NalogDAO;
+import org.unibl.etf.cinema.data.dao.PrikazivanjeFilmaUSaliDAO;
 import org.unibl.etf.cinema.data.dao.RezervacijaDAO;
 import org.unibl.etf.cinema.data.dao.RolaDAO;
 import org.unibl.etf.cinema.data.dao.SalaDAO;
@@ -69,6 +70,11 @@ public class MySQLDAOFactory extends DAOFactory {
 	@Override
 	public FilmDAO getFilmDAO(){
 		return new MySQLFilmDAO();
+	}
+	
+	@Override
+	public PrikazivanjeFilmaUSaliDAO getPrikazivanjeFilmaUSaliDAO(){
+		return new MySQLPrikazivanjeFilmaUSaliDAO();
 	}
 	
 	@Override

@@ -12,4 +12,9 @@ public interface PrikazivanjeFilmaUSaliDAO {
 	List<PrikazivanjeFilmaUSaliDTO> sviTerminizaFilm(FilmDTO film);
 	List<SjedisteDTO> listaSjedistaZaTermin(int salaID, String termin) ;
 	PrikazivanjeFilmaUSaliDTO terminFilma(String naziv, String termin);
+	PrikazivanjeFilmaUSaliDTO getByTerminID(int id);
+	List<PrikazivanjeFilmaUSaliDTO> termini();
+	
+	boolean dodaj(PrikazivanjeFilmaUSaliDTO pfusDTO);
+	boolean obrisi(int TerminID);
 }

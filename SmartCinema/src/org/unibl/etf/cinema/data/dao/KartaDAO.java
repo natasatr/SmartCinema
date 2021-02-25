@@ -10,9 +10,11 @@ public interface KartaDAO {
 	
 	KartaDTO getByID(int KartaID);
 	
-	List<KartaDTO> getByMovieName(String name);
+	List<KartaDTO> getByMovieName(String name, String termin);
+	KartaDTO getKartu(String name, int termin, int sjediste);
 	
 	boolean dodajKartu(KartaDTO karta);
 	boolean azurirajKartu(KartaDTO karta);
 	boolean obrisiKartu(int KartaID);
+
 }

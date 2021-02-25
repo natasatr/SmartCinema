@@ -27,6 +27,8 @@ public abstract class DAOFactory {
 
 	public abstract RezervacijaDAO getRezervacijaDAO();
 
+	public abstract PrikazivanjeFilmaUSaliDAO getPrikazivanjeFilmaUSaliDAO();
+	
 	public static DAOFactory getDAOFactory() {
 		return new MySQLDAOFactory();
 	}

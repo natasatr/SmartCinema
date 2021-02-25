@@ -5,9 +5,11 @@ import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
 
 public interface RezervacijaDAO {
 
-	List<RezervacijaDTO> rezervacijeZaFilm(String nazivFilma);
+	List<RezervacijaDTO> rezervacijeNaIme(String ime);
 	RezervacijaDTO getByID(int id);
 	boolean dodajRezervaciju(RezervacijaDTO Rezervacija);
 	boolean azurirajRezervaciju(RezervacijaDTO Rezervacija);
 	boolean obrisiRezervaciju(int rezervacijaID);
+	List<RezervacijaDTO> rezervacije();
+	boolean obrisiRezervacijeZaTermin(int rezervacijaID);
 }

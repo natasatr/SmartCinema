@@ -11,7 +11,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -57,14 +61,12 @@ public class KupiKartuForm extends JPanel{
 
 	private KartaDAO kartaDAO = DAOFactory.getDAOFactory().getKartaDAO();
 	private PrikazivanjeFilmaUSaliDAO pfusDAO= DAOFactory.getDAOFactory().getPrikazivanjeFilmaUSaliDAO();
-	private PrikazivanjeFilmaUSaliDAO pfusDAO2= DAOFactory.getDAOFactory().getPrikazivanjeFilmaUSaliDAO();
 	private SjedisteDAO sjedisteDAO = DAOFactory.getDAOFactory().getSjedisteDAO();
 	private FilmDAO filmDAO = DAOFactory.getDAOFactory().getFilmDAO();
 	private ZaposleniDAO zaposleniDAO = DAOFactory.getDAOFactory().getZaposleniDAO();
 	private RezervacijaDAO rezervacijaDAO = DAOFactory.getDAOFactory().getRezervacijaDAO();
-	private JComboBox comboBox;
-	private JComboBox comboBox_2;
-	//private Date termin;
+	private JComboBox<String> comboBox;
+	private JComboBox<String> comboBox_2;
 	private JScrollPane scrollPane;
 	private JButton btnRezervisi;
 	private JButton btnKupi;
@@ -75,14 +77,161 @@ public class KupiKartuForm extends JPanel{
 public JTextField tfPretraga;
 private JTable table;
 private JTable table_1;
-public KupiKartuForm() {
-	zaposleni = zaposleniDAO.zaposleni(6);
-	setBackground(Color.GRAY);
+
+public KupiKartuForm() {}
+
+public KupiKartuForm(Zaposleni zaposleni) {
+	this.zaposleni = zaposleni;
 	
-	JPanel panel = new JPanel();
+	
+	JPanel pnlPretraga = new JPanel();
+	pnlPretraga.setBounds(199, 11, 241, 29);
+	pnlPretraga.setBorder(null);
+	pnlPretraga.setBackground(new Color(220, 20, 60));
+	GridBagLayout gbl_pnlPretraga = new GridBagLayout();
+	gbl_pnlPretraga.columnWidths = new int[]{316, 180, 50, 0};
+	gbl_pnlPretraga.rowHeights = new int[]{22, 0, 0};
+	gbl_pnlPretraga.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+	gbl_pnlPretraga.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+	pnlPretraga.setLayout(gbl_pnlPretraga);
+	setLayout(null);
 	
 	scrollPane = new JScrollPane();
+	scrollPane.setViewportView(table);
+	
+	JPanel pnlOpcije = new JPanel();
+	pnlOpcije.setLayout(null);
+	pnlOpcije.setOpaque(false);
+	btnRezervisi = new JButton();
+	btnRezervisi.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e) {
+			rezervisiKartu();
+			ucitajSjedistaUSali();
+		}
+	});
+	btnRezervisi.setIcon(new ImageIcon(KupiKartuForm.class.getResource("/org/unibl/etf/cinema/view/icons/icon_edit.png")));
+	btnRezervisi.setEnabled(false);
+	btnRezervisi.setBackground(new Color(220, 20, 60));
+	btnRezervisi.setBounds(126, 5, 95, 36);
+	pnlOpcije.add(btnRezervisi);
+	
+	btnKupi = new JButton();	
+	btnKupi.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			kupiKartu();
+		}
+	});
+	btnKupi.setIcon(new ImageIcon(KupiKartuForm.class.getResource("/org/unibl/etf/cinema/view/icons/icon_add.png")));
+	btnKupi.setEnabled(false);
+	btnKupi.setBackground(new Color(220, 20, 60));
+	btnKupi.setBounds(340, 5, 95, 36);
+	pnlOpcije.add(btnKupi);
+	GroupLayout gl_pnlKorisnici = new GroupLayout(this);
+	gl_pnlKorisnici.setHorizontalGroup(
+		gl_pnlKorisnici.createParallelGroup(Alignment.TRAILING)
+			.addGroup(Alignment.LEADING, gl_pnlKorisnici.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
+					.addComponent(pnlPretraga, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+					.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+					.addComponent(pnlOpcije, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE))
+				.addGap(40))
+	);
+	gl_pnlKorisnici.setVerticalGroup(
+		gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
+			.addGroup(gl_pnlKorisnici.createSequentialGroup()
+				.addContainerGap()
+				.addComponent(pnlPretraga, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+				.addGap(28)
+				.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+				.addGap(50))
+	);
+	
+	JLabel lblNewLabel = new JLabel("Odaberi film");
+	GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+	gbc_lblNewLabel.anchor = GridBagConstraints.SOUTHWEST;
+	gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+	gbc_lblNewLabel.gridx = 0;
+	gbc_lblNewLabel.gridy = 0;
+	pnlPretraga.add(lblNewLabel, gbc_lblNewLabel);
+	
+	JLabel lblNewLabel_1 = new JLabel("Odaberi termin");
+	GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+	gbc_lblNewLabel_1.anchor = GridBagConstraints.SOUTHWEST;
+	gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+	gbc_lblNewLabel_1.gridx = 1;
+	gbc_lblNewLabel_1.gridy = 0;
+	pnlPretraga.add(lblNewLabel_1, gbc_lblNewLabel_1);
+	
+	comboBox_2 = new JComboBox<String>();
+	comboBox_2.addItem((" "));
 
+	List<FilmDTO> filmDTO = new ArrayList<FilmDTO>();
+	List<PrikazivanjeFilmaUSaliDTO>filmovi = pfusDAO.termini();
+	for (PrikazivanjeFilmaUSaliDTO prikazivanjeFilmaUSaliDTO : filmovi) {
+		
+		if(!filmDTO.contains(prikazivanjeFilmaUSaliDTO.getFilm())) {
+			filmDTO.add(prikazivanjeFilmaUSaliDTO.getFilm());
+			comboBox_2.addItem(prikazivanjeFilmaUSaliDTO.getFilm().getNaziv());
+		}
+		
+	}
+
+	comboBox_2.addItemListener(new ItemListener() {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if(comboBox_2.getSelectedIndex()!=0)
+				ucitajTermineZaFilm();
+			else comboBox.removeAllItems();
+			}
+		});
+
+	GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
+	gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
+	gbc_comboBox_2.insets = new Insets(0, 0, 0, 5);
+	gbc_comboBox_2.gridx = 0;
+	gbc_comboBox_2.gridy = 1;
+	pnlPretraga.add(comboBox_2, gbc_comboBox_2);
+	
+	comboBox = new JComboBox<String>();
+	comboBox.addItemListener(new ItemListener() {
+		public void itemStateChanged(ItemEvent e) {
+			if(comboBox.getSelectedIndex()>0)
+			{
+				ucitajSjedistaUSali();
+				
+			}
+			podesiDugme();
+		}
+	});
+	
+	GridBagConstraints gbc_comboBox = new GridBagConstraints();
+	gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+	gbc_comboBox.insets = new Insets(0, 0, 0, 5);
+	gbc_comboBox.gridx = 1;
+	gbc_comboBox.gridy = 1;
+	pnlPretraga.add(comboBox, gbc_comboBox);
+	
+	/*JButton btnPretrazi = new JButton("");
+	btnPretrazi.setIcon(new ImageIcon(KupiKartuForm.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
+	btnPretrazi.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if(comboBox.getSelectedIndex()>0)
+			{
+				ucitajSjedistaUSali();
+			}
+				//else table.setModel(new SjedisteTableModel(new ArrayList<SjedisteDTO>()));
+
+		
+		}
+	});
+	GridBagConstraints gbc_btnPretrazi = new GridBagConstraints();
+	gbc_btnPretrazi.gridx = 2;
+	gbc_btnPretrazi.gridy = 1;
+	pnlPretraga.add(btnPretrazi, gbc_btnPretrazi);
+	*/
 	table = new JTable();
 	
 	table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -94,208 +243,147 @@ public KupiKartuForm() {
 			});
 		}
 	});
-	table.setModel(new SjedisteTableModel(null));
-	table.setFont(new Font("Arial", Font.PLAIN, 12));
-	table.getColumnModel().getColumn(0).setPreferredWidth(50);
-	table.getColumnModel().getColumn(1).setPreferredWidth(120);
-	table.getColumnModel().getColumn(2).setPreferredWidth(140);
-	table.getColumnModel().getColumn(3).setPreferredWidth(140);
-	table.getColumnModel().getColumn(4).setPreferredWidth(80);
-	
-	JPanel pnlOpcije = new JPanel();
-	pnlOpcije.setLayout(null);
-	pnlOpcije.setOpaque(false);
-	
-	btnRezervisi = new JButton("Rezervi\u0161i");
-	btnRezervisi.setEnabled(false);
-	btnRezervisi.setBackground(new Color(220, 20, 60));
-	btnRezervisi.setBounds(126, 5, 95, 36);
-	pnlOpcije.add(btnRezervisi);
-	
-	btnKupi = new JButton("kupi");
-	btnKupi.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			kupiKartu();
-		}
-	});
-	btnKupi.setEnabled(false);
-	btnKupi.setBackground(new Color(220, 20, 60));
-	btnKupi.setBounds(340, 5, 95, 36);
-	pnlOpcije.add(btnKupi);
-	
-	GroupLayout gl_pnlKorisnici = new GroupLayout(this);
-	gl_pnlKorisnici.setHorizontalGroup(
-		gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_pnlKorisnici.createSequentialGroup()
-				.addGap(29)
-				.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_pnlKorisnici.createSequentialGroup()
-						.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 435, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap())
-					.addGroup(gl_pnlKorisnici.createSequentialGroup()
-						.addGroup(gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-							.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-							.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
-						.addGap(32))))
-	);
-	gl_pnlKorisnici.setVerticalGroup(
-		gl_pnlKorisnici.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_pnlKorisnici.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(panel, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(pnlOpcije, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(29, Short.MAX_VALUE))
-	);
 	
 	
 	
-	JLabel lblNewLabel = new JLabel("Odaberi Film");
-	
-	JLabel lblNewLabel_1 = new JLabel("OdaberiTermin");
-	
-	comboBox = new JComboBox();
-	comboBox_2 = new JComboBox();
-	List<FilmDTO> filmDTO = filmDAO.selectAll();
-	for (FilmDTO f : filmDTO) {
-		comboBox_2.addItem(f);
-	}
-
-	comboBox_2.addItemListener(new ItemListener() {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			ucitajTermineZaFilm();
-			
-			}
-		});
-	
-	/*comboBox.addItemListener(new ItemListener() {
-		public void itemStateChanged(ItemEvent e) {
-			ucitajSjedistaUSali();
-		}
-	});*/
-	
-	JButton btnNewButton = new JButton("pretrazi");
-	btnNewButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			ucitajSjedistaUSali();
-		
-		}
-	});
-		
-	GroupLayout gl_panel = new GroupLayout(panel);
-	gl_panel.setHorizontalGroup(
-		gl_panel.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panel.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-					.addComponent(comboBox_2, 0, 176, Short.MAX_VALUE)
-					.addComponent(lblNewLabel))
-				.addGap(25)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(lblNewLabel_1)
-						.addGap(43)
-						.addComponent(btnNewButton)
-						.addGap(26))
-					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(comboBox, 0, 0, Short.MAX_VALUE)
-						.addContainerGap())))
-	);
-	gl_panel.setVerticalGroup(
-		gl_panel.createParallelGroup(Alignment.LEADING)
-			.addGroup(gl_panel.createSequentialGroup()
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addGap(20)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNewLabel)
-							.addComponent(lblNewLabel_1)))
-					.addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(btnNewButton)))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-					.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-	);
-	panel.setLayout(gl_panel);
 	setLayout(gl_pnlKorisnici);
+	
+	
+	
 	}
 	
+
+	protected void rezervisiKartu() {
+		int row = table.getSelectedRow();
+		termin = comboBox.getSelectedItem().toString();
+		naziv = comboBox_2.getSelectedItem().toString();		
+		Object[] opcije = { "Da", "Ne" };
+		String message = "Da li ste sigurni da\nželite rezervisati ovu kartu?";
+		int value = JOptionPane.showOptionDialog(this, message, "", JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE, null, opcije, opcije[0]);
+		if (value == 0) {
+			SjedisteDTO sjedisteDTO = ((SjedisteTableModel) table.getModel()).getSjedisteAtRow(row);
+			KartaDTO karta = new KartaDTO((5.0), new Timestamp(System.currentTimeMillis()),
+					false,sjedisteDTO, zaposleni,pfusDAO.terminFilma(naziv,termin));
+					if(!kartaDAO.getByMovieName(naziv,termin).contains(karta)) {
+			if( kartaDAO.dodajKartu(karta))  {
+				
+				karta = kartaDAO.getKartu(karta.getPfus().getFilm().getNaziv(), karta.getPfus().getTerminID(),karta.getSjediste().getSjedisteID());
+				new RezervacijaDialog(karta).setVisible(true);
+			} 
+		}else 
+		{
+			JOptionPane.showMessageDialog(this, "Sjedalo nije slobodno.", "Greška",
+					JOptionPane.ERROR_MESSAGE);
+			}
+		}	
+}
+
 
 	protected void kupiKartu() {
 		int row = table.getSelectedRow();
 		termin = comboBox.getSelectedItem().toString();
-		naziv = comboBox.getSelectedItem().toString();
-		String kljucnaRijec = comboBox.getSelectedItem().toString();
-		List<PrikazivanjeFilmaUSaliDTO> pf = pfusDAO.sviTerminizaFilm((FilmDTO)comboBox_2.getSelectedItem());
-		//PrikazivanjeFilmaUSaliDTO fp = pf.get(0);
-		System.out.println(pf);
+		naziv = comboBox_2.getSelectedItem().toString();		
 		Object[] opcije = { "Da", "Ne" };
 		String message = "Da li ste sigurni da\nželite kupiti ovu kartu?";
 		int value = JOptionPane.showOptionDialog(this, message, "", JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE, null, opcije, opcije[0]);
 		if (value == 0) {
 			SjedisteDTO sjedisteDTO = ((SjedisteTableModel) table.getModel()).getSjedisteAtRow(row);
-			System.out.println(sjedisteDTO);
-			for (PrikazivanjeFilmaUSaliDTO pfus : pf) {
-				
-			if( kartaDAO.dodajKartu(new KartaDTO((5.0), new Date(System.currentTimeMillis()),false,sjedisteDTO,zaposleniDAO.zaposleni(6),pfusDAO.terminFilma(naziv,termin)))); 
-			/*{
-				if(kartaDAO.dodajKartu(kartaDAO.getByID(112))) {
+					KartaDTO karta = new KartaDTO((5.0), new Timestamp(System.currentTimeMillis()),true,sjedisteDTO, zaposleni, pfusDAO.terminFilma(naziv,termin));
+					if(!kartaDAO.Karte().contains(karta)) {
+			if( kartaDAO.dodajKartu(karta)) {
 				JOptionPane.showMessageDialog(this, "Karta uspješno Kupljena.", "Uspjeh",
 						JOptionPane.INFORMATION_MESSAGE);
-				//azurirajTabeluRezervacija();
-			} else {
+				odstampajKartu(kartaDAO.getKartu(naziv, pfusDAO.terminFilma(naziv,termin).getTerminID(), sjedisteDTO.getSjedisteID()));
+				}
+			}
+			else 
+			{
 				JOptionPane.showMessageDialog(this, "Karta nije uspješno Kupljena.", "Greška",
 						JOptionPane.ERROR_MESSAGE);
-			}*/
-			}
+				}
+				
 		}
-	}			
-		
-			
-		//new KartaDTO(5.0,"sada",new Date(1),new Date(System.currentTimeMillis()),false,sjedisteDTO,Zaposleni(),pfusDAO.sviTerminizaFilm(filmDAO.searchMovie((FilmDTO)comboBox_2.getSelectedItem())))
-		
-		
-		
-		
+		ucitajSjedistaUSali();
+	}
+	
 
-
-
-	protected void ucitajSjedistaUSali() {
-		
-		scrollPane.setViewportView(table);
+	public void ucitajSjedistaUSali() {		
+		//scrollPane.setViewportView(table);
 		termin = comboBox.getSelectedItem().toString();
-		naziv = comboBox.getSelectedItem().toString();
-		SjedisteTableModel model = (SjedisteTableModel) table.getModel();
-		FilmDTO f = (FilmDTO) comboBox_2.getSelectedItem();
+		naziv = comboBox_2.getSelectedItem().toString();
+		List<KartaDTO> karte = kartaDAO.getByMovieName(naziv,termin);
+		List<SjedisteDTO> sjedista = pfusDAO.listaSjedistaZaTermin(pfusDAO.terminFilma(naziv,termin).getSala().getSalaID(),pfusDAO.terminFilma(naziv, termin).termin);
+		table.setModel(new SjedisteTableModel(sjedista));
+		table.setFont(new Font("Arial", Font.PLAIN, 12));
+		table.getColumnModel().getColumn(0).setPreferredWidth(30);
+		table.getColumnModel().getColumn(1).setPreferredWidth(30);
+		table.getColumnModel().getColumn(2).setPreferredWidth(30);
+		table.getColumnModel().getColumn(3).setPreferredWidth(80);
 		
-		List<PrikazivanjeFilmaUSaliDTO> pf = pfusDAO.sviTerminizaFilm(f); 
-		for (PrikazivanjeFilmaUSaliDTO pfus : pf) {
-			if(termin.equals(pfus.termin)) {
-			model.setSjediste(pfusDAO2.listaSjedistaZaTermin(pfus.getSala().getSalaID(), termin));
-			model.fireTableDataChanged();
-			}
+		
+		for (KartaDTO k : karte) {
+			if(sjedista.contains(k.getSjediste()))
+				sjedista.remove(k.getSjediste());
 		}
+		scrollPane.setViewportView(table);
+		SjedisteTableModel model = (SjedisteTableModel) table.getModel();
+		model.setSjedista(sjedista);
+		model.fireTableDataChanged();
+		
+		
+		
 	}
 	
 	protected void ucitajTermineZaFilm() {
 		comboBox.removeAllItems();
-		
-		List<PrikazivanjeFilmaUSaliDTO>pfus =pfusDAO.sviTerminizaFilm((FilmDTO)comboBox_2.getSelectedItem());
+		comboBox.addItem("");
+		List<PrikazivanjeFilmaUSaliDTO>pfus =pfusDAO.sviTerminizaFilm(filmDAO.searchMovie(comboBox_2.getSelectedItem().toString().trim()).get(0));
 		for (PrikazivanjeFilmaUSaliDTO prikazivanjeFilmaUSaliDTO : pfus) {
-			comboBox.addItem(prikazivanjeFilmaUSaliDTO);
+			comboBox.addItem(prikazivanjeFilmaUSaliDTO.termin);
 		}	
 	}
 	
 	private void podesiDugme() {
 		boolean enabled = table.getSelectedRow() != -1;
-		btnKupi.setEnabled(enabled);
-		btnRezervisi.setEnabled(enabled);
+		if(comboBox_2.getSelectedIndex()>0 && comboBox.getSelectedIndex()>0) {
+			btnKupi.setEnabled(enabled);
+			btnRezervisi.setEnabled(enabled);
+		}else {
+			btnKupi.setEnabled(false);
+			btnRezervisi.setEnabled(false);
+		
+		}
+	}
+	public void ucitavanjeTermina() {
+		comboBox_2.removeAll();
+		comboBox_2.addItem((" "));
+		List<FilmDTO> filmDTO = new ArrayList<FilmDTO>();
+		List<PrikazivanjeFilmaUSaliDTO>filmovi = pfusDAO.termini();
+		for (PrikazivanjeFilmaUSaliDTO prikazivanjeFilmaUSaliDTO : filmovi) {
+			
+			if(!filmDTO.contains(prikazivanjeFilmaUSaliDTO.getFilm())) {
+				filmDTO.add(prikazivanjeFilmaUSaliDTO.getFilm());
+				comboBox_2.addItem(prikazivanjeFilmaUSaliDTO.getFilm().getNaziv());
+			}
+			
+		}
+	}
+	
+	
+	public void odstampajKartu(KartaDTO karta) {
+		try {
+		      FileWriter myWriter = new FileWriter("out\\"+karta.getKartaID()+" Karta.pdf");
+		      myWriter.write("FILM:     "+karta.getPfus().getFilm().getNaziv()+"\n"+
+		    		  		 "SALA:     "+karta.getPfus().getSala().getBroj()+"\n"+
+		    		  		 "RED:      "+karta.getSjediste().getRed()+"\n"+
+		    		  		 "SJEDISTE: "+karta.getSjediste().getBroj()+"\n"+
+		    		  		 "TERMIN :  "+karta.getPfus().termin);
+		      myWriter.close();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
 	}
 	
 }

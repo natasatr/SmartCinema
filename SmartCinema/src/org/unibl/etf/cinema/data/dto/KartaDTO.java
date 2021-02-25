@@ -3,11 +3,12 @@ package org.unibl.etf.cinema.data.dto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class KartaDTO {
 	private int KartaID;
 	private double cijena;
-	private Date vrijemeKupovine;
+	private Timestamp vrijemeKupovine;
 	private boolean prodano;
 	private SjedisteDTO sjediste;
 	private Zaposleni zaposleni;
@@ -17,7 +18,7 @@ public class KartaDTO {
 		super();
 	}
 	
-	public KartaDTO(double cijena, Date vrijemeKupovine, boolean prodano, SjedisteDTO sjediste, Zaposleni zaposleni, PrikazivanjeFilmaUSaliDTO pfus) {
+	public KartaDTO(double cijena, Timestamp vrijemeKupovine, boolean prodano, SjedisteDTO sjediste, Zaposleni zaposleni, PrikazivanjeFilmaUSaliDTO pfus) {
 	//	this.KartaID = KartaID;
 		this.cijena = cijena;
 		this.setSjediste(sjediste);
@@ -28,7 +29,7 @@ public class KartaDTO {
 		this.setPfus(pfus);
 	}
 	
-	public KartaDTO(int KartaID, double cijena, Date vrijemeKupovine, boolean prodano, SjedisteDTO sjediste, Zaposleni zaposleni, PrikazivanjeFilmaUSaliDTO pfus) {
+	public KartaDTO(int KartaID, double cijena, Timestamp vrijemeKupovine, boolean prodano, SjedisteDTO sjediste, Zaposleni zaposleni, PrikazivanjeFilmaUSaliDTO pfus) {
 		this.KartaID = KartaID;
 		this.cijena = cijena;
 		this.setSjediste(sjediste);
@@ -55,11 +56,11 @@ public class KartaDTO {
 	}
 	
 
-	public Date getVrijemeKupovine() {
+	public Timestamp getVrijemeKupovine() {
 		return vrijemeKupovine;
 	}
 	
-	public void setVrijemeKupovine(Date vrijemeKupovine) {
+	public void setVrijemeKupovine(Timestamp vrijemeKupovine) {
 		this.vrijemeKupovine = vrijemeKupovine;
 	}
 	

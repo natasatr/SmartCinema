@@ -1,11 +1,10 @@
 package org.unibl.etf.cinema.data.dao.mysql;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,13 +40,14 @@ public class MySQLKartaDAO implements KartaDAO {
 			+ " r.RolaID, r.Naziv, "
 			+ " ad.AdresaID, ad.Mjesto, ad.Ulica, ad.Broj, "  
 
-			+ " ps.SALA_SalaID, pf.FILM_FilmID, "
+			+ " p.TerminID, p.SALA_SalaID, p.FILM_FilmID, "
 			+ " sa.SalaID, sa.Broj, sa.Kapacitet, sa.Uklonjeno, "
 			+ " kin.KinoID, kin.Naziv, kin.Email, kin.Telefon, "
 			+ " adr.AdresaID, adr.Mjesto, adr.Ulica, adr.Broj, "
-			+ " f.FilmID, f.Naziv, f.Trajanje, f.GodinaSnimanja, f.Reziser, f.Opis, f.URepetoaru, f.DatumPrvogPrikazivanja, f.Uklonjeno, "
+			+ " f.FilmID, f.Naziv, f.Trajanje, f.GodinaSnimanja, f.Reziser, f.Opis, f.URepetoaru, "
+			+ "f.DatumPrvogPrikazivanja, f.Glumci, f.Zanr, "
 
-			+ " ps.Termin, ps.Uklonjeno "
+			+ " p.Termin, p.Uklonjeno "
 			
 			+ " from karta k "
 			
@@ -62,12 +62,13 @@ public class MySQLKartaDAO implements KartaDAO {
 			+ "	INNER JOIN rola r ON n.ROLA_RolaID = r.RolaID "
 			+ "	INNER JOIN adresa ad ON z.ADRESA_AdresaID = ad.AdresaID "
 			
-			+ " INNER JOIN prikazivanje_filma_u_sali ps ON k.PRIKAZIVANJE_FILMA_U_SALI_SALA_SalaID = ps.SALA_SalaID"
-			+ " INNER JOIN prikazivanje_filma_u_sali pf ON k.PRIKAZIVANJE_FILMA_U_SALI_FILM_FilmID = pf.FILM_FilmID"
-			+ " INNER JOIN sala sa ON ps.SALA_SalaID = sa.SalaID"
+			+ " INNER JOIN prikazivanje_filma_u_sali p ON k.PRIKAZIVANJE_FILMA_U_SALI_TerminID = p.TerminID"
+			//+ " INNER JOIN prikazivanje_filma_u_sali ps ON k.PRIKAZIVANJE_FILMA_U_SALI_SALA_SalaID = ps.SALA_SalaID"
+		//	+ " INNER JOIN prikazivanje_filma_u_sali pf ON k.PRIKAZIVANJE_FILMA_U_SALI_FILM_FilmID = pf.FILM_FilmID"
+			+ " INNER JOIN sala sa ON p.SALA_SalaID = sa.SalaID"
 			+ " INNER JOIN kino kin on sa.KINO_KinoID = kin.KinoID "
 			+ " INNER JOIN adresa adr on kin.ADRESA_AdresaID = adr.AdresaID "
-			+ " INNER JOIN film f ON pf.FILM_FilmID = f.FilmID ";
+			+ " INNER JOIN film f ON p.FILM_FilmID = f.FilmID ";
 			
 	
 	
@@ -77,7 +78,7 @@ public class MySQLKartaDAO implements KartaDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = q + " WHERE k.uklonjeno = false"	+ " ORDER BY k.KartaID ASC";
+		String query = q + " WHERE k.Uklonjeno = false"	+ " ORDER BY k.KartaID ASC";
 		
 
 		try {
@@ -86,8 +87,8 @@ public class MySQLKartaDAO implements KartaDAO {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				retVal.add(new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getDate("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"),
-						new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getInt("sj.Zauzeto"),
+				retVal.add(new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getTimestamp("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"),
+						new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getBoolean("sj.Zauzeto"),
 								new SalaDTO(rs.getInt("s.SalaID"),rs.getInt("s.Broj"), rs.getInt("s.Kapacitet"),
 										new KinoDTO(rs.getInt("ki.KinoID"),rs.getString("ki.Naziv"),rs.getString("ki.Email"),rs.getString("ki.Telefon"),
 												new AdresaDTO(rs.getInt("a.AdresaID"), rs.getString("a.Mjesto"), rs.getString("a.Ulica"),
@@ -102,12 +103,12 @@ public class MySQLKartaDAO implements KartaDAO {
 							new PrikazivanjeFilmaUSaliDTO(new FilmDTO(rs.getInt("f.FilmID"),
 										rs.getString("f.Naziv"),rs.getString("f.Trajanje"),
 										rs.getInt("f.GodinaSnimanja"),rs.getString("f.Reziser"), 
-										rs.getString("f.Opis"), rs.getBoolean("f.URepetoaru"), 
-										rs.getDate("f.DatumPrvogPrikazivanja"), rs.getBoolean("f.Uklonjeno")),
+										rs.getString("f.Opis"), rs.getString("f.URepetoaru"), 
+										rs.getString("f.DatumPrvogPrikazivanja"), rs.getString("f.Glumci"),rs.getString("f.Zanr")),
 									new SalaDTO(rs.getInt("sa.SalaID"),rs.getInt("sa.Broj"), rs.getInt("sa.Kapacitet"),
 									new KinoDTO(rs.getInt("kin.KinoID"),rs.getString("kin.Naziv"),rs.getString("kin.Email"),rs.getString("kin.Telefon"),
 											new AdresaDTO(rs.getInt("adr.AdresaID"), rs.getString("adr.Mjesto"), rs.getString("adr.Ulica"),
-													rs.getInt("adr.Broj")))),rs.getDate("ps.Termin"))));  //treba jos popuniti podatke klase prikazivanje filma u sali
+													rs.getInt("adr.Broj")))),rs.getString("p.Termin"))));  //treba jos popuniti podatke klase prikazivanje filma u sali
 			}
 
 		} catch (SQLException ex) {
@@ -136,8 +137,8 @@ public class MySQLKartaDAO implements KartaDAO {
 					rs = ps.executeQuery();
 					
 					if (rs.next())
-						retVal = (new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getDate("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"), 
-								new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getInt("sj.Zauzeto"),
+						retVal = (new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getTimestamp("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"),
+								new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getBoolean("sj.Zauzeto"),
 										new SalaDTO(rs.getInt("s.SalaID"),rs.getInt("s.Broj"), rs.getInt("s.Kapacitet"),
 												new KinoDTO(rs.getInt("ki.KinoID"),rs.getString("ki.Naziv"),rs.getString("ki.Email"),rs.getString("ki.Telefon"),
 														new AdresaDTO(rs.getInt("a.AdresaID"), rs.getString("a.Mjesto"), rs.getString("a.Ulica"),
@@ -152,12 +153,12 @@ public class MySQLKartaDAO implements KartaDAO {
 									new PrikazivanjeFilmaUSaliDTO(new FilmDTO(rs.getInt("f.FilmID"),
 												rs.getString("f.Naziv"),rs.getString("f.Trajanje"),
 												rs.getInt("f.GodinaSnimanja"),rs.getString("f.Reziser"), 
-												rs.getString("f.Opis"), rs.getBoolean("f.URepetoaru"), 
-												rs.getDate("f.DatumPrvogPrikazivanja"), rs.getBoolean("f.Uklonjeno")),
+												rs.getString("f.Opis"), rs.getString("f.URepetoaru"), 
+												rs.getString("f.DatumPrvogPrikazivanja"), rs.getString("f.Glumci"),rs.getString("f.Zanr")),
 											new SalaDTO(rs.getInt("sa.SalaID"),rs.getInt("sa.Broj"), rs.getInt("sa.Kapacitet"),
 											new KinoDTO(rs.getInt("kin.KinoID"),rs.getString("kin.Naziv"),rs.getString("kin.Email"),rs.getString("kin.Telefon"),
 													new AdresaDTO(rs.getInt("adr.AdresaID"), rs.getString("adr.Mjesto"), rs.getString("adr.Ulica"),
-															rs.getInt("adr.Broj")))),rs.getDate("ps.Termin")))); 						
+															rs.getInt("adr.Broj")))),rs.getString("p.Termin")))); 						
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} finally {
@@ -167,27 +168,26 @@ public class MySQLKartaDAO implements KartaDAO {
 		return retVal;
 	}
 	
-	
-	
-	@Override
-	public List<KartaDTO> getByMovieName(String name){
-		List<KartaDTO> retVal = new ArrayList<>();
+	public KartaDTO getKartu(String name, int termin, int sjediste) {
+		KartaDTO retVal = new KartaDTO();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String query = q + " WHERE k.uklonjeno = false"
+		String query = q + " WHERE k.Uklonjeno = false and f.Naziv = ? and p.TerminID =? and sj.SjedisteID=?"
 				+ " ORDER BY k.KartaID ASC";
 		
 
 		try {
 			conn = DBUtil.getConnection();
 			ps = conn.prepareStatement(query);
-			//ps.setString(1, name);
+			ps.setString(1, name);
+			ps.setInt(2, termin);
+			ps.setInt(3, sjediste);
 			rs = ps.executeQuery();
 
-			while (rs.next()) {
-				retVal.add(new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getDate("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"), 
+			if(rs.next()) {
+				retVal =(new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getTimestamp("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"),
 						new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getBoolean("sj.Zauzeto"),
 								new SalaDTO(rs.getInt("s.SalaID"),rs.getInt("s.Broj"), rs.getInt("s.Kapacitet"),
 										new KinoDTO(rs.getInt("ki.KinoID"),rs.getString("ki.Naziv"),rs.getString("ki.Email"),rs.getString("ki.Telefon"),
@@ -203,12 +203,67 @@ public class MySQLKartaDAO implements KartaDAO {
 							new PrikazivanjeFilmaUSaliDTO(new FilmDTO(rs.getInt("f.FilmID"),
 										rs.getString("f.Naziv"),rs.getString("f.Trajanje"),
 										rs.getInt("f.GodinaSnimanja"),rs.getString("f.Reziser"), 
-										rs.getString("f.Opis"), rs.getBoolean("f.URepetoaru"), 
-										rs.getDate("f.DatumPrvogPrikazivanja"), rs.getBoolean("f.Uklonjeno")),
+										rs.getString("f.Opis"), rs.getString("f.URepetoaru"), 
+										rs.getString("f.DatumPrvogPrikazivanja"), rs.getString("f.Glumci"),rs.getString("f.Zanr")),
 									new SalaDTO(rs.getInt("sa.SalaID"),rs.getInt("sa.Broj"), rs.getInt("sa.Kapacitet"),
 									new KinoDTO(rs.getInt("kin.KinoID"),rs.getString("kin.Naziv"),rs.getString("kin.Email"),rs.getString("kin.Telefon"),
 											new AdresaDTO(rs.getInt("adr.AdresaID"), rs.getString("adr.Mjesto"), rs.getString("adr.Ulica"),
-													rs.getInt("adr.Broj")))),rs.getDate("ps.Termin")))); 					
+													rs.getInt("adr.Broj")))),rs.getString("p.Termin")))); 					
+
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLKartaDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			DBUtil.close(rs, ps, conn);
+		}
+
+		return retVal;
+		
+	}
+
+	
+	@Override
+	public List<KartaDTO> getByMovieName(String name, String termin){
+		List<KartaDTO> retVal = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String query = q + " WHERE k.Uklonjeno = false and f.Naziv = ? and p.Termin =?"
+				+ " ORDER BY k.KartaID ASC";
+		
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(query);
+			ps.setString(1, name);
+			ps.setString(2, termin);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				retVal.add(new KartaDTO(rs.getInt("k.KartaID"), rs.getDouble("k.Cijena"), rs.getTimestamp("k.VrijemeKupovine"), rs.getBoolean("k.Prodano"),
+						new SjedisteDTO(rs.getInt("sj.SjedisteID"),rs.getInt("sj.Broj"),rs.getInt("sj.red"),rs.getBoolean("sj.Zauzeto"),
+								new SalaDTO(rs.getInt("s.SalaID"),rs.getInt("s.Broj"), rs.getInt("s.Kapacitet"),
+										new KinoDTO(rs.getInt("ki.KinoID"),rs.getString("ki.Naziv"),rs.getString("ki.Email"),rs.getString("ki.Telefon"),
+												new AdresaDTO(rs.getInt("a.AdresaID"), rs.getString("a.Mjesto"), rs.getString("a.Ulica"),
+														rs.getInt("a.Broj")))),
+								new VrstaSjedistaDTO(rs.getInt("v.VrstaSjedistaID"),rs.getString("v.Naziv"))),
+							new Zaposleni(rs.getInt("z.ZaposleniID"), rs.getString("z.JMB"), rs.getString("z.Ime"),
+									rs.getString("z.Prezime"), rs.getDouble("z.Plata"), rs.getString("z.Email"),
+									new AdresaDTO(rs.getInt("ad.AdresaID"), rs.getString("ad.Mjesto"), rs.getString("ad.Ulica"),
+											rs.getInt("ad.Broj")),
+									new Nalog(rs.getInt("n.NalogID"), rs.getString("n.KorisnickoIme"),
+											new Rola(rs.getInt("r.RolaID"), rs.getString("r.Naziv")))),
+							new PrikazivanjeFilmaUSaliDTO(new FilmDTO(rs.getInt("f.FilmID"),
+										rs.getString("f.Naziv"),rs.getString("f.Trajanje"),
+										rs.getInt("f.GodinaSnimanja"),rs.getString("f.Reziser"), 
+										rs.getString("f.Opis"), rs.getString("f.URepetoaru"), 
+										rs.getString("f.DatumPrvogPrikazivanja"), rs.getString("f.Glumci"),rs.getString("f.Zanr")),
+									new SalaDTO(rs.getInt("sa.SalaID"),rs.getInt("sa.Broj"), rs.getInt("sa.Kapacitet"),
+									new KinoDTO(rs.getInt("kin.KinoID"),rs.getString("kin.Naziv"),rs.getString("kin.Email"),rs.getString("kin.Telefon"),
+											new AdresaDTO(rs.getInt("adr.AdresaID"), rs.getString("adr.Mjesto"), rs.getString("adr.Ulica"),
+													rs.getInt("adr.Broj")))),rs.getString("p.Termin")))); 					
 
 			}
 
@@ -232,21 +287,22 @@ public class MySQLKartaDAO implements KartaDAO {
 				+ "VrijemeKupovine, Prodano,Uklonjeno, SJEDISTE_SjedisteID, "
 				+ "ZAPOSLENI_ZaposleniID, "
 				+ "PRIKAZIVANJE_FILMA_U_SALI_SALA_SalaID, "
-				+ "PRIKAZIVANJE_FILMA_U_SALI_FILM_FilmID) VALUES "
-				+ " (?, ?, ?, ?, ?, ?, ?, ? ) ";
+				+ "PRIKAZIVANJE_FILMA_U_SALI_FILM_FilmID,"
+				+ "PRIKAZIVANJE_FILMA_U_SALI_TerminID) VALUES "
+				+ " (?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
-			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps = conn.prepareStatement(query);
+
 			ps.setDouble(1, karta.getCijena());
-			//ps.setString(2, karta.getInformacijeOFilmu());
-			//ps.setDate(2,  karta.getTerminPrikazivanjaFilma());
-			ps.setDate(2,  karta.getVrijemeKupovine());
+			ps.setTimestamp(2,  karta.getVrijemeKupovine());
 			ps.setBoolean(3,karta.isProdano());
 			ps.setBoolean(4, false);
 			ps.setInt(5,karta.getSjediste().getSjedisteID());
 			ps.setInt(6,karta.getZaposleni().getZaposleniID());
-			ps.setInt(7,karta.getPfus().getFilm().getFilmID());
-			ps.setInt(8,karta.getPfus().getSala().getSalaID());
+			ps.setInt(7,karta.getPfus().getSala().getSalaID());
+			ps.setInt(8,karta.getPfus().getFilm().getFilmID());
+			ps.setInt(9, karta.getPfus().getTerminID());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
@@ -264,11 +320,12 @@ public class MySQLKartaDAO implements KartaDAO {
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		String query = "UPDATE karta SET Prodano = true WHERE KartaID = ?";
+		String query = "UPDATE karta SET Prodano = ? WHERE KartaID = ?";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
 			ps = conn.prepareStatement(query);
-			ps.setInt(1, karta.getKartaID());
+			ps.setBoolean(1, !karta.isProdano());
+			ps.setInt(2, karta.getKartaID());
 
 			retVal = ps.executeUpdate() == 1;
 		} catch (SQLException e) {
@@ -304,58 +361,6 @@ public class MySQLKartaDAO implements KartaDAO {
 			DBUtil.close(ps, conn);
 		}
 		return retVal;
-	}
-
-	
-	
-	public static void main(String[] args) {
-		MySQLKartaDAO karta = new MySQLKartaDAO();
-		List<KartaDTO> k2 = karta.getByMovieName("ssdsd");
-		/*for (KartaDTO kartaDTO : k2) {
-			System.out.println(kartaDTO);
-		}*/
-		MySQLPrikazivanjeFilmaUSaliDAO pf = new MySQLPrikazivanjeFilmaUSaliDAO();
-		MySQLSjedisteDAO sjediste = new MySQLSjedisteDAO();
-		MySQLZaposleniDAO zaposleni = new MySQLZaposleniDAO();
-		
-		System.out.println("============================================================");
-		karta.dodajKartu(new KartaDTO((10.0),new Date(System.currentTimeMillis()),false,
-				sjediste.svaSjedistaUSaliUKinu(1).get(1),
-				zaposleni.zaposleni(6),
-				pf.sviTerminizaFilm(new MySQLFilmDAO().searchMovie("asdf").get(0)).get(0)));
-		
-		System.out.println("============================================================");
-		
-		//List<KartaDTO> k = karta.Karte();
-		/*KartaDTO k3 = k2.get(1);
-		k3.setCijena(5.5);
-		k3.setSjediste(new MySQLSjedisteDAO().sjediste(230));
-		k3.setProdano(false);*/
-		//karta.dodajKartu(k3);
-	//	System.out.println("-----------------------------------------------------------------");
-		//System.out.println((karta.dodajKartu(k3)));
-		/*if(!k.contains(k3)) {
-			karta.dodajKartu(k3);
-			System.out.println("karta dodana");			
-		}
-		else System.out.println("nije");*/
-		System.out.println("-----------------------------------------------------------------");
-		//System.out.println((karta.dodajKartu(k3)));
-     // System.out.println((k3).equals(k3));
-		System.out.println("-----------------------------------------------------------------");
-		//karta.azurirajKartu(karta.getByID(55));
-		System.out.println("======================================");
-		//System.out.println(k3);
-		for (int i = 29; i < 35; i++) {
-			karta.obrisiKartu(i);
-		}
-		//List<KartaDTO> k = karta.Karte();
-
-		System.out.println("======================================");
-		/*for (KartaDTO kartaDTO : k) {
-			System.out.println(kartaDTO);
-			//System.out.println(kartaDTO.getInformacijeOFilmu());
-		}*/
 	}
 	
 }

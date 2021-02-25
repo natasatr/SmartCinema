@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -68,6 +69,10 @@ public class LoginForma extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginForma() {
+		File theDir = new File("out");
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
 		setTitle("SmartCinema - Prijava");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -190,8 +195,11 @@ public class LoginForma extends JFrame {
 			case "Administrator2":
 				forma = new FilmoviGlavnaForma(nalog.getNalogID());
 				break;
-			default:
+			case "Sluzbenik":
 				forma = new DodatnaPonudaSearchFrame();
+				break;
+			default:
+				forma = new RadnikForm(nalog.getNalogID());
 			}
 
 			final JFrame glavnaForma = forma;

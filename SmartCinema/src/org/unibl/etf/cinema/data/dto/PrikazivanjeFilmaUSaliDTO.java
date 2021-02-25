@@ -3,6 +3,7 @@ package org.unibl.etf.cinema.data.dto;
 import java.sql.Date;
 
 public class PrikazivanjeFilmaUSaliDTO {
+	private int TerminID;
 	private FilmDTO film;
 	private SalaDTO sala;
 	public String termin;
@@ -16,6 +17,21 @@ public class PrikazivanjeFilmaUSaliDTO {
 		this.film = film;
 		this.sala = sala;
 		this.termin = termin;
+	}
+	
+	public PrikazivanjeFilmaUSaliDTO(int terminid, FilmDTO film, SalaDTO sala, String termin) {
+		this.setTerminID(terminid);
+		this.film = film;
+		this.sala = sala;
+		this.termin = termin;
+	}
+
+	public int getTerminID() {
+		return TerminID;
+	}
+
+	public void setTerminID(int terminID) {
+		TerminID = terminID;
 	}
 
 	public FilmDTO getFilm() {

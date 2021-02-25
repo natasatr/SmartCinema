@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -31,6 +33,7 @@ import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.KartaDAO;
 import org.unibl.etf.cinema.data.dao.RezervacijaDAO;
 import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
+import org.unibl.etf.cinema.data.dto.KartaDTO;
 import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
 import org.unibl.etf.cinema.view.tables.RezervacijaTableModel;
@@ -46,6 +49,7 @@ public class RezervacijeForm extends JPanel {
 	
 	private ZaposleniDAO zaposleniDAO = DAOFactory.getDAOFactory().getZaposleniDAO();
 	private RezervacijaDAO rezervacijaDAO = DAOFactory.getDAOFactory().getRezervacijaDAO();
+	private KartaDAO kartaDAO =  DAOFactory.getDAOFactory().getKartaDAO(); 
 	private JTable table;
 	JButton btnObrisi = new JButton("");
 	JButton btnDodaj = new JButton("");
@@ -53,6 +57,9 @@ public class RezervacijeForm extends JPanel {
 	
 	public JTextField tfPretraga;
 	private JTextField textField;
+	
+	
+	
 	public RezervacijeForm() {
 		
 		this.setBorder(null);
@@ -86,6 +93,8 @@ public class RezervacijeForm extends JPanel {
 			}
 		});
 		textField.setFont(new Font("Arial", Font.PLAIN, 14));
+		textField.setText("");
+		
 		textField.setColumns(10);
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -166,13 +175,14 @@ public class RezervacijeForm extends JPanel {
 		
 		scrollPane.setViewportView(table);
 		table.setFont(new Font("Arial", Font.PLAIN, 12));
-		table.setModel(new RezervacijaTableModel(rezervacijaDAO.rezervacijeZaFilm(textField.getText())));
+		table.setModel(new RezervacijaTableModel(rezervacijaDAO.rezervacijeNaIme(textField.getText())));
 		table.getColumnModel().getColumn(0).setPreferredWidth(50);
 		table.getColumnModel().getColumn(1).setPreferredWidth(120);
 		table.getColumnModel().getColumn(2).setPreferredWidth(140);
 		table.getColumnModel().getColumn(3).setPreferredWidth(140);
-		table.getColumnModel().getColumn(4).setPreferredWidth(80);
+		table.getColumnModel().getColumn(4).setPreferredWidth(140);
 		table.getColumnModel().getColumn(5).setPreferredWidth(120);
+		azurirajTabeluRezervacija();
 		//scrollPane.setColumnHeaderView(table);
 		setLayout(gl_pnlKorisnici);
 		
@@ -190,6 +200,7 @@ public class RezervacijeForm extends JPanel {
 			if (!rezervacijaDAO.azurirajRezervaciju(rezervacijaDTO)) {
 				JOptionPane.showMessageDialog(this, "Karta uspješno kupljena.", "Uspjeh",
 						JOptionPane.INFORMATION_MESSAGE);
+				odstampajKartu(rezervacijaDTO.getKarta());
 				azurirajTabeluRezervacija();
 			} else {
 				JOptionPane.showMessageDialog(this, "Karta nije uspješno kupljena.", "Greška",
@@ -197,6 +208,22 @@ public class RezervacijeForm extends JPanel {
 			}
 		}		
 	}
+	
+	
+	public void odstampajKartu(KartaDTO karta) {
+		try {
+		      FileWriter myWriter = new FileWriter("out\\"+karta.getKartaID()+" Karta.pdf");
+		      myWriter.write("FILM:     "+karta.getPfus().getFilm().getNaziv()+"\n"+
+		    		  		 "SALA:     "+karta.getPfus().getSala().getBroj()+"\n"+
+		    		  		 "RED:      "+karta.getSjediste().getRed()+"\n"+
+		    		  		 "SJEDISTE: "+karta.getSjediste().getBroj()+"\n"+
+		    		  		 "TERMIN :  "+karta.getPfus().termin);
+		      myWriter.close();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
+	}
+	
 
 
 	protected void ObrisiSelektovanuRezervaciju() {
@@ -209,6 +236,7 @@ public class RezervacijeForm extends JPanel {
 		if (value == 0) {
 			RezervacijaDTO rezervacijaDTO = ((RezervacijaTableModel) table.getModel()).getRezervacijaAtRow(row);
 			if (rezervacijaDAO.obrisiRezervaciju(rezervacijaDTO.getRezervacijaID())) {
+				kartaDAO.obrisiKartu((rezervacijaDTO.getKarta().getKartaID()));
 				JOptionPane.showMessageDialog(this, "Rezervacija uspješno obrisana.", "Uspjeh",
 						JOptionPane.INFORMATION_MESSAGE);
 				azurirajTabeluRezervacija();
@@ -229,7 +257,11 @@ public class RezervacijeForm extends JPanel {
 	protected void azurirajTabeluRezervacija() {
 		String kljucnaRijec = textField.getText().trim();
 		RezervacijaTableModel model = (RezervacijaTableModel) table.getModel();
-		model.setRezervacija(rezervacijaDAO.rezervacijeZaFilm(kljucnaRijec));
+		if(!kljucnaRijec.equals("")) {
+		
+		model.setRezervacija(rezervacijaDAO.rezervacijeNaIme(kljucnaRijec));
+		}
+		else model.setRezervacija(rezervacijaDAO.rezervacije());
 		model.fireTableDataChanged();
 	} 
 
@@ -238,10 +270,6 @@ public class RezervacijeForm extends JPanel {
 		System.out.println(karta.Karte());
 	}
 	
-	
-	public JPanel display() {
-		return this;
-	}
 }
 
 
