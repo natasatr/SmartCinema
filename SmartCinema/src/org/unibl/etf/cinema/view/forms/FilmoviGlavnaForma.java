@@ -252,7 +252,7 @@ public class FilmoviGlavnaForma extends JFrame {
 		lblFilmovi.setBackground(new Color(99, 62, 109));
 		lblFilmovi.setIconTextGap(10);
 		lblFilmovi.setIcon(
-				new ImageIcon(FilmoviGlavnaForma.class.getResource("/org/unibl/etf/cinema/view/icons/filmovi.png")));
+				new ImageIcon(FilmoviGlavnaForma.class.getResource("/org/unibl/etf/cinema/view/icons/round_movie_white_18dp.png")));
 		lblFilmovi.setHorizontalTextPosition(SwingConstants.RIGHT);
 		lblFilmovi.setHorizontalAlignment(SwingConstants.LEFT);
 		lblFilmovi.setForeground(Color.WHITE);

@@ -276,10 +276,10 @@ public class FilmDialog extends JDialog {
 			dispose();
 			frame.refresh();
 			
-			JOptionPane.showMessageDialog(frame, "Film dodan uspješno.","Film je dodan", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "Film dodan uspijesno.","Film je dodan", JOptionPane.INFORMATION_MESSAGE);
 		}catch(Exception ee)
 		{
-			JOptionPane.showMessageDialog(frame, "Greška pri èuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "Greska pri cuvanju zaposlenog: " + ee.getMessage(), "Greska", JOptionPane.ERROR_MESSAGE);
 		}
 	
 		
