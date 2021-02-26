@@ -10,4 +10,6 @@ public interface NalogDAO {
 	boolean obrisiNalog(Nalog nalog);
 
 	Nalog prijava(String korisnickoIme, String lozinka);
+	
+	boolean postoji(String korisnickoIme);
 }

@@ -195,16 +195,18 @@ insert into sjediste values (135, 10 ,5, 0 , 0 , 4, 5);
 
 insert into rola values (1,'Administrator1');
 insert into rola values (2,'Administrator2');
-insert into rola values (3,'Sluzbenik');
-insert into rola values (4,'Radnik');
+insert into rola values (3,'Slu�benik');
+insert into rola values (4,'Blagajnik');
 
 insert into nalog values (1,'korisnik1','$2a$12$EkazOUR.cmIlUrC7UYRqL.gITTendUcW2Y.sJ.ZvjWZdl5QWck7OW',0,1);
 insert into nalog values (2,'korisnik2','$2a$12$Ph1IO2P5XclpMbw7v2sPy.bKCfxzJFGi1gdT1YlqKo7Ajb2oCpFnO',0,2);
 insert into nalog values (3,'korisnik3','$2a$12$mucCHXv5BYobH93jx49h1.o.kAIr1fEcZMdLpnSd6Tpx.4yutX6gm',0,3);
+insert into nalog values (4,'korisnik4','$2a$12$Xtou.aTzh88FYuHHryatbubwtf4WaIYC/3WZrlxmv5lSd2tOotc4e',0,4);
 
 insert into zaposleni values (1,'0101981123418','Svjetlana','Ljubičić',1800,'svjetlana.ljubicic@gmail.com',0,1,2);
 insert into zaposleni values (2,'082987145235','Biljana','Marković',1800,'biljana.markovic@gmail.com',0,2,3);
 insert into zaposleni values (3,'0205978124748','Martin','Blagojević',1600,'martin.blagojevic@gmail.com',0,3,4);
+insert into zaposleni values (3,'0805978124778','Ana','Ritan',1700,'ana.ritan@gmail.com',0,4,5);
 
 insert into film values (2, 'Togo', '3h', '2017','Ericson Core', 'Nevjerovatna prica o prijateljstvu izmedju covjeka i psa', 'DA', '2021-03-08', ' Willem Dafoe, Julianne Nicholson, Christopher Heyerdahl', 'Akcija, drama');
 insert into film values (3, 'Step up', '1h25min', '2013','Anne Fletcher', 'Radnja ima strogo definisan ritam, baš poput neke plesne tačke, pa je stoga lako predvidljiva, lišena bilo kakve neizvesnost​i.Vidljiva je hemija između nosilaca glavnih rola, pa se izvlači logičan zaključak da su Channing Tatum i Jenna Dewan opravdali očekivanja', 'DA', '2021-03-09', ' Channing Tatum, Jenna Dewan, Mario, Drew Sidora, and Rachel Griffiths', 'Akcija, Muzicki');

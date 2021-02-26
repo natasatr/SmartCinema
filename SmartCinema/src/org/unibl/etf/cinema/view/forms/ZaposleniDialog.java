@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -40,6 +41,7 @@ import org.unibl.etf.cinema.util.CryptoUtil;
 import org.unibl.etf.cinema.util.EmailValidator;
 import org.unibl.etf.cinema.util.UIUtils;
 import org.unibl.etf.cinema.util.Utils;
+import javax.swing.JComboBox;
 
 public class ZaposleniDialog extends JDialog {
 
@@ -73,6 +75,8 @@ public class ZaposleniDialog extends JDialog {
 	private static final int MIN_DUZINA_K_IMENA = 6;
 	private JButton btnSacuvaj;
 	private JButton btnOtkazi;
+	private JLabel lblRola;
+	private JComboBox cbRola;
 
 	/**
 	 * Create the dialog.
@@ -84,7 +88,7 @@ public class ZaposleniDialog extends JDialog {
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		getContentPane().setBackground(Color.WHITE);
-		setBounds(100, 100, 481, 682);
+		setBounds(100, 100, 481, 728);
 		contentPanel.setBackground(Color.WHITE);
 		contentPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
 
@@ -250,105 +254,114 @@ public class ZaposleniDialog extends JDialog {
 		tfPlata.setFont(new Font("Arial", Font.PLAIN, 14));
 		tfPlata.setColumns(10);
 		polja.add(tfPlata);
+		
+		lblRola = new JLabel("Rola");
+		lblRola.setFont(new Font("Arial", Font.PLAIN, 14));
+		
+		cbRola = new JComboBox(new DefaultComboBoxModel<>(rolaDAO.sveRole().toArray()));
+		cbRola.setFont(new Font("Arial", Font.PLAIN, 14));
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-		gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addGap(18).addGroup(gl_contentPanel
-						.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(gl_contentPanel.createSequentialGroup().addGroup(gl_contentPanel
-								.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel)
+		gl_contentPanel.setHorizontalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(18)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel)
 								.addComponent(lblIme, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblPrezime, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 89,
-										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblKorisnikoIme, GroupLayout.PREFERRED_SIZE, 102,
-										GroupLayout.PREFERRED_SIZE))
-								.addGap(26)
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(tfBroj, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfUlica, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-										.addComponent(tfMjesto)
-										.addComponent(tfPlata, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfPrezime, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfJmb, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfIme, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfEmail, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-										.addComponent(tfKorisnickoIme)))
-						.addGroup(gl_contentPanel.createSequentialGroup().addGroup(gl_contentPanel
-								.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, gl_contentPanel.createSequentialGroup()
-										.addComponent(lblLozinka, GroupLayout.PREFERRED_SIZE, 122,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(gl_contentPanel.createSequentialGroup()
-										.addComponent(lblPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 122,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)))
-								.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(pfPotvrdaLozinke)
-										.addComponent(pfLozinka, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))))
-						.addGap(88))
-				.addGroup(gl_contentPanel.createSequentialGroup().addContainerGap()
-						.addComponent(chbKredencijali, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(162, Short.MAX_VALUE)));
-		gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPanel.createSequentialGroup().addGap(27)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel)
-								.addComponent(tfJmb, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfIme, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblIme, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfPrezime, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPrezime, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfEmail, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(
-								gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(tfPlata, GroupLayout.PREFERRED_SIZE, 29,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 17,
-												GroupLayout.PREFERRED_SIZE))
-						.addGap(14)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfMjesto, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfUlica, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblKorisnikoIme, GroupLayout.PREFERRED_SIZE, 17,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(tfKorisnickoIme, GroupLayout.PREFERRED_SIZE, 29,
-										GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED, 24, Short.MAX_VALUE).addComponent(chbKredencijali)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPanel.createSequentialGroup().addGap(24).addComponent(lblLozinka,
-										GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPanel.createSequentialGroup().addGap(18).addComponent(pfLozinka,
-										GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
-						.addGap(12)
-						.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(pfPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 29,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 17,
-										GroupLayout.PREFERRED_SIZE))
-						.addContainerGap()));
+								.addComponent(lblKorisnikoIme, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblRola, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(cbRola, 0, 226, Short.MAX_VALUE)
+								.addComponent(tfBroj, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfUlica, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+								.addComponent(tfMjesto)
+								.addComponent(tfPlata, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfPrezime, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfJmb, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfIme, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfEmail, GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+								.addComponent(tfKorisnickoIme)))
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(19)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblLozinka, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(pfPotvrdaLozinke)
+								.addComponent(pfLozinka, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(chbKredencijali, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(84, Short.MAX_VALUE))
+		);
+		gl_contentPanel.setVerticalGroup(
+			gl_contentPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPanel.createSequentialGroup()
+					.addGap(27)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel)
+						.addComponent(tfJmb, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(tfIme, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblIme, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(tfPrezime, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPrezime, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(tfEmail, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(tfPlata, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblBrojTelefona, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addGap(14)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblMjesto, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tfMjesto, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblUlica, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tfUlica, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblBroj, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tfBroj, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblKorisnikoIme, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(tfKorisnickoIme, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRola, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cbRola, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+					.addComponent(chbKredencijali)
+					.addGap(26)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPanel.createSequentialGroup()
+							.addGap(6)
+							.addComponent(lblLozinka, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+						.addComponent(pfLozinka, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(12)
+					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(pfPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPotvrdaLozinke, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			buttonPane = new JPanel();
@@ -396,25 +409,27 @@ public class ZaposleniDialog extends JDialog {
 		lblHeader.setBorder(new EmptyBorder(0, 20, 0, 0));
 		lblHeader.setFont(new Font("Arial", Font.BOLD, 18));
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout
-				.setHorizontalGroup(
-						groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblHeader, GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
-								.addGroup(groupLayout.createSequentialGroup().addContainerGap()
-										.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 442,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(17, Short.MAX_VALUE))
-								.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 459, Short.MAX_VALUE)
-										.addContainerGap()));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(lblHeader, GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
 				.addGroup(groupLayout.createSequentialGroup()
-						.addComponent(lblHeader, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 523, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap()));
+					.addContainerGap()
+					.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 442, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(23, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 465, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(lblHeader, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(contentPanel, GroupLayout.PREFERRED_SIZE, 568, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(buttonPane, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
 		getContentPane().setLayout(groupLayout);
 
 		this.popuniPodatke();
@@ -431,6 +446,7 @@ public class ZaposleniDialog extends JDialog {
 			tfMjesto.setText(zaposleni.getAdresa().getMjesto());
 			tfUlica.setText(zaposleni.getAdresa().getUlica());
 			tfBroj.setText(zaposleni.getAdresa().getBroj() + "");
+			cbRola.setSelectedItem(zaposleni.getNalog().getRola());
 			tfKorisnickoIme.setText(zaposleni.getNalog().getKorisnickoIme());
 		}
 	}
@@ -469,7 +485,15 @@ public class ZaposleniDialog extends JDialog {
 			}
 		}
 
-		if (tfKorisnickoIme.getText().trim().length() < MIN_DUZINA_K_IMENA) {
+		if (cbRola.getSelectedIndex() == -1) {
+			cbRola.setBackground(UIUtils.ERROR_COLOR);
+		} else {
+			cbRola.setBackground(UIUtils.COMBO_BOX_COLOR);
+		}
+		
+		String korisnickoIme = tfKorisnickoIme.getText().trim();
+		if (korisnickoIme.length() < MIN_DUZINA_K_IMENA ||
+				(zaposleni == null || !zaposleni.getNalog().getKorisnickoIme().equals(korisnickoIme)) && nalogDAO.postoji(korisnickoIme)) {
 			if (!nevalidnaPolja.contains(tfKorisnickoIme)) {
 				nevalidnaPolja.add(tfKorisnickoIme);
 			}

@@ -18,14 +18,15 @@ public class UIUtils {
 	public static final Color HOVER_MENU_BG_COLOR = new Color(28, 15, 42);
 	public static final Font HOVER_MENU_FONT = new Font("Arial", Font.BOLD, 16);
 	public static final Color BUTTON_COLOR = new Color(220, 20, 60);
+	public static final Color COMBO_BOX_COLOR = new Color(214, 217, 223);
 	
-	public static final Color ERROR_BORDER_COLOR = Color.RED;
+	public static final Color ERROR_COLOR = Color.RED;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
 	public static final int MAX_DUZINA = 45;
 
 	public static void dodajCrvenuIvicu(JTextField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(ERROR_BORDER_COLOR), new EmptyBorder(0, 5, 0, 0)));
+		polje.setBorder(new CompoundBorder(new LineBorder(ERROR_COLOR), new EmptyBorder(0, 5, 0, 0)));
 	}
 
 	public static void dodajPodrazumijevanuIvicu(JTextField polje) {
@@ -33,7 +34,7 @@ public class UIUtils {
 	}
 
 	public static void dodajCrvenuIvicu(JPasswordField polje) {
-		polje.setBorder(new CompoundBorder(new LineBorder(ERROR_BORDER_COLOR), new EmptyBorder(0, 5, 0, 0)));
+		polje.setBorder(new CompoundBorder(new LineBorder(ERROR_COLOR), new EmptyBorder(0, 5, 0, 0)));
 	}
 
 	public static void dodajPodrazumijevanuIvicu(JPasswordField polje) {

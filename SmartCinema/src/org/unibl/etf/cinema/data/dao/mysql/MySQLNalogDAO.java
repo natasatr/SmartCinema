@@ -128,4 +128,32 @@ public class MySQLNalogDAO implements NalogDAO {
 		return nalog;
 	}
 
+	@Override
+	public boolean postoji(String korisnickoIme) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String sqlQuery = "SELECT * FROM Nalog n "
+				+ "INNER JOIN Rola r ON n.ROLA_RolaID = r.RolaID " + "WHERE KorisnickoIme = ?";
+
+		try {
+			conn = DBUtil.getConnection();
+			ps = conn.prepareStatement(sqlQuery);
+			ps.setString(1, korisnickoIme);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return true;
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(MySQLNalogDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			DBUtil.close(rs, ps, conn);
+		}
+
+		return false;
+	}
+
 }

@@ -184,6 +184,7 @@ public class LoginForma extends JFrame {
 
 	private void prijava() {
 		Nalog nalog = nalogDAO.prijava(tfKorisnickoIme.getText().trim(), new String(pfLozinka.getPassword()).trim());
+		lblLoginGreska.setText("Pogre\u0161no korisni\u010Dko ime ili lozinka!");
 		lblLoginGreska.setVisible(nalog == null);
 
 		if (nalog != null) {
@@ -195,26 +196,31 @@ public class LoginForma extends JFrame {
 			case "Administrator2":
 				forma = new FilmoviGlavnaForma(nalog.getNalogID());
 				break;
-			case "Sluzbenik":
+			case "Službenik":
 				forma = new DodatnaPonudaSearchFrame();
 				break;
-			default:
+			case "Blagajnik":
 				forma = new RadnikForm(nalog.getNalogID());
 			}
 
-			final JFrame glavnaForma = forma;
-			forma.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						glavnaForma.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
+			if (forma == null) {
+				lblLoginGreska.setText("Nepostojeæa rola.");
+				lblLoginGreska.setVisible(true);
+			} else {
+				final JFrame glavnaForma = forma;
+				forma.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							glavnaForma.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
-			});
-			dispose();
+				});
+				dispose();
+			}
 		}
 
 	}
