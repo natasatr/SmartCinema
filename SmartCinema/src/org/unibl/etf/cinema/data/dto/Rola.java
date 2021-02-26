@@ -49,6 +49,6 @@ public class Rola implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ID: " + rolaID + "\nNaziv: " + naziv + "\n";
+		return naziv;
 	}
 }

@@ -57,6 +57,7 @@ public class LoginForma extends JFrame {
 			public void run() {
 				try {
 					LoginForma frame = new LoginForma();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

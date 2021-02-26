@@ -23,6 +23,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -752,13 +753,17 @@ public class AdminForma extends JFrame {
 	}
 
 	private void dodajKorisnika() {
-		new ZaposleniDialog(this, null).setVisible(true);
+		JDialog dialog = new ZaposleniDialog(this, null);
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
 	}
 
 	private void azurirajKorisnika() {
 		Zaposleni zaposleni = ((ZaposleniTableModel) tblKorisnici.getModel())
 				.getZaposleni(tblKorisnici.getSelectedRow());
-		new ZaposleniDialog(this, zaposleni).setVisible(true);
+		JDialog dialog = new ZaposleniDialog(this, zaposleni);
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
 	}
 
 	private void obrisiKorisnika() {
