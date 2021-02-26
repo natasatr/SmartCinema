@@ -2,10 +2,20 @@ package org.unibl.etf.cinema.view.forms;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
@@ -15,19 +25,6 @@ import org.unibl.etf.cinema.data.dao.SalaDAO;
 import org.unibl.etf.cinema.data.dto.FilmDTO;
 import org.unibl.etf.cinema.data.dto.PrikazivanjeFilmaUSaliDTO;
 import org.unibl.etf.cinema.data.dto.SalaDTO;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import java.util.List;
-
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class TerminDialog extends JDialog {
 

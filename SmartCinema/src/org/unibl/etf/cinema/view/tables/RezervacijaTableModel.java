@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
-import org.unibl.etf.cinema.data.dto.Zaposleni;
 
 public class RezervacijaTableModel extends AbstractTableModel {
 	private String[] naziviKolona= {"#", "IME", "PREZIME", "DO DATUMA", "FILM", "TERMIN", "SALA", "RED", "BROJ" };

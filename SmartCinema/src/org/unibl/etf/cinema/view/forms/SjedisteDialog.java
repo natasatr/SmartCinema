@@ -1,6 +1,6 @@
 package org.unibl.etf.cinema.view.forms;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
 import org.unibl.etf.cinema.data.dao.SalaDAO;
@@ -25,11 +28,6 @@ import org.unibl.etf.cinema.data.dto.SalaDTO;
 import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 import org.unibl.etf.cinema.data.dto.VrstaSjedistaDTO;
 import org.unibl.etf.cinema.util.UIUtils;
-
-import java.awt.Color;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class SjedisteDialog extends JDialog {
 

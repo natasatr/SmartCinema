@@ -1,7 +1,5 @@
 package org.unibl.etf.cinema.data.dto;
 
-import java.sql.Date;
-
 public class PrikazivanjeFilmaUSaliDTO {
 	private int TerminID;
 	private FilmDTO film;

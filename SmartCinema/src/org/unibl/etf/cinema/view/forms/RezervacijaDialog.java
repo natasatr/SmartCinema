@@ -4,10 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.unibl.etf.cinema.data.dao.DAOFactory;
@@ -16,15 +24,6 @@ import org.unibl.etf.cinema.data.dao.RezervacijaDAO;
 import org.unibl.etf.cinema.data.dto.KartaDTO;
 import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
 import org.unibl.etf.cinema.util.UIUtils;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.sql.Timestamp;
-import java.awt.event.ActionEvent;
 
 public class RezervacijaDialog extends JDialog {
 

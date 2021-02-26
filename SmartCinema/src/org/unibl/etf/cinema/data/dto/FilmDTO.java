@@ -1,7 +1,5 @@
 package org.unibl.etf.cinema.data.dto;
 
-import java.util.Date;
-
 public class FilmDTO {
 	private int FilmID;
 	private String Naziv;

@@ -1,6 +1,7 @@
 package org.unibl.etf.cinema.data.dao;
 
 import java.util.List;
+
 import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
 
 public interface RezervacijaDAO {

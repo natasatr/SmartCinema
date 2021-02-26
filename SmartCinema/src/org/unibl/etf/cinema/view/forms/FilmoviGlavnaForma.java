@@ -1,34 +1,29 @@
 package org.unibl.etf.cinema.view.forms;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-
-import java.awt.Font;
-import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import java.awt.CardLayout;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicSpinnerUI;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.border.EmptyBorder;
 
 import org.unibl.etf.cinema.data.dao.AdresaDAO;
 import org.unibl.etf.cinema.data.dao.DAOFactory;
@@ -36,43 +31,8 @@ import org.unibl.etf.cinema.data.dao.FilmDAO;
 //import org.unibl.etf.cinema.data.dao.FilmDAO;
 import org.unibl.etf.cinema.data.dao.KinoDAO;
 import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLKinoDAO;
-import org.unibl.etf.cinema.data.dto.AdresaDTO;
 import org.unibl.etf.cinema.data.dto.KinoDTO;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
-import org.unibl.etf.cinema.util.EmailValidator;
-import org.unibl.etf.cinema.util.UIUtils;
-import org.unibl.etf.cinema.util.Utils;
-import org.unibl.etf.cinema.view.tables.ZaposleniTableModel;
-
-import java.awt.Rectangle;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JFormattedTextField;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-
-import java.awt.event.KeyEvent;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Dimension;
-import javax.swing.border.CompoundBorder;
-import javax.swing.JTextArea;
 
 public class FilmoviGlavnaForma extends JFrame {
 

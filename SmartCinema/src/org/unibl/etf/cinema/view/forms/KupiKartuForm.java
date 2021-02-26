@@ -9,27 +9,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -40,21 +38,12 @@ import org.unibl.etf.cinema.data.dao.PrikazivanjeFilmaUSaliDAO;
 import org.unibl.etf.cinema.data.dao.RezervacijaDAO;
 import org.unibl.etf.cinema.data.dao.SjedisteDAO;
 import org.unibl.etf.cinema.data.dao.ZaposleniDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLFilmDAO;
-import org.unibl.etf.cinema.data.dao.mysql.MySQLPrikazivanjeFilmaUSaliDAO;
 import org.unibl.etf.cinema.data.dto.FilmDTO;
 import org.unibl.etf.cinema.data.dto.KartaDTO;
 import org.unibl.etf.cinema.data.dto.PrikazivanjeFilmaUSaliDTO;
-import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
 import org.unibl.etf.cinema.data.dto.SjedisteDTO;
 import org.unibl.etf.cinema.data.dto.Zaposleni;
-import org.unibl.etf.cinema.view.tables.RezervacijaTableModel;
 import org.unibl.etf.cinema.view.tables.SjedisteTableModel;
-
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JRadioButton;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
 
 
 public class KupiKartuForm extends JPanel{

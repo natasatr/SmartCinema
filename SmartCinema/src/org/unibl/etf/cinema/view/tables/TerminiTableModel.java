@@ -1,12 +1,10 @@
 package org.unibl.etf.cinema.view.tables;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import org.unibl.etf.cinema.data.dto.PrikazivanjeFilmaUSaliDTO;
-import org.unibl.etf.cinema.data.dto.Zaposleni;
 
 public class TerminiTableModel extends AbstractTableModel {
 		

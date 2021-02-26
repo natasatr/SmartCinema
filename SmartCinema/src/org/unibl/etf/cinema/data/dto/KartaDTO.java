@@ -1,8 +1,5 @@
 package org.unibl.etf.cinema.data.dto;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class KartaDTO {

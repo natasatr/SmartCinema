@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,7 +24,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -33,8 +33,6 @@ import org.unibl.etf.cinema.data.dao.PrikazivanjeFilmaUSaliDAO;
 import org.unibl.etf.cinema.data.dao.mysql.MySQLRezervacijaDAO;
 import org.unibl.etf.cinema.data.dto.FilmDTO;
 import org.unibl.etf.cinema.data.dto.PrikazivanjeFilmaUSaliDTO;
-import org.unibl.etf.cinema.data.dto.RezervacijaDTO;
-import org.unibl.etf.cinema.view.tables.RezervacijaTableModel;
 import org.unibl.etf.cinema.view.tables.TerminiTableModel;
 
 public class TerminiForm extends JPanel {
