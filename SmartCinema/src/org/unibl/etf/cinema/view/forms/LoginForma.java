@@ -194,10 +194,10 @@ public class LoginForma extends JFrame {
 			case "Administrator1":
 				forma = new AdminForma(nalog.getNalogID());
 				break;
-			case "Administrator2":
+			case "Službenik":
 				forma = new FilmoviGlavnaForma(nalog.getNalogID());
 				break;
-			case "Službenik":
+			case "Administrator2":
 				forma = new DodatnaPonudaSearchFrame();
 				break;
 			case "Blagajnik":
