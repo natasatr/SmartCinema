@@ -13,6 +13,6 @@ public interface SalaDAO {
 
 	boolean azurirajSalu(SalaDTO sala);
 
-	boolean obrisiSalu(int KinoID, int broj);
+	boolean obrisiSalu(int SalaID);
 
 }

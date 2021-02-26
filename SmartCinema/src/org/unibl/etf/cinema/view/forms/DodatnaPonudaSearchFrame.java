@@ -469,6 +469,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 				new ImageIcon(AdminForma.class.getResource("/org/unibl/etf/cinema/view/icons/icon_search.png")));
 
 		
+		
 		List<SalaDTO> sale = salaDAO.sveSale();
 		comboBox_1 = new JComboBox(sale.toArray(new SalaDTO[] {}));
 		comboBox_1.setSelectedIndex(sale.isEmpty() ? -1 : 0);
@@ -870,6 +871,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 				JOptionPane.showMessageDialog(this, "Sjediste je uspješno obrisano.", "Uspjeh",
 						JOptionPane.INFORMATION_MESSAGE);
 				azurirajTabeluSjedista();
+				azurirajTabeluSala();
 			} else {
 				JOptionPane.showMessageDialog(this, "Sjediste nije obrisano.", "Greška", JOptionPane.ERROR_MESSAGE);
 			}
@@ -886,7 +888,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		if (value == 0) {
 			SalaDTO s = ((SalaTableModel) table_2.getModel()).getSalaAtRow(row);
 
-			if (salaDAO.obrisiSalu(s.getKino().getKinoID(), s.getBroj())
+			if (salaDAO.obrisiSalu(s.getSalaID())
 
 			) {
 				JOptionPane.showMessageDialog(this, "Sala je uspješno obrisana.", "Uspjeh",
@@ -894,6 +896,7 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 				azurirajTabeluSala();
 			} else {
 				JOptionPane.showMessageDialog(this, "Sala je uspješno obrisana.", "Greška", JOptionPane.ERROR_MESSAGE);
+				azurirajTabeluSala();
 			}
 		}
 	}

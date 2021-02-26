@@ -1,5 +1,6 @@
 package org.unibl.etf.cinema.data.dao.mysql;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -134,33 +135,26 @@ public class MySQLSalaDAO implements SalaDAO {
 	}
 
 	@Override
-	public boolean obrisiSalu(int KinoID, int broj) {
+	public boolean obrisiSalu(int SalaID) {
 		boolean retVal = false;
 		Connection conn = null;
-		PreparedStatement ps = null;
+		CallableStatement cs = null;
 
-		String query = " update sala set Uklonjeno=1 " + " where Broj = ? " + " and KINO_KinoID= ?  ";
+		String query = "{CALL obrisi_salu( ? )}";
 		try {
 			conn = ConnectionPool.getInstance().checkOut();
-			ps = conn.prepareStatement(query);
-			ps.setInt(1, broj);
-			ps.setInt(2, KinoID);
+			cs = conn.prepareCall(query);
+			cs.setInt(1, SalaID);
 
-			retVal = ps.executeUpdate() == 1;
+			retVal = cs.executeUpdate() == 1;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 
 		} finally {
 			ConnectionPool.getInstance().checkIn(conn);
-			DBUtil.close(ps, conn);
+			DBUtil.close(cs, conn);
 		}
 		return retVal;
-	}
-
-	public static void main(String args[]) {
-		MySQLSalaDAO ms = new MySQLSalaDAO();
-		List<SalaDTO> sale = ms.sveSale();
-
-		System.out.println(ms.obrisiSalu(1, 4));
-	}
+}
 }
