@@ -151,7 +151,6 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		gbc_pnlZaglavlje.gridx = 1;
 		gbc_pnlZaglavlje.gridy = 0;
 		contentPane.add(pnlZaglavlje, gbc_pnlZaglavlje);
-		pnlZaglavlje.setLayout(new BoxLayout(pnlZaglavlje, BoxLayout.X_AXIS));
 
 		lblZaglavlje = new JLabel("");
 
@@ -160,8 +159,56 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 		lblZaglavlje.setForeground(Color.WHITE);
 		lblZaglavlje.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblZaglavlje.setBorder(new EmptyBorder(0, 15, 0, 0));
-		pnlZaglavlje.add(lblZaglavlje);
 
+		
+		final JLabel lblOdjava = new JLabel("Odjava");
+		lblOdjava.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblOdjava.setBackground(UIUtils.DEFAULT_MENU_BG_COLOR);
+		lblOdjava.setOpaque(true);
+		lblOdjava.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblOdjava.setBackground(UIUtils.HOVER_MENU_BG_COLOR);
+				lblOdjava.setFont(UIUtils.HOVER_MENU_FONT);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblOdjava.setBackground(UIUtils.DEFAULT_MENU_BG_COLOR);
+				lblOdjava.setFont(UIUtils.DEFAULT_MENU_FONT);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				odjava();
+			}
+		});
+		lblOdjava.setBorder(new EmptyBorder(10, 15, 10, 15));
+		lblOdjava.setForeground(Color.WHITE);
+		lblOdjava.setFont(new Font("Arial", Font.PLAIN, 16));
+		GroupLayout gl_pnlZaglavlje = new GroupLayout(pnlZaglavlje);
+		gl_pnlZaglavlje.setHorizontalGroup(
+			gl_pnlZaglavlje.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlZaglavlje.createSequentialGroup()
+					.addComponent(lblZaglavlje)
+					.addGap(752)
+					.addComponent(lblOdjava, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		gl_pnlZaglavlje.setVerticalGroup(
+			gl_pnlZaglavlje.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_pnlZaglavlje.createSequentialGroup()
+					.addGroup(gl_pnlZaglavlje.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_pnlZaglavlje.createSequentialGroup()
+							.addGap(24)
+							.addComponent(lblZaglavlje))
+						.addGroup(gl_pnlZaglavlje.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblOdjava, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addContainerGap())
+		);
+		pnlZaglavlje.setLayout(gl_pnlZaglavlje);
+
+		
 		JPanel pnlSadrzaj = new JPanel();
 		GridBagConstraints gbc_pnlSadrzaj = new GridBagConstraints();
 		gbc_pnlSadrzaj.gridheight = 3;
@@ -863,5 +910,19 @@ public class DodatnaPonudaSearchFrame extends JFrame {
 	private void podesiDugmad() {
 		boolean enabled = table_1.getSelectedRow() != -1;
 
+	}
+	
+	private void odjava() {
+		EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					new LoginForma().setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		dispose();
 	}
 }
