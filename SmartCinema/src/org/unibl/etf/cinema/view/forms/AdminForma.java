@@ -430,6 +430,7 @@ public class AdminForma extends JFrame {
 		tfBrojTelefona.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
+				UIUtils.onemoguciUnosNonDigitKaraktera(e, tfBrojTelefona, true);
 				UIUtils.ograniciDuzinuUnosa(e, tfBrojTelefona);
 			}
 		});
@@ -468,10 +469,7 @@ public class AdminForma extends JFrame {
 		tfBroj.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				System.out.println(tfBroj.getText().length());
-				if (!Character.isDigit(e.getKeyChar())) {
-					e.consume();
-				}
+				UIUtils.onemoguciUnosNonDigitKaraktera(e, tfBroj, true);
 			}
 		});
 
@@ -722,6 +720,7 @@ public class AdminForma extends JFrame {
 		tfBrojTelefona.setEditable(editable);
 		tfMjesto.setEditable(editable);
 		tfUlica.setEditable(editable);
+		tfBroj.setEditable(editable);
 	}
 
 	private void postaviZaglavlje(JLabel label) {
